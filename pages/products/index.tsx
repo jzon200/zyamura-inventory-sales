@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import { FiEdit } from "react-icons/fi";
 import { MdAdd, MdOutlineArrowDropDown, MdOutlineClose } from "react-icons/md";
 import Image from "next/image";
-import dogPic from "../assets/chow_chow.png";
-import fishPic from "../assets/fish.png";
+import dogPic from "../../assets/chow_chow.png";
+import fishPic from "../../assets/fish.png";
 
 const Products: NextPage = () => {
   return (
@@ -11,8 +11,14 @@ const Products: NextPage = () => {
       {/* Products */}
       <div className="px-8 py-4 rounded-3xl bg-primary-light">
         <div className="flex justify-between text-lg">
-          <div className="text-3xl text-[#AAA683]">All Products</div>
-          <input type="text" className="max-h-12 basis-80" />
+          <div className="text-3xl text-[#AAA683] select-none">
+            All Products
+          </div>
+          <input
+            type="text"
+            placeholder="Search"
+            className="max-h-12 basis-80 rounded-2xl p-4"
+          />
           <button className="flex justify-between items-center rounded-3xl bg-[#D1CEB2] basis-72 p-4">
             <div>
               sort by <span className="font-medium text-[#13240D]">Price</span>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
+import { FC } from "react";
 import { FiBox } from "react-icons/fi";
 import {
   IoPeopleOutline,
@@ -20,12 +20,12 @@ const sidebarItems = [
 ];
 
 const Sidebar: FC = () => {
-  const [selectedNavIndex, setSelectedNavIndex] = useState(0);
   const router = useRouter();
 
-  const routeHandler = (index: number, routeName: string) => {
-    setSelectedNavIndex(index);
-    router.push(`${index === 0 ? "/" : routeName.toLowerCase()}`);
+  const routeName = router.pathname.substring(1); // /dashboard => dashboard
+
+  const routeHandler = (routeName: string) => {
+    router.push(routeName.toLowerCase());
   };
 
   return (
@@ -37,8 +37,8 @@ const Sidebar: FC = () => {
               key={index}
               label={item.label}
               icon={item.icon}
-              isSelected={selectedNavIndex === index}
-              onSelected={routeHandler.bind(null, index, item.label)}
+              isSelected={routeName === item.label.toLowerCase()}
+              onSelected={routeHandler.bind(null, item.label)}
             />
           ))}
         </ul>
@@ -52,8 +52,8 @@ const Sidebar: FC = () => {
                 key={index}
                 label={item.label}
                 icon={item.icon}
-                isSelected={selectedNavIndex === index}
-                onSelected={routeHandler.bind(null, index, item.label)}
+                isSelected={routeName === item.label.toLowerCase()}
+                onSelected={routeHandler.bind(null, item.label)}
               />
             );
           })}
