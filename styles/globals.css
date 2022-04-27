@@ -2,12 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer base {
-  :root {
-    --background-color: #e0e4d9;
+@layer components {
+  .form-control {
+    @apply px-4 py-2 rounded border border-slate-500 focus:outline-none
+     focus:border-blue-500 focus:ring-blue-500 focus:ring-1 text-black;
   }
 
-  body {
-    background: the;
+  .file-input {
+    @apply file:mr-4 file:border-0 file:px-0 file:py-[2px] file:text-sm file:font-medium
+     file:text-blue-700 hover:file:bg-violet-100;
   }
-} */
+
+  .btn-primary {
+    @apply rounded-lg px-4 py-2 bg-blue-500 text-blue-50 text-lg font-medium;
+  }
+}

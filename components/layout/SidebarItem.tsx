@@ -1,12 +1,14 @@
 import { createElement, FC } from "react";
 import { IconType } from "react-icons";
 
-const SidebarItem: FC<{
+type Props = {
   label: string;
   icon: IconType;
   isSelected: boolean;
   onSelected: () => void;
-}> = (props) => {
+};
+
+const SidebarItem: FC<Props> = (props) => {
   return (
     <div
       onClick={props.onSelected}
