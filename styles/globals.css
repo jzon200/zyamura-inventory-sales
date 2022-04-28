@@ -13,7 +13,15 @@
      file:text-blue-700 hover:file:bg-violet-100;
   }
 
+  .btn-rounded {
+    @apply flex justify-between items-center rounded-3xl p-4;
+  }
+
   .btn-primary {
     @apply rounded-lg px-4 py-2 bg-blue-500 text-blue-50 text-lg font-medium;
+  }
+
+  .table-header {
+    @apply text-[#919F88] text-base;
   }
 }

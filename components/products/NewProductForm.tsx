@@ -1,4 +1,5 @@
-import { addDoc, collection } from "firebase/firestore";
+import TextField from "@mui/material/TextField";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { FC, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
@@ -9,7 +10,13 @@ import Input from "../UI/Input";
 const NewProductForm: FC = (props) => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [uploadFile, uploading, snapshot] = useUploadFile();
-  const { register, handleSubmit, watch } = useForm<IFormValues>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<IFormValues>();
 
   const submitHandler: SubmitHandler<IFormValues> = async (productData) => {
     console.log(productData);
@@ -26,7 +33,11 @@ const NewProductForm: FC = (props) => {
 
     const productsCollectionRef = collection(db, "products");
 
-    await addDoc(productsCollectionRef, { ...productData, Image: imageUrl })
+    await addDoc(productsCollectionRef, {
+      ...productData,
+      Image: imageUrl,
+      dateAdded: serverTimestamp(),
+    })
       .then(() => console.log("success"))
       .catch((error) => console.log(error.message));
   };
@@ -45,22 +56,24 @@ const NewProductForm: FC = (props) => {
             required
             register={register}
           />
-          <div className="flex gap-2">
-            <Input
-              id="age"
-              label="Age"
-              type="number"
-              className="w-full"
-              placeholder="year"
-              register={register}
-            />
-            <Input
-              label="Age"
-              className="w-full"
-              type="number"
-              placeholder="month"
-              register={register}
-            />
+          <div className="flex flex-col gap-1">
+            <label htmlFor="year">Age</label>
+            <div className="mt-[-2.5px] flex gap-2 items-center">
+              <TextField
+                type="number"
+                id="year"
+                label="year"
+                variant="outlined"
+                size="small"
+              />
+              <TextField
+                type="number"
+                id="month"
+                label="month"
+                variant="outlined"
+                size="small"
+              />
+            </div>
           </div>
 
           <Input
@@ -98,7 +111,10 @@ const NewProductForm: FC = (props) => {
             register={register}
           />
 
-          <button className="col-span-2 place-self-end btn-primary">
+          <button
+            onClick={() => reset()}
+            className="col-span-2 place-self-end btn-primary"
+          >
             Submit
           </button>
         </div>

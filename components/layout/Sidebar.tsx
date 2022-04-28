@@ -30,7 +30,7 @@ const Sidebar: FC = () => {
 
   return (
     <aside className="hidden order-1 basis-52 bg-primary-dark md:block">
-      <nav className="flex flex-col justify-between text-xl text-[#AFB29C] h-full">
+      <nav className="flex flex-col justify-between text-xl text-[#AFB29C] h-full max-h-screen">
         <ul className="mt-40">
           {sidebarItems.slice(0, 4).map((item, index) => (
             <SidebarItem
