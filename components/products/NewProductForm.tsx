@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -5,11 +6,15 @@ import { FC, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { db, storage } from "../../lib/firebase";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { closeModal } from "../../redux-store/slices/modalSlice";
 import Input from "../UI/Input";
 
 const NewProductForm: FC = (props) => {
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadFile, uploading, snapshot] = useUploadFile();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -19,6 +24,7 @@ const NewProductForm: FC = (props) => {
   } = useForm<IFormValues>();
 
   const submitHandler: SubmitHandler<IFormValues> = async (productData) => {
+    setIsSubmitting(true);
     console.log(productData);
 
     const storageRef = ref(storage, `products/images/${selectedFile?.name}`);
@@ -29,7 +35,7 @@ const NewProductForm: FC = (props) => {
       console.log(`Result: ${JSON.stringify(result)}`);
     }
 
-    const imageUrl = await getDownloadURL(storageRef);
+    const imageUrl = selectedFile ? await getDownloadURL(storageRef) : null;
 
     const productsCollectionRef = collection(db, "products");
 
@@ -40,12 +46,21 @@ const NewProductForm: FC = (props) => {
     })
       .then(() => console.log("success"))
       .catch((error) => console.log(error.message));
+
+    setIsSubmitting(false);
+    reset();
+    dispatch(closeModal());
   };
 
-  console.log(watch("Item Name"));
+  if (isSubmitting)
+    return (
+      <div className="grid place-items-center h-full">
+        <CircularProgress size={64} />
+      </div>
+    );
 
   return (
-    <div className="ml-auto mt-24 mr-20 px-8 py-4 w-[32rem] rounded-xl bg-white text-slate-500">
+    <div className="w-[32rem] absolute top-24 right-28 px-8 py-4 rounded-xl bg-white text-slate-500">
       <div className="text-center text-2xl mb-4">Add Items</div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
@@ -76,12 +91,20 @@ const NewProductForm: FC = (props) => {
             </div>
           </div>
 
-          <Input
-            id="category"
-            label="Category"
-            placeholder="Fish"
-            register={register}
-          />
+          <div className="flex flex-col gap-[1px]">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              className="form-control px-2"
+              {...register("Category")}
+            >
+              <option value="fish">Fish</option>
+              <option value="dog">Dog</option>
+              <option value="materials">Materials</option>
+              <option value="food">Food</option>
+              <option value="other">Define New</option>
+            </select>
+          </div>
           <Input
             type="number"
             id="price"
@@ -91,7 +114,7 @@ const NewProductForm: FC = (props) => {
           />
 
           <Input
-            className="file-input w-full text-sm"
+            className="file-input text-sm"
             type="file"
             id="image"
             label="Image"
@@ -111,10 +134,7 @@ const NewProductForm: FC = (props) => {
             register={register}
           />
 
-          <button
-            onClick={() => reset()}
-            className="col-span-2 place-self-end btn-primary"
-          >
+          <button className="col-span-2 place-self-end btn-primary">
             Submit
           </button>
         </div>

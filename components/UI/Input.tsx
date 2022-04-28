@@ -46,7 +46,7 @@ const Input: FC<InputProps> = (props) => {
         defaultValue={props.defaultValue}
         required={props.required}
         autoFocus={props.autoFocus}
-        min={1}
+        min={0.0}
         onFocus={() => setIsTouched(true)}
         className={`form-control ${props.className}`}
         {...props.register(props.label, {
@@ -59,19 +59,6 @@ const Input: FC<InputProps> = (props) => {
           },
         })}
       />
-      {/* <input
-        className={`form-control ${props.className}`}
-        id={props.id}
-        type={props.type}
-        placeholder={props.placeholder}
-        defaultValue={props.defaultValue}
-        required={props.required}
-        autoFocus={props.autoFocus}
-        min={1}
-        onFocus={() => setIsTouched(true)}
-        onBlur={() => setIsTouched(false)}
-        {...props.register(props.label)}
-      /> */}
     </div>
   );
 };

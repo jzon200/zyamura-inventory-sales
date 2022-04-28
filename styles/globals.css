@@ -4,12 +4,12 @@
 
 @layer components {
   .form-control {
-    @apply px-4 py-2 rounded border border-slate-500 focus:outline-none
+    @apply w-full px-3 py-2 rounded border border-slate-500 focus:outline-none
      focus:border-blue-500 focus:ring-blue-500 focus:ring-1 text-black;
   }
 
   .file-input {
-    @apply file:mr-4 file:border-0 file:px-0 file:py-[2px] file:text-sm file:font-medium
+    @apply file:mr-4 file:border-0 file:p-[2px] file:font-medium
      file:text-blue-700 hover:file:bg-violet-100;
   }
 

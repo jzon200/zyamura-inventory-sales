@@ -3,8 +3,6 @@ import Image from "next/image";
 import { FC, Fragment } from "react";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineClose } from "react-icons/md";
-import dogPic from "../../assets/chow_chow.png";
-import fishPic from "../../assets/fish.png";
 import TableGrid from "../layout/TableGrid";
 
 const ProductsTable: FC<{ productsList: IFormValues[] | DocumentData[] }> = (
@@ -22,15 +20,19 @@ const ProductsTable: FC<{ productsList: IFormValues[] | DocumentData[] }> = (
       <div className="table-header">ACTION</div>
       {/* Items */}
       {props.productsList.map((product: DocumentData) => (
-        <Fragment>
-          <Image
-            src={product.Image}
-            className="rounded-md"
-            width={80}
-            height={80}
-            objectFit={"cover"}
-          />
-          <div>{product.id.substring(0, 5).toUpperCase()}</div>
+        <Fragment key={product.id}>
+          {product.Image ? (
+            <Image
+              src={product.Image}
+              className="rounded-md"
+              width={80}
+              height={80}
+              objectFit={"cover"}
+            />
+          ) : (
+            <div className="h-20 w-20 rounded-md bg-slate-400 grid place-items-center"></div>
+          )}
+          <div>#{product.id.substring(0, 5).toUpperCase()}</div>
           <div>{product["Item Name"]}</div>
           <div>{product.Category}</div>
           {/* <div>{product.Age}</div> */}

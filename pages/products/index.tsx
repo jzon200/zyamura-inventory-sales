@@ -12,8 +12,8 @@ import { openModal } from "../../redux-store/slices/modalSlice";
 
 const Products: NextPage = () => {
   const collectionRef = collection(db, "products");
-  const q = query(collectionRef, orderBy("dateAdded"));
-  const [products, loading, error] = useCollection(collectionRef);
+  const q = query(collectionRef, orderBy("dateAdded", "desc"));
+  const [products, loading, error] = useCollection(q);
 
   const dispatch = useAppDispatch();
 
@@ -25,7 +25,7 @@ const Products: NextPage = () => {
         <NewProductForm />
       </MuiModal>
       {/* Products Container */}
-      <div className="py-12 px-24 bg-primary-light max-h-screen overflow-y-scroll">
+      <div className="py-12 px-24 bg-primary-light h-screen max-h-screen overflow-y-scroll">
         <div className="flex justify-between items-center text-lg">
           <div className="text-3xl text-[#AAA683] select-none">
             All Products
@@ -43,7 +43,7 @@ const Products: NextPage = () => {
           </div>
           <button className="btn-rounded max-h-14 bg-[#D1CEB2] basis-72">
             <div>
-              sort by <span className="font-medium text-[#13240D]">Price</span>
+              Sort by <span className="font-medium text-[#13240D]">Latest</span>
             </div>
             <MdOutlineArrowDropDown size={24} />
           </button>
