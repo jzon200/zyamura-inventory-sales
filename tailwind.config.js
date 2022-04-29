@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sriracha: ["Sriracha", "sans-serif"],
+      },
       colors: {
         surface: "#e0e4d9",
         "primary-light": "#D9D7C4",

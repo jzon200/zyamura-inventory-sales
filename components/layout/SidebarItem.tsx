@@ -13,7 +13,7 @@ const SidebarItem: FC<Props> = (props) => {
     <div
       onClick={props.onSelected}
       className={`${
-        props.isSelected && "bg-primary-light"
+        props.isSelected && "bg-primary-light font-medium text-primary-dark"
       } py-4 px-8 cursor-pointer select-none hover:bg-primary-light hover:bg-blend-dodge`}
     >
       <li className="flex gap-4 items-center">
