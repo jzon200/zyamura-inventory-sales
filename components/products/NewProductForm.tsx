@@ -1,5 +1,4 @@
 import { CircularProgress } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { FC, useState } from "react";
@@ -11,7 +10,6 @@ import { closeModal } from "../../redux-store/slices/modalSlice";
 import Input from "../UI/Input";
 
 const NewProductForm: FC = (props) => {
-  const [selectedFile, setSelectedFile] = useState<File>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadFile, uploading, snapshot] = useUploadFile();
   const dispatch = useAppDispatch();
@@ -21,27 +19,38 @@ const NewProductForm: FC = (props) => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<IFormValues>();
+  } = useForm<InputValues>();
 
-  const submitHandler: SubmitHandler<IFormValues> = async (productData) => {
+  const submitHandler: SubmitHandler<InputValues> = async (productData) => {
     setIsSubmitting(true);
     console.log(productData);
 
-    const storageRef = ref(storage, `products/images/${selectedFile?.name}`);
-    if (selectedFile) {
-      const result = await uploadFile(storageRef, selectedFile, {
-        contentType: "image/jpeg",
-      });
-      console.log(`Result: ${JSON.stringify(result)}`);
-    }
+    const { name, category, price, quantity, imagePath, description } =
+      productData;
 
-    const imageUrl = selectedFile ? await getDownloadURL(storageRef) : null;
+    let imageUrl: null | string = null;
+    const imgFile = imagePath[0];
+
+    if (imgFile) {
+      const storageRef = ref(storage, `products/images/${imgFile.name}`);
+
+      await uploadFile(storageRef, imgFile);
+
+      imageUrl = await getDownloadURL(storageRef);
+    }
 
     const productsCollectionRef = collection(db, "products");
 
+    const id = Math.floor(Math.random() * 1000000);
+
     await addDoc(productsCollectionRef, {
-      ...productData,
-      Image: imageUrl,
+      id,
+      name,
+      description,
+      category,
+      price,
+      quantity,
+      imageUrl,
       dateAdded: serverTimestamp(),
     })
       .then(() => console.log("success"))
@@ -51,6 +60,8 @@ const NewProductForm: FC = (props) => {
     reset();
     dispatch(closeModal());
   };
+
+  console.log(watch());
 
   if (isSubmitting)
     return (
@@ -69,9 +80,18 @@ const NewProductForm: FC = (props) => {
             id="itemName"
             placeholder="Enter Item Name"
             required
+            autoFocus
+            inputValue="name"
             register={register}
           />
-          <div className="flex flex-col gap-1">
+          <Input
+            label="Description"
+            id="description"
+            placeholder="Enter Description"
+            inputValue="description"
+            register={register}
+          />
+          {/* <div className="flex flex-col gap-1">
             <label htmlFor="year">Age</label>
             <div className="mt-[-2.5px] flex gap-2 items-center">
               <TextField
@@ -89,14 +109,14 @@ const NewProductForm: FC = (props) => {
                 size="small"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-[1px]">
             <label htmlFor="category">Category</label>
             <select
               id="category"
               className="form-control px-2"
-              {...register("Category")}
+              {...register("category")}
             >
               <option value="fish">Fish</option>
               <option value="dog">Dog</option>
@@ -110,20 +130,19 @@ const NewProductForm: FC = (props) => {
             id="price"
             label="Price"
             defaultValue={0}
+            valueAsNumber
+            inputValue="price"
             register={register}
           />
 
           <Input
             className="file-input text-sm"
             type="file"
+            accept="image/*"
             id="image"
             label="Image"
+            inputValue="imagePath"
             register={register}
-            onChange={(e) => {
-              const file = e.target.files ? e.target.files[0] : undefined;
-              console.log(file?.name);
-              setSelectedFile(file);
-            }}
           />
           <Input
             id="quantity"
@@ -131,6 +150,8 @@ const NewProductForm: FC = (props) => {
             className=""
             type="number"
             defaultValue={1}
+            valueAsNumber
+            inputValue="quantity"
             register={register}
           />
 

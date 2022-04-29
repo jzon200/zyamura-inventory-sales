@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 import { Path, UseFormRegister } from "react-hook-form";
 
 // type Props = {
@@ -10,7 +10,7 @@ import { Path, UseFormRegister } from "react-hook-form";
 //   required?: boolean;
 //   autoFocus?: boolean;
 //   className?: string;
-//   register: UseFormRegister<ProductDetails>;
+//   register: UseFormRegister<IFormValues>;
 // };
 
 // interface IFormValues {
@@ -20,42 +20,58 @@ import { Path, UseFormRegister } from "react-hook-form";
 
 type InputProps = {
   id?: string;
+  label?: string;
   type?: string;
   placeholder?: string;
   defaultValue?: string | number;
   autoFocus?: boolean;
   className?: string;
-  label: Path<IFormValues>;
-  register: UseFormRegister<IFormValues>;
+  accept?: string;
+  inputValue: Path<InputValues>;
   required?: boolean;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  valueAsNumber?: boolean;
+  register: UseFormRegister<InputValues>;
 };
 
 const Input: FC<InputProps> = (props) => {
   const [isTouched, setIsTouched] = useState(false);
 
+  const {
+    id,
+    type,
+    inputValue,
+    register,
+    autoFocus,
+    className,
+    label,
+    defaultValue,
+    placeholder,
+    required,
+    valueAsNumber,
+    accept,
+  } = props;
+
   return (
     <div>
-      <label className={`${isTouched && "text-blue-500"}`} htmlFor={props.id}>
-        {props.label}
+      <label className={`${isTouched && "text-blue-500"}`} htmlFor={id}>
+        {label}
       </label>
       <input
-        id={props.id}
-        type={props.type}
-        placeholder={props.placeholder}
-        defaultValue={props.defaultValue}
-        required={props.required}
-        autoFocus={props.autoFocus}
-        min={0.0}
+        className={`form-control ${className}`}
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        min={0}
+        step={"any"}
+        accept={accept}
+        autoFocus={autoFocus}
+        defaultValue={defaultValue}
         onFocus={() => setIsTouched(true)}
-        className={`form-control ${props.className}`}
-        {...props.register(props.label, {
-          required: props.required,
+        {...register(inputValue, {
+          required,
+          valueAsNumber,
           onBlur() {
             setIsTouched(false);
-          },
-          onChange(event) {
-            props.onChange && props.onChange(event);
           },
         })}
       />

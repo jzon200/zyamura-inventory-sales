@@ -1,18 +1,12 @@
-// type ProductDetails = {
-//   name: string;
-//   category: string;
-//   ageYear?: number;
-//   ageMonth?: number;
-//   price: number;
-//   quantity: number;
-//   image?: File;
-// };
-
-interface IFormValues {
-  "Item Name": string;
-  Age: number;
-  Category: string;
-  Price: number;
-  Quantity: number;
-  Image: string;
+interface InputValues {
+  id: string;
+  name: string;
+  description: string | null;
+  category: Category;
+  price: number;
+  quantity: number;
+  imagePath: FileList;
+  imageUrl: string | null;
 }
+
+type Category = "fish" | "dog" | "materials" | "other";

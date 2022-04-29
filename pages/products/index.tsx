@@ -58,7 +58,6 @@ const Products: NextPage = () => {
         <ProductsTable
           productsList={products!.docs.map((doc) => ({
             ...doc.data(),
-            id: doc.id,
           }))}
         />
       </div>
