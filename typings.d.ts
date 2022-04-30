@@ -1,12 +1,21 @@
 interface InputValues {
-  id: string;
   name: string;
-  description: string | null;
+  description: string;
   category: Category;
   price: number;
   quantity: number;
   imagePath: FileList;
-  imageUrl: string | null;
 }
+
+type Product = {
+  id: string;
+  docId: string;
+  name: string;
+  description: string;
+  category: Category;
+  price: number;
+  quantity: number;
+  imageUrl: string | null;
+};
 
 type Category = "fish" | "dog" | "materials" | "other";

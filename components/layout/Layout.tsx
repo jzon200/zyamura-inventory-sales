@@ -4,7 +4,9 @@ import Sidebar from "./Sidebar";
 const Layout: FC<{ children?: ReactNode }> = (props) => {
   return (
     <div className="flex h-screen">
-      <main className="order-2 grow bg-surface">{props.children}</main>
+      <main className="order-2 grow bg-surface overflow-hidden">
+        {props.children}
+      </main>
       <Sidebar />
     </div>
   );

@@ -5,15 +5,27 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { MdAdd, MdFilterList, MdOutlineArrowDropDown } from "react-icons/md";
 import NewProductForm from "../../components/products/NewProductForm";
 import ProductsTable from "../../components/products/ProductsTable";
+import DeleteDialog from "../../components/products/DeleteProductDialog";
 import MuiModal from "../../components/UI/Modal";
 import { db } from "../../lib/firebase";
-import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { openModal } from "../../redux-store/slices/modalSlice";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import {
+  setShowAddDialog,
+  setShowDeleteDialog,
+} from "../../redux-store/slices/productsSlice";
 
 const Products: NextPage = () => {
   const collectionRef = collection(db, "products");
   const q = query(collectionRef, orderBy("dateAdded", "desc"));
   const [products, loading, error] = useCollection(q);
+
+  const { showAddDialog, showEditDialog, showDeleteDialog } = useAppSelector(
+    (state) => ({
+      showAddDialog: state.products.showAddDialog,
+      showEditDialog: state.products.showEditDialog,
+      showDeleteDialog: state.products.showDeleteDialog,
+    })
+  );
 
   const dispatch = useAppDispatch();
 
@@ -21,11 +33,18 @@ const Products: NextPage = () => {
 
   return (
     <Fragment>
-      <MuiModal>
+      <MuiModal
+        showModal={showAddDialog}
+        onClose={() => dispatch(setShowAddDialog(false))}
+      >
         <NewProductForm />
       </MuiModal>
+      <DeleteDialog
+        showDialog={showDeleteDialog}
+        onClose={() => dispatch(setShowDeleteDialog(false))}
+      />
       {/* Products Container */}
-      <div className="py-12 px-24 bg-primary-light h-screen max-h-screen overflow-y-scroll">
+      <div className="mx-12 my-6 px-24 py-12 rounded-t-3xl shadow-md bg-primary-light h-screen max-h-screen overflow-y-scroll">
         <div className="flex justify-between items-center text-lg">
           <div className="text-3xl text-[#AAA683] select-none">
             All Products
@@ -48,7 +67,7 @@ const Products: NextPage = () => {
             <MdOutlineArrowDropDown size={24} />
           </button>
           <button
-            onClick={() => dispatch(openModal())}
+            onClick={() => dispatch(setShowAddDialog(true))}
             className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
           >
             <div>Add Items</div>
@@ -56,8 +75,9 @@ const Products: NextPage = () => {
           </button>
         </div>
         <ProductsTable
-          productsList={products!.docs.map((doc) => ({
+          products={products!.docs.map((doc) => ({
             ...doc.data(),
+            docId: doc.id,
           }))}
         />
       </div>

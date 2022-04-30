@@ -1,15 +1,28 @@
 import { DocumentData } from "firebase/firestore";
-import { FC, Fragment } from "react";
 import Image from "next/image";
+import { FC, Fragment } from "react";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineClose } from "react-icons/md";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import {
+  setProduct,
+  setShowDeleteDialog,
+} from "../../redux-store/slices/productsSlice";
 
 type Props = {
-  data: InputValues | DocumentData;
+  data: Product | DocumentData;
 };
 
 const ProductsRowData: FC<Props> = (props) => {
-  const { id, name, category, imageUrl, price, quantity } = props.data;
+  const { id, name, category, imageUrl, price, quantity, docId } = props.data;
+
+  const dispatch = useAppDispatch();
+
+  const deleteHandler = async () => {
+    dispatch(setProduct(props.data));
+    dispatch(setShowDeleteDialog(true));
+    // await deleteDoc(doc(db, "products", docId));
+  };
 
   return (
     <Fragment key={id}>
@@ -36,7 +49,7 @@ const ProductsRowData: FC<Props> = (props) => {
         <button>
           <FiEdit />
         </button>
-        <button>
+        <button onClick={deleteHandler}>
           <MdOutlineClose />
         </button>
       </div>

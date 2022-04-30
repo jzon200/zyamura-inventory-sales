@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  ::-webkit-scrollbar {
+    @apply w-[10px];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[#ACA58E] rounded-md;
+  }
+}
+
 @layer components {
   .form-control {
     @apply w-full px-3 py-2 rounded border border-slate-500 focus:outline-none

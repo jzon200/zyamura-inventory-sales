@@ -1,27 +1,24 @@
-import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import { FC, Fragment, ReactNode } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { closeModal, selectModal } from "../../redux-store/slices/modalSlice";
 
-const MuiModal: FC<{ children: ReactNode }> = (props) => {
-  const open = useAppSelector(selectModal);
-  const dispatch = useAppDispatch();
+type Props = {
+  showModal: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};
 
-  const closeHandler = () => {
-    dispatch(closeModal());
-  };
+const MuiModal: FC<Props> = (props) => {
+  const { showModal, onClose, children } = props;
 
   return (
     <Fragment>
-      {/* <Button onClick={() => dispatch(openModal())}>Open modal</Button> */}
       <Modal
-        open={open}
-        onClose={closeHandler}
+        open={showModal}
+        onClose={onClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Fragment>{props.children}</Fragment>
+        <Fragment>{children}</Fragment>
       </Modal>
     </Fragment>
   );

@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { FC, useState } from "react";
@@ -6,11 +5,12 @@ import { useUploadFile } from "react-firebase-hooks/storage";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { closeModal } from "../../redux-store/slices/modalSlice";
+import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
+import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const NewProductForm: FC = (props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const NewProductForm: FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [uploadFile, uploading, snapshot] = useUploadFile();
   const dispatch = useAppDispatch();
   const {
@@ -22,7 +22,7 @@ const NewProductForm: FC = (props) => {
   } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = async (productData) => {
-    setIsSubmitting(true);
+    setIsLoading(true);
     console.log(productData);
 
     const { name, category, price, quantity, imagePath, description } =
@@ -56,19 +56,14 @@ const NewProductForm: FC = (props) => {
       .then(() => console.log("success"))
       .catch((error) => console.log(error.message));
 
-    setIsSubmitting(false);
+    setIsLoading(false);
     reset();
-    dispatch(closeModal());
+    dispatch(setShowAddDialog(false));
   };
 
   console.log(watch());
 
-  if (isSubmitting)
-    return (
-      <div className="grid place-items-center h-full">
-        <CircularProgress size={64} />
-      </div>
-    );
+  if (isLoading) return <CircularProgressCentered />;
 
   return (
     <div className="w-[32rem] absolute top-24 right-28 px-8 py-4 rounded-xl bg-white text-slate-500">
@@ -110,7 +105,6 @@ const NewProductForm: FC = (props) => {
               />
             </div>
           </div> */}
-
           <div className="flex flex-col gap-[1px]">
             <label htmlFor="category">Category</label>
             <select
@@ -134,7 +128,6 @@ const NewProductForm: FC = (props) => {
             inputValue="price"
             register={register}
           />
-
           <Input
             className="file-input text-sm"
             type="file"
@@ -154,7 +147,6 @@ const NewProductForm: FC = (props) => {
             inputValue="quantity"
             register={register}
           />
-
           <button className="col-span-2 place-self-end btn-primary">
             Submit
           </button>

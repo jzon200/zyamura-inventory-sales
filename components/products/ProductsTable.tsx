@@ -4,7 +4,7 @@ import TableGrid from "../layout/TableGrid";
 import ProductsRowData from "./ProductsRowData";
 
 type Props = {
-  productsList: InputValues[] | DocumentData[];
+  products: Product[] | DocumentData[];
 };
 
 const ProductsTable: FC<Props> = (props) => {
@@ -19,7 +19,7 @@ const ProductsTable: FC<Props> = (props) => {
       <div className="table-header">PRICE</div>
       <div className="table-header">ACTION</div>
       {/* Items */}
-      {props.productsList.map((product: InputValues | DocumentData) => (
+      {props.products.map((product: Product | DocumentData) => (
         <ProductsRowData key={product.id} data={product} />
       ))}
     </TableGrid>

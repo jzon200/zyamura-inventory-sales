@@ -1,7 +1,9 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import modalReducer from "./slices/modalSlice";
+import productReducer from "./slices/productsSlice";
 
-const store = configureStore({ reducer: { modal: modalReducer } });
+const store = configureStore({
+  reducer: { products: productReducer },
+});
 
 export default store;
 

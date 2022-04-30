@@ -9,17 +9,19 @@ type Props = {
 };
 
 const SidebarItem: FC<Props> = (props) => {
+  const { label, icon, isSelected, onSelected } = props;
+
   return (
     <div
-      onClick={props.onSelected}
+      onClick={onSelected}
       className={`${
-        props.isSelected && "bg-primary-light font-medium text-primary-dark"
-      } py-4 px-8 cursor-pointer select-none hover:bg-primary-light hover:bg-blend-dodge`}
+        isSelected && "bg-primary-light text-primary-dark"
+      } px-6 py-4 font-medium cursor-pointer select-none hover:bg-primary-light hover:text-primary-dark`}
     >
       <li className="flex gap-4 items-center">
         {/* Icon */}
-        {createElement(props.icon, { width: 24 })}
-        <div>{props.label}</div>
+        {createElement(icon, { width: 24 })}
+        <div>{label}</div>
       </li>
     </div>
   );
