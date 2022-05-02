@@ -8,7 +8,7 @@ import {
   IoSettingsOutline,
 } from "react-icons/io5";
 import {
-  MdGroups,
+  MdOutlineGroups,
   MdMenu,
   MdOutlineSpaceDashboard,
   MdPets,
@@ -22,7 +22,7 @@ const sidebarItems = [
   { label: "Sales", icon: VscGraphLine },
   { label: "Expenses", icon: IoReceiptOutline },
   { label: "Customers", icon: IoPeopleOutline },
-  { label: "Employees", icon: MdGroups },
+  { label: "Employees", icon: MdOutlineGroups },
   { label: "Accounts", icon: VscAccount },
   { label: "Settings", icon: IoSettingsOutline },
 ];

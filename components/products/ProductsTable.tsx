@@ -1,10 +1,9 @@
-import { DocumentData } from "firebase/firestore";
 import { FC } from "react";
 import TableGrid from "../layout/TableGrid";
 import ProductsRowData from "./ProductsRowData";
 
 type Props = {
-  products: Product[] | DocumentData[];
+  products: Product[];
 };
 
 const ProductsTable: FC<Props> = (props) => {
@@ -19,8 +18,8 @@ const ProductsTable: FC<Props> = (props) => {
       <div className="table-header">PRICE</div>
       <div className="table-header">ACTION</div>
       {/* Items */}
-      {props.products.map((product: Product | DocumentData) => (
-        <ProductsRowData key={product.id} data={product} />
+      {props.products.map((product: Product) => (
+        <ProductsRowData key={product.docId} data={product} />
       ))}
     </TableGrid>
   );

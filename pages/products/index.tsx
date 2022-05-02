@@ -3,21 +3,24 @@ import { NextPage } from "next";
 import { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { MdAdd, MdFilterList, MdOutlineArrowDropDown } from "react-icons/md";
+import DeleteDialog from "../../components/products/DeleteProductDialog";
+import EditProductForm from "../../components/products/EditProductForm";
 import NewProductForm from "../../components/products/NewProductForm";
 import ProductsTable from "../../components/products/ProductsTable";
-import DeleteDialog from "../../components/products/DeleteProductDialog";
+import CircularProgressCentered from "../../components/UI/CircularProgressCentered";
 import MuiModal from "../../components/UI/Modal";
 import { db } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
   setShowAddDialog,
   setShowDeleteDialog,
+  setShowEditDialog,
 } from "../../redux-store/slices/productsSlice";
 
 const Products: NextPage = () => {
   const collectionRef = collection(db, "products");
-  const q = query(collectionRef, orderBy("dateAdded", "desc"));
-  const [products, loading, error] = useCollection(q);
+  const q = query(collectionRef, orderBy("dateModified", "desc"));
+  const [snapshot, loading, error] = useCollection(q);
 
   const { showAddDialog, showEditDialog, showDeleteDialog } = useAppSelector(
     (state) => ({
@@ -29,7 +32,37 @@ const Products: NextPage = () => {
 
   const dispatch = useAppDispatch();
 
-  if (loading) return null;
+  if (loading) return <CircularProgressCentered />;
+
+  const products: Product[] = snapshot!.docs.map((doc) => {
+    const {
+      id,
+      name,
+      price,
+      month,
+      quantity,
+      year,
+      category,
+      itemType,
+      description,
+      imageUrl,
+      dateAdded,
+    } = doc.data();
+    return {
+      id,
+      docId: doc.id,
+      name,
+      description,
+      category,
+      price,
+      itemType,
+      year,
+      month,
+      quantity,
+      imageUrl,
+      dateAdded,
+    };
+  });
 
   return (
     <Fragment>
@@ -38,6 +71,12 @@ const Products: NextPage = () => {
         onClose={() => dispatch(setShowAddDialog(false))}
       >
         <NewProductForm />
+      </MuiModal>
+      <MuiModal
+        showModal={showEditDialog}
+        onClose={() => dispatch(setShowEditDialog(false))}
+      >
+        <EditProductForm />
       </MuiModal>
       <DeleteDialog
         showDialog={showDeleteDialog}
@@ -74,12 +113,7 @@ const Products: NextPage = () => {
             <MdAdd size={24} />
           </button>
         </div>
-        <ProductsTable
-          products={products!.docs.map((doc) => ({
-            ...doc.data(),
-            docId: doc.id,
-          }))}
-        />
+        <ProductsTable products={products} />
       </div>
     </Fragment>
   );

@@ -1,25 +1,29 @@
-import { TextField } from "@mui/material";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import CircularProgress from "@mui/material/CircularProgress";
+import TextField from "@mui/material/TextField";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { db, storage } from "../../lib/firebase";
-import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { setShowEditDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const NewProductForm: FC = () => {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+const EditProductForm: FC = () => {
+  const product = useAppSelector((state) => state.products.product);
+
+  const [imageUrl, setImageUrl] = useState<string | null>(product?.imageUrl);
   const [itemType, setItemType] = useState<"individual" | "collective">(
-    "individual"
+    product!.itemType
   );
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
   const [uploadFile, uploading, snapshot] = useUploadFile();
+
   const dispatch = useAppDispatch();
   const {
     register,
@@ -29,8 +33,6 @@ const NewProductForm: FC = () => {
     reset,
     formState: { errors },
   } = useForm<InputValues>();
-  // let test: UseControllerProps<InputValues>;
-  // const { field, fieldState } = useController(test);
 
   const submitHandler: SubmitHandler<InputValues> = async (productData) => {
     setIsLoading(true);
@@ -39,66 +41,59 @@ const NewProductForm: FC = () => {
     const { name, category, price, description, quantity, year, month } =
       productData;
 
-    const productsCollectionRef = collection(db, "products");
+    const productDocRef = doc(db, "products", product?.docId);
 
-    const id = Math.floor(Math.random() * 1000000);
-
-    await addDoc(productsCollectionRef, {
-      id,
+    await updateDoc(productDocRef, {
       name,
       description,
       category,
       price,
-      quantity: !quantity && null,
-      year: !year && null,
-      month: !month && null,
+      quantity: !quantity ? null : quantity,
+      year: !year ? null : year,
+      month: !month ? null : month,
       imageUrl,
       itemType,
-      dateAdded: serverTimestamp(),
       dateModified: serverTimestamp(),
     })
       .then(() => console.log("success"))
       .catch((error) => console.log(error.message));
 
     setIsLoading(false);
-    dispatch(setShowAddDialog(false));
+    dispatch(setShowEditDialog(false));
     reset();
-  };
-
-  const uploadImgHandler = async (event: ChangeEvent<HTMLInputElement>) => {
-    const imgPath = event.target.files ? event.target.files[0] : undefined;
-    if (imgPath) {
-      const storageRef = ref(storage, `products/images/${imgPath?.name}`);
-      setIsUploading(true);
-      await uploadFile(storageRef, imgPath);
-      const imgUrl = await getDownloadURL(storageRef);
-      setImageUrl(imgUrl);
-      setIsUploading(false);
-    }
   };
 
   console.log(watch());
 
-  let imgContent = <div className="w-40" />;
+  let imgContent = (
+    <img
+      className="rounded-lg mr-1 min-w-[69px] max-h-[64px] ring ring-slate-400 bg-slate-400 object-cover"
+      src={imageUrl!}
+    />
+  );
 
   if (isUploading) {
-    imgContent = <CircularProgressCentered />;
+    imgContent = (
+      <div className="rounded-lg w-40 bg-slate-400 grid place-items-center">
+        <CircularProgress size={24} />
+      </div>
+    );
   } else if (imageUrl) {
     imgContent = (
       <img
-        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] object-cover"
+        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] ring ring-slate-400 bg-slate-400 object-cover"
         src={imageUrl!}
       />
     );
   } else {
-    imgContent = <div className="w-40 bg-slate-400 rounded-lg" />;
+    imgContent = <div className="rounded-lg w-40 bg-slate-400" />;
   }
 
   if (isLoading) return <CircularProgressCentered />;
 
   return (
-    <div className="w-[32rem] absolute top-32 right-36 px-8 py-4 rounded-xl bg-white text-slate-500">
-      <div className="text-center text-2xl mb-4">Add Items</div>
+    <div className="absolute top-1/4 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
+      <div className="text-center text-2xl mb-4">Edit Item: #{product!.id}</div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
           <Input
@@ -109,6 +104,7 @@ const NewProductForm: FC = () => {
             autoFocus
             inputValue="name"
             register={register}
+            defaultValue={product?.name}
           />
           <Input
             type="number"
@@ -119,6 +115,7 @@ const NewProductForm: FC = () => {
             inputValue="price"
             required
             register={register}
+            defaultValue={product?.price}
           />
 
           {/* Select Category */}
@@ -127,6 +124,7 @@ const NewProductForm: FC = () => {
             <select
               id="category"
               className="form-control px-2"
+              defaultValue={product?.category}
               {...register("category")}
             >
               <option value="fish">Fish</option>
@@ -144,7 +142,22 @@ const NewProductForm: FC = () => {
                 className="form-control upload-input w-[138px]"
                 type="file"
                 accept="image/*"
-                onChange={uploadImgHandler}
+                onChange={async (e) => {
+                  const imgPath = e.target.files
+                    ? e.target.files[0]
+                    : undefined;
+                  if (imgPath) {
+                    const storageRef = ref(
+                      storage,
+                      `products/images/${imgPath?.name}`
+                    );
+                    setIsUploading(true);
+                    await uploadFile(storageRef, imgPath);
+                    const imgUrl = await getDownloadURL(storageRef);
+                    setImageUrl(imgUrl);
+                    setIsUploading(false);
+                  }
+                }}
               />
             </div>
             {imgContent}
@@ -192,6 +205,7 @@ const NewProductForm: FC = () => {
                       label="year"
                       variant="outlined"
                       size="small"
+                      defaultValue={product?.year}
                       {...field}
                     />
                   )}
@@ -205,6 +219,7 @@ const NewProductForm: FC = () => {
                       label="month"
                       variant="outlined"
                       size="small"
+                      defaultValue={product?.month}
                       {...field}
                     />
                   )}
@@ -222,6 +237,7 @@ const NewProductForm: FC = () => {
               placeholder="2"
               valueAsNumber
               inputValue="quantity"
+              defaultValue={product?.quantity}
               register={register}
             />
           )}
@@ -232,6 +248,7 @@ const NewProductForm: FC = () => {
             className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
             rows={4}
             placeholder="Enter some text..."
+            defaultValue={product?.description}
             {...register("description")}
           ></textarea>
 
@@ -244,4 +261,4 @@ const NewProductForm: FC = () => {
   );
 };
 
-export default NewProductForm;
+export default EditProductForm;

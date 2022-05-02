@@ -3,6 +3,8 @@ import productReducer from "./slices/productsSlice";
 
 const store = configureStore({
   reducer: { products: productReducer },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export default store;
