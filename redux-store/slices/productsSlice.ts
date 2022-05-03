@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { DocumentData } from "firebase/firestore";
 
 export type ProductsState = {
-  product: Product | null;
+  product: Product | DocumentData | null;
   showAddDialog: boolean;
   showEditDialog: boolean;
   showDeleteDialog: boolean;
