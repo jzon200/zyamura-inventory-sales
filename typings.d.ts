@@ -25,4 +25,31 @@ type Product = {
   dateAdded: string;
 };
 
+type ProductQuery = {
+  sort: SortQuery;
+  label: SortLabel;
+  queryConstraint: ProductQueryConstraint;
+  descending?: boolean;
+};
+
 type Category = "fish" | "dog" | "materials" | "other";
+
+type ProductQueryConstraint = "dateAdded" | "price" | "quantity" | "name";
+
+type SortLabel =
+  | "Latest"
+  | "Highest Price"
+  | "Lowest Price"
+  | "Lowest Quantity"
+  | "Highest Quantity"
+  | "Name A-Z"
+  | "Name Z-A";
+
+type SortQuery =
+  | "latest"
+  | "priceAsc"
+  | "priceDesc"
+  | "quantityAsc"
+  | "quantityDesc"
+  | "nameAsc"
+  | "nameDesc";

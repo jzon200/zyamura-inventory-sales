@@ -1,15 +1,13 @@
-import { collection, orderBy, query } from "firebase/firestore";
 import { NextPage } from "next";
 import { Fragment } from "react";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { MdAdd, MdFilterList, MdOutlineArrowDropDown } from "react-icons/md";
+import { MdAdd, MdFilterList } from "react-icons/md";
+import TableGrid from "../../components/layout/TableGrid";
 import DeleteDialog from "../../components/products/DeleteProductDialog";
 import EditProductForm from "../../components/products/EditProductForm";
 import NewProductForm from "../../components/products/NewProductForm";
 import ProductsTable from "../../components/products/ProductsTable";
-import CircularProgressCentered from "../../components/UI/CircularProgressCentered";
+import Dropdown from "../../components/UI/Dropdown";
 import MuiModal from "../../components/UI/Modal";
-import { db } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
   setShowAddDialog,
@@ -18,10 +16,6 @@ import {
 } from "../../redux-store/slices/productsSlice";
 
 const Products: NextPage = () => {
-  const collectionRef = collection(db, "products");
-  const q = query(collectionRef, orderBy("dateModified", "desc"));
-  const [snapshot, loading, error] = useCollection(q);
-
   const { showAddDialog, showEditDialog, showDeleteDialog } = useAppSelector(
     (state) => ({
       showAddDialog: state.products.showAddDialog,
@@ -31,38 +25,6 @@ const Products: NextPage = () => {
   );
 
   const dispatch = useAppDispatch();
-
-  if (loading) return <CircularProgressCentered />;
-
-  const products: Product[] = snapshot!.docs.map((doc) => {
-    const {
-      id,
-      name,
-      price,
-      month,
-      quantity,
-      year,
-      category,
-      itemType,
-      description,
-      imageUrl,
-      dateAdded,
-    } = doc.data();
-    return {
-      id,
-      docId: doc.id,
-      name,
-      description,
-      category,
-      price,
-      itemType,
-      year,
-      month,
-      quantity,
-      imageUrl,
-      dateAdded,
-    };
-  });
 
   return (
     <Fragment>
@@ -83,8 +45,8 @@ const Products: NextPage = () => {
         onClose={() => dispatch(setShowDeleteDialog(false))}
       />
       {/* Products Container */}
-      <div className="mx-12 my-6 px-24 py-12 rounded-t-3xl shadow-md bg-primary-light h-screen max-h-screen overflow-y-scroll">
-        <div className="flex justify-between items-center text-lg">
+      <div className="mx-12 my-6 pt-12 pb-6 rounded-t-3xl shadow-md bg-primary-light h-screen max-h-screen">
+        <div className="flex px-16 justify-between items-center text-lg">
           <div className="text-3xl text-[#AAA683] select-none">
             All Products
           </div>
@@ -99,12 +61,7 @@ const Products: NextPage = () => {
               <MdFilterList size={24} />
             </button>
           </div>
-          <button className="btn-rounded max-h-14 bg-[#D1CEB2] basis-72">
-            <div>
-              Sort by <span className="font-medium text-[#13240D]">Latest</span>
-            </div>
-            <MdOutlineArrowDropDown size={24} />
-          </button>
+          <Dropdown />
           <button
             onClick={() => dispatch(setShowAddDialog(true))}
             className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
@@ -113,7 +70,18 @@ const Products: NextPage = () => {
             <MdAdd size={24} />
           </button>
         </div>
-        <ProductsTable products={products} />
+        <TableGrid className="mt-16 text-[#3A512B] text-xl">
+          {/* Header */}
+          <div>{/* Empty Column */}</div>
+          <div className="table-header">ID</div>
+          <div className="table-header">NAME</div>
+          <div className="table-header">CATEGORY</div>
+          <div className="table-header">QUANTITY</div>
+          <div className="table-header">PRICE</div>
+          <div className="table-header">ACTION</div>
+          {/* Items */}
+        </TableGrid>
+        <ProductsTable />
       </div>
     </Fragment>
   );

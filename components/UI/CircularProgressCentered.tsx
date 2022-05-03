@@ -2,12 +2,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { FC } from "react";
 
 type Props = {
+  className?: string;
   size?: number;
 };
 
-const CircularProgressCentered: FC = ({ size = 64 }: Props) => {
+const CircularProgressCentered: FC<Props> = ({
+  size = 64,
+  className,
+}: Props) => {
   return (
-    <div className="grid place-items-center h-screen">
+    <div className={`grid place-items-center ${className}`}>
       <CircularProgress size={size} />
     </div>
   );

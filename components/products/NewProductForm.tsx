@@ -82,7 +82,7 @@ const NewProductForm: FC = () => {
   let imgContent = <div className="w-40" />;
 
   if (isUploading) {
-    imgContent = <CircularProgressCentered />;
+    imgContent = <CircularProgressCentered className="w-40" size={24} />;
   } else if (imageUrl) {
     imgContent = (
       <img
@@ -97,7 +97,7 @@ const NewProductForm: FC = () => {
   if (isLoading) return <CircularProgressCentered />;
 
   return (
-    <div className="w-[32rem] absolute top-32 right-36 px-8 py-4 rounded-xl bg-white text-slate-500">
+    <div className="w-[32rem] absolute top-32 right-28 px-8 py-4 rounded-xl bg-white text-slate-500">
       <div className="text-center text-2xl mb-4">Add Items</div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">

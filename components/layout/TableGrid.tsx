@@ -8,7 +8,7 @@ type Props = {
 const TableGrid: FC<Props> = (props) => {
   return (
     <div
-      className={`grid grid-cols-7 gap-x-4 gap-y-8 place-items-center select-none ${props.className}`}
+      className={`grid grid-cols-7 gap-y-8 place-items-center select-none ${props.className}`}
     >
       {props.children}
     </div>

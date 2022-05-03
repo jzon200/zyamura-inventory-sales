@@ -73,15 +73,11 @@ const EditProductForm: FC = () => {
   );
 
   if (isUploading) {
-    imgContent = (
-      <div className="rounded-lg w-40 bg-slate-400 grid place-items-center">
-        <CircularProgress size={24} />
-      </div>
-    );
+    imgContent = <CircularProgressCentered className="w-40" size={24} />;
   } else if (imageUrl) {
     imgContent = (
       <img
-        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] ring ring-slate-400 bg-slate-400 object-cover"
+        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] object-cover"
         src={imageUrl!}
       />
     );
@@ -89,7 +85,7 @@ const EditProductForm: FC = () => {
     imgContent = <div className="rounded-lg w-40 bg-slate-400" />;
   }
 
-  if (isLoading) return <CircularProgressCentered />;
+  if (isLoading) return <CircularProgressCentered className="h-screen" />;
 
   return (
     <div className="absolute top-1/4 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">

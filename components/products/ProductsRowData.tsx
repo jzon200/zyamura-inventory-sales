@@ -29,7 +29,7 @@ const ProductsRowData: FC<Props> = (props) => {
   };
 
   return (
-    <Fragment key={docId}>
+    <Fragment>
       {imageUrl ? (
         <Image
           src={imageUrl}
