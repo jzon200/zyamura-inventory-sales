@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
 import { FiBox } from "react-icons/fi";
 import {
   IoPeopleOutline,
@@ -8,8 +7,8 @@ import {
   IoSettingsOutline,
 } from "react-icons/io5";
 import {
-  MdOutlineGroups,
   MdMenu,
+  MdOutlineGroups,
   MdOutlineSpaceDashboard,
   MdPets,
 } from "react-icons/md";
@@ -27,7 +26,7 @@ const sidebarItems = [
   { label: "Settings", icon: IoSettingsOutline },
 ];
 
-const Sidebar: FC = () => {
+const Sidebar = () => {
   const router = useRouter();
 
   const routeName = router.pathname.substring(1); // /dashboard => dashboard

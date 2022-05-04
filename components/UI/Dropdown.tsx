@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setProductQuery } from "../../redux-store/slices/productsSlice";
@@ -46,7 +46,7 @@ const items: ProductQuery[] = [
   },
 ];
 
-const Dropdown: FC = () => {
+const Dropdown = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const selectedQuery = useAppSelector((state) => state.products.productQuery);
   const dispatch = useAppDispatch();

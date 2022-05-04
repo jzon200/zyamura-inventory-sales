@@ -1,5 +1,5 @@
 import Modal from "@mui/material/Modal";
-import { FC, Fragment, ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 
 type Props = {
   showModal: boolean;
@@ -7,9 +7,7 @@ type Props = {
   children: ReactNode;
 };
 
-const MuiModal: FC<Props> = (props) => {
-  const { showModal, onClose, children } = props;
-
+const MuiModal = ({ showModal, onClose, children }: Props) => {
   return (
     <Fragment>
       <Modal

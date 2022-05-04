@@ -16,7 +16,7 @@ type Product = {
   name: string;
   description: string;
   category: Category;
-  itemType: string;
+  itemType: ItemType;
   price: number;
   quantity?: number | null;
   year?: number | null;
@@ -31,6 +31,8 @@ type ProductQuery = {
   queryConstraint: ProductQueryConstraint;
   descending?: boolean;
 };
+
+type ItemType = "individual" | "collective";
 
 type Category = "fish" | "dog" | "materials" | "other";
 

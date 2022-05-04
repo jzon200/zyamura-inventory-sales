@@ -1,5 +1,5 @@
 import { deleteDoc, doc } from "firebase/firestore";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { MdOutlineClose, MdWarning } from "react-icons/md";
 import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
@@ -11,16 +11,14 @@ type Props = {
   onClose: () => void;
 };
 
-const DeleteDialog: FC<Props> = (props) => {
+const DeleteDialog = ({ showDialog, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const selectedProduct = useAppSelector((state) => state.products.product);
 
-  const { showDialog, onClose } = props;
-
   return (
     <MuiModal showModal={showDialog} onClose={onClose}>
-      {isLoading && <CircularProgressCentered className="h-screeen" />}
+      {isLoading && <CircularProgressCentered className="h-full" />}
       {!isLoading && (
         <div className="absolute top-1/3 left-[38%] rounded-xl p-6 w-[616px] h-[288px] bg-white drop-shadow-lg select-none">
           <div className="flex justify-between items-center text-xl font-medium">

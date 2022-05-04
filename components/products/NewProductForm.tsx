@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { db, storage } from "../../lib/firebase";
@@ -10,11 +10,9 @@ import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const NewProductForm: FC = () => {
+const NewProductForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [itemType, setItemType] = useState<"individual" | "collective">(
-    "individual"
-  );
+  const [itemType, setItemType] = useState<ItemType>("individual");
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -43,15 +41,18 @@ const NewProductForm: FC = () => {
 
     const id = Math.floor(Math.random() * 1000000);
 
+    const isNotIndividual = itemType !== "individual";
+    const isNotCollective = itemType !== "collective";
+
     await addDoc(productsCollectionRef, {
       id,
       name,
       description,
       category,
       price,
-      quantity: !quantity && null,
-      year: !year && null,
-      month: !month && null,
+      quantity: !quantity || isNotCollective ? null : quantity,
+      year: !year || isNotIndividual ? null : year,
+      month: !month || isNotIndividual ? null : month,
       imageUrl,
       itemType,
       dateAdded: serverTimestamp(),

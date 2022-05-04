@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { Path, UseFormRegister } from "react-hook-form";
 
 // type Props = {
@@ -33,23 +33,21 @@ type InputProps = {
   register: UseFormRegister<InputValues>;
 };
 
-const Input: FC<InputProps> = (props) => {
+const Input = ({
+  id,
+  type,
+  inputValue,
+  register,
+  autoFocus,
+  className,
+  label,
+  defaultValue,
+  placeholder,
+  required,
+  valueAsNumber,
+  accept,
+}: InputProps) => {
   const [isTouched, setIsTouched] = useState(false);
-
-  const {
-    id,
-    type,
-    inputValue,
-    register,
-    autoFocus,
-    className,
-    label,
-    defaultValue,
-    placeholder,
-    required,
-    valueAsNumber,
-    accept,
-  } = props;
 
   return (
     <div>

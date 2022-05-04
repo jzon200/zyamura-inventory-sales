@@ -1,12 +1,12 @@
 import { collection, orderBy, query } from "firebase/firestore";
-import { FC, Fragment } from "react";
+import { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import ProductsRowData from "./ProductsRowData";
 
-const ProductsTable: FC = () => {
+const ProductsTable = () => {
   const productQuery = useAppSelector((state) => state.products.productQuery);
   const collectionRef = collection(db, "products");
   const q = query(
@@ -56,7 +56,7 @@ const ProductsTable: FC = () => {
       <div className="overflow-y-scroll py-8 h-5/6">
         <div className="grid grid-cols-7 gap-y-8 place-items-center select-none text-[#3A512B] text-xl">
           {products.map((product: Product) => (
-            <ProductsRowData key={product.docId} data={product} />
+            <ProductsRowData key={product.docId} product={product} />
           ))}
         </div>
       </div>

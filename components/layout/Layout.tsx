@@ -1,11 +1,17 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 
-const Layout: FC<{ children?: ReactNode }> = (props) => {
+type Props = {
+  children?: ReactNode;
+};
+
+const Layout = ({ children }: Props) => {
   return (
     <div className="flex h-screen">
       <main className="order-2 grow bg-surface overflow-hidden">
-        {props.children}
+        <div className="mx-12 my-6 pt-12 pb-6 rounded-t-3xl drop-shadow-xl bg-primary-light h-full max-h-screen">
+          {children}
+        </div>
       </main>
       <Sidebar />
     </div>

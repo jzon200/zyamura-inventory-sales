@@ -1,4 +1,4 @@
-import { createElement, FC } from "react";
+import { createElement } from "react";
 import { IconType } from "react-icons";
 
 type Props = {
@@ -8,9 +8,7 @@ type Props = {
   onSelected: () => void;
 };
 
-const SidebarItem: FC<Props> = (props) => {
-  const { label, icon, isSelected, onSelected } = props;
-
+const SidebarItem = ({ label, icon, isSelected, onSelected }: Props) => {
   return (
     <div
       onClick={onSelected}
