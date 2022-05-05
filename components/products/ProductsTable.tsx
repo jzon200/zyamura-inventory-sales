@@ -1,4 +1,4 @@
-import { collection, orderBy, query } from "firebase/firestore";
+import { collection, DocumentData, orderBy, query } from "firebase/firestore";
 import { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
@@ -16,37 +16,14 @@ const ProductsTable = () => {
       productQuery.descending ? "desc" : "asc"
     )
   );
-  const [snapshot, loading, error] = useCollection(q);
+  const [snapshot, loading] = useCollection(q);
 
-  if (loading) return <CircularProgressCentered className="h-full" />;
+  if (loading) return <CircularProgressCentered />;
 
-  const products: Product[] = snapshot!.docs.map((doc) => {
-    const {
-      id,
-      name,
-      price,
-      month,
-      quantity,
-      year,
-      category,
-      itemType,
-      description,
-      imageUrl,
-      dateAdded,
-    } = doc.data();
+  const products: Product[] | DocumentData = snapshot!.docs.map((doc) => {
     return {
-      id,
+      ...doc.data(),
       docId: doc.id,
-      name,
-      description,
-      category,
-      price,
-      itemType,
-      year,
-      month,
-      quantity,
-      imageUrl,
-      dateAdded,
     };
   });
 
@@ -63,21 +40,5 @@ const ProductsTable = () => {
     </Fragment>
   );
 };
-
-// const TableHeader: FC = () => {
-//   return (
-//     <TableGrid className="mt-16 text-[#3A512B] text-xl">
-//       {/* Header */}
-//       <div>{/* Empty Column */}</div>
-//       <div className="table-header">ID</div>
-//       <div className="table-header">NAME</div>
-//       <div className="table-header">CATEGORY</div>
-//       <div className="table-header">QUANTITY</div>
-//       <div className="table-header">PRICE</div>
-//       <div className="table-header">ACTION</div>
-//       {/* Items */}
-//     </TableGrid>
-//   );
-// };
 
 export default ProductsTable;

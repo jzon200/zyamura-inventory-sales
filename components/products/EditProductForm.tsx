@@ -1,6 +1,7 @@
 import TextField from "@mui/material/TextField";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
+import Image from "next/image";
 import { useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -9,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowEditDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
+import imgPlaceholder from "../../assets/image_placeholder.svg";
 
 const EditProductForm = () => {
   const product = useAppSelector((state) => state.products.product);
@@ -65,27 +67,7 @@ const EditProductForm = () => {
 
   console.log(watch());
 
-  let imgContent = (
-    <img
-      className="rounded-lg mr-1 min-w-[69px] max-h-[64px] ring ring-slate-400 bg-slate-400 object-cover"
-      src={imageUrl!}
-    />
-  );
-
-  if (isUploading) {
-    imgContent = <CircularProgressCentered className="w-40" size={24} />;
-  } else if (imageUrl) {
-    imgContent = (
-      <img
-        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] object-cover"
-        src={imageUrl!}
-      />
-    );
-  } else {
-    imgContent = <div className="rounded-lg w-40 bg-slate-400" />;
-  }
-
-  if (isLoading) return <CircularProgressCentered className="h-screen" />;
+  if (isLoading) return <CircularProgressCentered />;
 
   return (
     <div className="absolute top-1/4 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
@@ -156,7 +138,25 @@ const EditProductForm = () => {
                 }}
               />
             </div>
-            {imgContent}
+            <div
+              className={`w-full max-w-[4rem] max-h-16 ${
+                (imageUrl !== null || isUploading) &&
+                "rounded-lg border-2 border-gray-500"
+              }`}
+            >
+              {isUploading ? (
+                <CircularProgressCentered size={24} />
+              ) : (
+                <Image
+                  className="rounded-md text-blue-500"
+                  src={imageUrl !== null ? imageUrl : imgPlaceholder}
+                  width={720}
+                  height={720}
+                  objectFit="cover"
+                  quality={100}
+                />
+              )}
+            </div>
           </div>
 
           <div>

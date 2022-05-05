@@ -17,7 +17,7 @@ const initialState: ProductsState = {
   productQuery: {
     sort: "latest",
     label: "Latest",
-    queryConstraint: "dateAdded",
+    queryConstraint: "dateModified",
     descending: true,
   },
 };

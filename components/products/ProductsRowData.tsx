@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Fragment } from "react";
+import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
-import { MdOutlineClose } from "react-icons/md";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import {
   setProduct,
@@ -32,17 +32,20 @@ const ProductsRowData = ({ product }: Props) => {
   return (
     <Fragment>
       {imageUrl ? (
-        <Image
-          src={imageUrl}
-          className="rounded-md"
-          width={80}
-          height={80}
-          objectFit={"cover"}
-        />
+        <div className="w-20">
+          <Image
+            src={imageUrl}
+            className="rounded-md "
+            width={720}
+            height={720}
+            objectFit={"cover"}
+            quality={100}
+          />
+        </div>
       ) : (
-        <div className="h-20 w-20"></div>
+        <div className="h-20 w-20" />
       )}
-      <div>#{id}</div>
+      <div>{id}</div>
       <div>{name}</div>
       <div>{category}</div>
       {/* <div>{description}</div> */}
@@ -56,11 +59,11 @@ const ProductsRowData = ({ product }: Props) => {
         maximumFractionDigits: 2,
       })}`}</div>
       <div className="flex gap-4">
-        <button onClick={editHandler}>
+        <button title="Edit" onClick={editHandler}>
           <FiEdit />
         </button>
-        <button onClick={deleteHandler}>
-          <MdOutlineClose />
+        <button title="Delete" onClick={deleteHandler}>
+          <BsTrash />
         </button>
       </div>
     </Fragment>

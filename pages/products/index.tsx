@@ -1,7 +1,8 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import { Fragment } from "react";
 import { MdAdd, MdFilterList } from "react-icons/md";
-import TableGrid from "../../components/layout/TableGrid";
+import TableHeader from "../../components/layout/Table";
 import DeleteDialog from "../../components/products/DeleteProductDialog";
 import EditProductForm from "../../components/products/EditProductForm";
 import NewProductForm from "../../components/products/NewProductForm";
@@ -14,6 +15,17 @@ import {
   setShowDeleteDialog,
   setShowEditDialog,
 } from "../../redux-store/slices/productsSlice";
+
+const TABLE_HEADERS = [
+  { label: "" },
+  { label: "ID" },
+  { label: "NAME" },
+  { label: "CATEGORY" },
+  // { label: "Quantity" },
+  { label: "ITEM TYPE" },
+  { label: "PRICE" },
+  { label: "ACTION" },
+];
 
 const Products: NextPage = () => {
   const { showAddDialog, showEditDialog, showDeleteDialog } = useAppSelector(
@@ -28,6 +40,9 @@ const Products: NextPage = () => {
 
   return (
     <Fragment>
+      <Head>
+        <title>Products | Zyamura Mix Pet Shop Inventory & Sales System</title>
+      </Head>
       <MuiModal
         showModal={showAddDialog}
         onClose={() => dispatch(setShowAddDialog(false))}
@@ -67,17 +82,7 @@ const Products: NextPage = () => {
           <MdAdd size={24} />
         </button>
       </div>
-      <TableGrid className="mt-16 text-[#3A512B] text-xl">
-        {/* Header */}
-        <div>{/* Empty Column */}</div>
-        <div className="table-header">ID</div>
-        <div className="table-header">NAME</div>
-        <div className="table-header">CATEGORY</div>
-        <div className="table-header">ITEM TYPE</div>
-        <div className="table-header">PRICE</div>
-        <div className="table-header">ACTION</div>
-        {/* Items */}
-      </TableGrid>
+      <TableHeader items={TABLE_HEADERS} />
       <ProductsTable />
     </Fragment>
   );

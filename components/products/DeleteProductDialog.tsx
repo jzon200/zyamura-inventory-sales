@@ -18,7 +18,7 @@ const DeleteDialog = ({ showDialog, onClose }: Props) => {
 
   return (
     <MuiModal showModal={showDialog} onClose={onClose}>
-      {isLoading && <CircularProgressCentered className="h-full" />}
+      {isLoading && <CircularProgressCentered />}
       {!isLoading && (
         <div className="absolute top-1/3 left-[38%] rounded-xl p-6 w-[616px] h-[288px] bg-white drop-shadow-lg select-none">
           <div className="flex justify-between items-center text-xl font-medium">

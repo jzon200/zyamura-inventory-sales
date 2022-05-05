@@ -36,7 +36,12 @@ type ItemType = "individual" | "collective";
 
 type Category = "fish" | "dog" | "materials" | "other";
 
-type ProductQueryConstraint = "dateAdded" | "price" | "quantity" | "name";
+type ProductQueryConstraint =
+  | "dateAdded"
+  | "dateModified"
+  | "price"
+  | "quantity"
+  | "name";
 
 type SortLabel =
   | "Latest"

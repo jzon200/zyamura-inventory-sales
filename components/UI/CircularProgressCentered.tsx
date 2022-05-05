@@ -7,7 +7,7 @@ type Props = {
 
 const CircularProgressCentered = ({ size = 64, className }: Props) => {
   return (
-    <div className={`grid place-items-center ${className}`}>
+    <div className={`grid place-items-center h-full ${className}`}>
       <CircularProgress size={size} />
     </div>
   );

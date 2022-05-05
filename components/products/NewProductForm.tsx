@@ -4,11 +4,14 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { BsImage } from "react-icons/bs";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
+import Image from "next/image";
+import imgPlaceholder from "../../assets/image_placeholder.svg";
 
 const NewProductForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -17,8 +20,9 @@ const NewProductForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [uploadFile, uploading, snapshot] = useUploadFile();
+  const [uploadFile] = useUploadFile();
   const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -67,7 +71,7 @@ const NewProductForm = () => {
   };
 
   const uploadImgHandler = async (event: ChangeEvent<HTMLInputElement>) => {
-    const imgPath = event.target.files ? event.target.files[0] : undefined;
+    const imgPath = event.target.files ? event.target.files[0] : null;
     if (imgPath) {
       const storageRef = ref(storage, `products/images/${imgPath?.name}`);
       setIsUploading(true);
@@ -80,25 +84,10 @@ const NewProductForm = () => {
 
   console.log(watch());
 
-  let imgContent = <div className="w-40" />;
-
-  if (isUploading) {
-    imgContent = <CircularProgressCentered className="w-40" size={24} />;
-  } else if (imageUrl) {
-    imgContent = (
-      <img
-        className="rounded-lg mr-1 min-w-[69px] max-h-[64px] object-cover"
-        src={imageUrl!}
-      />
-    );
-  } else {
-    imgContent = <div className="w-40 bg-slate-400 rounded-lg" />;
-  }
-
-  if (isLoading) return <CircularProgressCentered />;
+  if (isLoading) return <CircularProgressCentered className="h-full" />;
 
   return (
-    <div className="w-[32rem] absolute top-32 right-28 px-8 py-4 rounded-xl bg-white text-slate-500">
+    <div className="absolute top-32 right-28 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
       <div className="text-center text-2xl mb-4">Add Items</div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
@@ -121,7 +110,6 @@ const NewProductForm = () => {
             required
             register={register}
           />
-
           {/* Select Category */}
           <div className="flex flex-col gap-[1px]">
             <label htmlFor="category">Category</label>
@@ -142,15 +130,32 @@ const NewProductForm = () => {
               <label htmlFor="imgUpload">Image</label>
               <input
                 id="imgUpload"
-                className="form-control upload-input w-[138px]"
+                className="form-control upload-input"
                 type="file"
                 accept="image/*"
                 onChange={uploadImgHandler}
               />
             </div>
-            {imgContent}
+            <div
+              className={`w-full max-w-[4rem] max-h-16 ${
+                (imageUrl !== null || isUploading) &&
+                "rounded-lg border-2 border-gray-500"
+              }`}
+            >
+              {isUploading ? (
+                <CircularProgressCentered size={24} />
+              ) : (
+                <Image
+                  className="rounded-md text-blue-500"
+                  src={imageUrl !== null ? imageUrl : imgPlaceholder}
+                  width={720}
+                  height={720}
+                  objectFit="cover"
+                  quality={100}
+                />
+              )}
+            </div>
           </div>
-
           <div>
             <label>Item Type</label>
             <div className="flex gap-4">
@@ -178,7 +183,6 @@ const NewProductForm = () => {
               </button>
             </div>
           </div>
-
           {itemType === "individual" && (
             <div>
               <label htmlFor="age">Age</label>
@@ -213,7 +217,6 @@ const NewProductForm = () => {
               </div>
             </div>
           )}
-
           {itemType === "collective" && (
             <Input
               id="quantity"
@@ -226,7 +229,6 @@ const NewProductForm = () => {
               register={register}
             />
           )}
-
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
@@ -235,7 +237,6 @@ const NewProductForm = () => {
             placeholder="Enter some text..."
             {...register("description")}
           ></textarea>
-
           <button className="col-span-2 place-self-end btn-primary">
             Submit
           </button>

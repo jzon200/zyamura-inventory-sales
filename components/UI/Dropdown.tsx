@@ -41,7 +41,7 @@ const items: ProductQuery[] = [
   {
     sort: "latest",
     label: "Latest",
-    queryConstraint: "dateAdded",
+    queryConstraint: "dateModified",
     descending: true,
   },
 ];
