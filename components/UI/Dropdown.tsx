@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setProductQuery } from "../../redux-store/slices/productsSlice";
@@ -51,12 +51,8 @@ const Dropdown = () => {
   const selectedQuery = useAppSelector((state) => state.products.productQuery);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    console.log("onMount");
-  });
-
   return (
-    <div className="relative basis-72 select-none z-10">
+    <div className="relative basis-72 select-none">
       <button
         className={`btn-rounded bg-[#D1CEB2] w-full ${
           isExpanded && "rounded-b-none"
@@ -77,7 +73,7 @@ const Dropdown = () => {
           <MdOutlineArrowDropDown size={24} />
         )}
       </button>
-      {/* Dropdown */}
+      {/* Dropdown Items */}
       {isExpanded && (
         <ul className="absolute rounded-b-3xl shadow-md w-full bg-white">
           {items.map((item, index) => (

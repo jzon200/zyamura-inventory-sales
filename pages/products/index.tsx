@@ -1,13 +1,12 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import { MdAdd, MdFilterList } from "react-icons/md";
-import TableHeader from "../../components/layout/Table";
+import ActionsHeader from "../../components/layout/ActionsHeader";
+import TableHeader from "../../components/layout/TableHeader";
 import DeleteDialog from "../../components/products/DeleteProductDialog";
 import EditProductForm from "../../components/products/EditProductForm";
 import NewProductForm from "../../components/products/NewProductForm";
 import ProductsTable from "../../components/products/ProductsTable";
-import Dropdown from "../../components/UI/Dropdown";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
@@ -60,28 +59,10 @@ const Products: NextPage = () => {
         onClose={() => dispatch(setShowDeleteDialog(false))}
       />
       {/* Products Container */}
-      <div className="flex px-16 justify-between items-center text-lg">
-        <div className="text-3xl text-[#AAA683] select-none">All Products</div>
-        <div className="flex items-center">
-          <input
-            type="text"
-            placeholder="Search"
-            className="max-h-14 basis-80 rounded-l-2xl p-4"
-          />
-          <button className="flex items-center gap-2 px-4 py-[14px] rounded-r-2xl font-medium bg-[#D1CEB2]">
-            Filters
-            <MdFilterList size={24} />
-          </button>
-        </div>
-        <Dropdown />
-        <button
-          onClick={() => dispatch(setShowAddDialog(true))}
-          className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
-        >
-          <div>Add Items</div>
-          <MdAdd size={24} />
-        </button>
-      </div>
+      <ActionsHeader
+        title="All Products"
+        onAddHandler={() => dispatch(setShowAddDialog(true))}
+      />
       <TableHeader items={TABLE_HEADERS} />
       <ProductsTable />
     </Fragment>

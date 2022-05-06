@@ -1,7 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import TableHeader from "../../components/layout/Table";
+import ActionsHeader from "../../components/layout/ActionsHeader";
+import TableHeader from "../../components/layout/TableHeader";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { setShowAddDialog } from "../../redux-store/slices/employeesSlice";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -14,15 +17,18 @@ const TABLE_HEADERS = [
 ];
 
 const Employees: NextPage = () => {
+  const dispatch = useAppDispatch();
+
   return (
     <Fragment>
       <Head>
         <title>Employees | Zyamura Inventory & Sales</title>
       </Head>
-      <div>
-        Employees
-        <TableHeader items={TABLE_HEADERS} />
-      </div>
+      <ActionsHeader
+        title="Employees"
+        onAddHandler={() => dispatch(setShowAddDialog(true))}
+      />
+      <TableHeader items={TABLE_HEADERS} />
     </Fragment>
   );
 };

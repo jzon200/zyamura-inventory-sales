@@ -40,6 +40,7 @@ const ProductsRowData = ({ product }: Props) => {
             height={720}
             objectFit={"cover"}
             quality={100}
+            alt=""
           />
         </div>
       ) : (

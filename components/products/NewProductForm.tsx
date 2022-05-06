@@ -1,17 +1,16 @@
 import { TextField } from "@mui/material";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
+import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { BsImage } from "react-icons/bs";
+import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
-import Image from "next/image";
-import imgPlaceholder from "../../assets/image_placeholder.svg";
 
 const NewProductForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -152,6 +151,7 @@ const NewProductForm = () => {
                   height={720}
                   objectFit="cover"
                   quality={100}
+                  alt=""
                 />
               )}
             </div>

@@ -25,6 +25,15 @@ type Product = {
   dateAdded: string;
 };
 
+type Employee = {
+  id: string;
+  docId: string;
+  name: string;
+  contactNumber: string;
+  email: string;
+  role: string;
+};
+
 type ProductQuery = {
   sort: SortQuery;
   label: SortLabel;

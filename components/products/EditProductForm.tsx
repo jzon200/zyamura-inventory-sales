@@ -154,6 +154,7 @@ const EditProductForm = () => {
                   height={720}
                   objectFit="cover"
                   quality={100}
+                  alt=""
                 />
               )}
             </div>

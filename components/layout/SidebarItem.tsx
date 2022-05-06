@@ -13,8 +13,8 @@ const SidebarItem = ({ label, icon, isSelected, onSelected }: Props) => {
     <div
       onClick={onSelected}
       className={`${
-        isSelected && "bg-primary-light text-primary-dark"
-      } px-6 py-4 font-medium cursor-pointer select-none hover:bg-primary-light hover:text-primary-dark`}
+        isSelected && "bg-[#737E6D] text-primary-light"
+      } px-6 py-4 font-medium cursor-pointer select-none hover:bg-[#737E6D] hover:text-primary-light`}
     >
       <li className="flex gap-4 items-center">
         {/* Icon */}

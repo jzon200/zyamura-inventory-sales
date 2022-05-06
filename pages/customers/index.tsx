@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import TableHeader from "../../components/layout/Table";
+import ActionsHeader from "../../components/layout/ActionsHeader";
+import TableHeader from "../../components/layout/TableHeader";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -19,10 +20,8 @@ const Customers: NextPage = () => {
       <Head>
         <title>Customers | Zyamura Inventory & Sales</title>
       </Head>
-      <div>
-        Customers
-        <TableHeader items={TABLE_HEADERS} />
-      </div>
+      <ActionsHeader title="Customers" onAddHandler={() => {}} />
+      <TableHeader items={TABLE_HEADERS} />
     </Fragment>
   );
 };
