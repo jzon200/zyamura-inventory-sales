@@ -23,11 +23,7 @@ const data02 = [
 const TwoWayPieChart = () => {
   return (
     <ResponsiveContainer width="100%" height="100%" maxHeight={384}>
-      <PieChart
-        width={730}
-        height={300}
-        // margin={{ top: 24, right: 24, bottom: 24, left: 24 }}
-      >
+      <PieChart width={400} height={300}>
         <Pie
           data={data01}
           dataKey="value"
@@ -37,15 +33,20 @@ const TwoWayPieChart = () => {
           stroke="#081830"
           fill="#47D4CA"
         >
-          <LabelList dataKey="name" position="top" stroke="#fff" />
+          <LabelList
+            dataKey="name"
+            position="top"
+            stroke="#fff"
+            strokeWidth={0.75}
+          />
         </Pie>
         <Pie
           data={data02}
           dataKey="value"
           cx="50%"
           cy="50%"
-          innerRadius={100}
-          outerRadius={140}
+          innerRadius={95}
+          outerRadius={130}
           stroke="#081830"
           fill="#D5639C"
           color="#fff"
