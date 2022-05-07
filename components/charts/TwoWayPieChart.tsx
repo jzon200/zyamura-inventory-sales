@@ -22,7 +22,7 @@ const data02 = [
 
 const TwoWayPieChart = () => {
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" maxHeight={512}>
       <PieChart
         width={730}
         height={300}

@@ -59,7 +59,7 @@ const data = [
 
 const SimpleAreaChart = () => {
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height="100%" maxHeight={512}>
       <AreaChart
         width={730}
         height={250}
