@@ -26,10 +26,10 @@ const CategoryBox = ({ id, label, register }: Props) => {
           },
         })}
       >
-        {items.map((item) => (
-          <option value={item}>{`${item.charAt(0).toUpperCase()}${item.slice(
-            1
-          )}`}</option>
+        {items.map((item, index) => (
+          <option key={index} value={item}>{`${item
+            .charAt(0)
+            .toUpperCase()}${item.slice(1)}`}</option>
         ))}
       </select>
     </div>
