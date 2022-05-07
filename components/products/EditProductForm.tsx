@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { db, storage } from "../../lib/firebase";
@@ -37,8 +37,15 @@ const EditProductForm = () => {
     setIsLoading(true);
     console.log(productData);
 
-    const { name, category, price, description, quantity, year, month } =
-      productData;
+    const {
+      productName: name,
+      category,
+      price,
+      description,
+      quantity,
+      year,
+      month,
+    } = productData;
 
     const productDocRef = doc(db, "products", product?.docId);
 
@@ -65,6 +72,18 @@ const EditProductForm = () => {
     reset();
   };
 
+  const uploadImgHandler = async (event: ChangeEvent<HTMLInputElement>) => {
+    const imgPath = event.target.files ? event.target.files[0] : null;
+    if (imgPath) {
+      const storageRef = ref(storage, `employees/images/${imgPath?.name}`);
+      setIsUploading(true);
+      await uploadFile(storageRef, imgPath);
+      const imgUrl = await getDownloadURL(storageRef);
+      setImageUrl(imgUrl);
+      setIsUploading(false);
+    }
+  };
+
   console.log(watch());
 
   if (isLoading) return <CircularProgressCentered />;
@@ -80,7 +99,7 @@ const EditProductForm = () => {
             placeholder="Enter Item Name"
             required
             autoFocus
-            inputValue="name"
+            inputValue="productName"
             register={register}
             defaultValue={product?.name}
           />
@@ -120,22 +139,7 @@ const EditProductForm = () => {
                 className="form-control upload-input w-[138px]"
                 type="file"
                 accept="image/*"
-                onChange={async (e) => {
-                  const imgPath = e.target.files
-                    ? e.target.files[0]
-                    : undefined;
-                  if (imgPath) {
-                    const storageRef = ref(
-                      storage,
-                      `products/images/${imgPath?.name}`
-                    );
-                    setIsUploading(true);
-                    await uploadFile(storageRef, imgPath);
-                    const imgUrl = await getDownloadURL(storageRef);
-                    setImageUrl(imgUrl);
-                    setIsUploading(false);
-                  }
-                }}
+                onChange={uploadImgHandler}
               />
             </div>
             <div

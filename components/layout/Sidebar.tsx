@@ -36,8 +36,8 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="hidden order-1 basis-52 bg-primary-dark md:block">
-      <nav className="flex flex-col text-xl text-[#AFB29C] h-full max-h-screen">
+    <aside className="hidden order-1 basis-52 bg-primary-dark md:block min-w-[208px] max-h-screen">
+      <nav className="flex flex-col text-xl text-[#AFB29C] h-full">
         <div className="flex gap-2 items-center text-primary-light p-4 mt-4">
           <button className="ml-2">
             <MdMenu size={24} />

@@ -1,54 +1,50 @@
 import { useState } from "react";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
-import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { setProductQuery } from "../../redux-store/slices/productsSlice";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { setSortQuery } from "../../redux-store/slices/productsSlice";
 import DropdownItem from "./DropdownItem";
 
-const items: ProductQuery[] = [
-  {
-    sort: "nameAsc",
-    label: "Name A-Z",
-    queryConstraint: "name",
-  },
-  {
-    sort: "nameDesc",
-    label: "Name Z-A",
-    queryConstraint: "name",
-    descending: true,
-  },
-  {
-    sort: "priceAsc",
-    label: "Lowest Price",
-    queryConstraint: "price",
-  },
-  {
-    sort: "priceDesc",
-    label: "Highest Price",
-    queryConstraint: "price",
-    descending: true,
-  },
-  {
-    sort: "quantityAsc",
-    label: "Lowest Quantity",
-    queryConstraint: "quantity",
-  },
-  {
-    sort: "quantityDesc",
-    label: "Highest Quantity",
-    queryConstraint: "quantity",
-    descending: true,
-  },
-  {
-    sort: "latest",
-    label: "Latest",
-    queryConstraint: "dateModified",
-    descending: true,
-  },
-];
+// const items: ProductQuery[] = [
+//   {
+//     sort: "nameAsc",
+//     label: "Name A-Z",
+//   },
+//   {
+//     sort: "nameDesc",
+//     label: "Name Z-A",
+//   },
+//   {
+//     sort: "priceAsc",
+//     label: "Lowest Price",
+//   },
+//   {
+//     sort: "priceDesc",
+//     label: "Highest Price",
+//   },
+//   {
+//     sort: "quantityAsc",
+//     label: "Lowest Quantity",
+//   },
+//   {
+//     sort: "quantityDesc",
+//     label: "Highest Quantity",
+//   },
+//   {
+//     sort: "latest",
+//     label: "Latest",
+//   },
+// ];
 
-const Dropdown = () => {
+type Props = {
+  items: ProductQuery[];
+  selectedQuery: ProductQuery;
+  // onSortHandler: () => void;
+  // onSortHandler: (sortQuery: SortQuery) => void;
+};
+
+const Dropdown = ({ items, selectedQuery }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const selectedQuery = useAppSelector((state) => state.products.productQuery);
+  // const selectedQuery = useAppSelector((state) => state.products.productQuery);
   const dispatch = useAppDispatch();
 
   return (
@@ -82,7 +78,8 @@ const Dropdown = () => {
               label={item.label}
               isSelected={selectedQuery.label === item.label}
               onClick={() => {
-                dispatch(setProductQuery(item.sort));
+                dispatch(setSortQuery(item.sortQuery));
+                // onSortHandler(item.sortQuery);
                 setIsExpanded(false);
               }}
             />

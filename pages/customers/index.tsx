@@ -14,13 +14,33 @@ const TABLE_HEADERS = [
   { label: "Mobile number" },
 ];
 
+const SORT_QUERIES: ProductQuery[] = [
+  {
+    sortQuery: "priceAsc",
+    label: "Lowest Price",
+  },
+  {
+    sortQuery: "priceDesc",
+    label: "Highest Price",
+  },
+  {
+    sortQuery: "latest",
+    label: "Latest",
+  },
+];
+
 const Customers: NextPage = () => {
   return (
     <Fragment>
       <Head>
         <title>Customers | Zyamura Inventory & Sales</title>
       </Head>
-      <ActionsHeader title="Customers" onAddHandler={() => {}} />
+      <ActionsHeader
+        sortItems={SORT_QUERIES}
+        selectedQuery={SORT_QUERIES[0]}
+        title="Customers"
+        onAddHandler={() => {}}
+      />
       <TableHeader items={TABLE_HEADERS} />
     </Fragment>
   );

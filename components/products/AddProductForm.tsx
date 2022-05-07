@@ -12,7 +12,7 @@ import { setShowAddDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const NewProductForm = () => {
+const AddProductForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [itemType, setItemType] = useState<ItemType>("individual");
 
@@ -30,15 +30,20 @@ const NewProductForm = () => {
     reset,
     formState: { errors },
   } = useForm<InputValues>();
-  // let test: UseControllerProps<InputValues>;
-  // const { field, fieldState } = useController(test);
 
-  const submitHandler: SubmitHandler<InputValues> = async (productData) => {
+  const submitHandler: SubmitHandler<InputValues> = async (data) => {
     setIsLoading(true);
-    console.log(productData);
+    console.log(data);
 
-    const { name, category, price, description, quantity, year, month } =
-      productData;
+    const {
+      productName: name,
+      category,
+      price,
+      description,
+      quantity,
+      year,
+      month,
+    } = data;
 
     const productsCollectionRef = collection(db, "products");
 
@@ -96,7 +101,7 @@ const NewProductForm = () => {
             placeholder="Enter Item Name"
             required
             autoFocus
-            inputValue="name"
+            inputValue="productName"
             register={register}
           />
           <Input
@@ -121,7 +126,7 @@ const NewProductForm = () => {
               <option value="dog">Dog</option>
               <option value="materials">Materials</option>
               <option value="food">Food</option>
-              <option value="other">Define New</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div className="flex gap-2">
@@ -246,4 +251,4 @@ const NewProductForm = () => {
   );
 };
 
-export default NewProductForm;
+export default AddProductForm;

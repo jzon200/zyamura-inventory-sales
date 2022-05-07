@@ -1,20 +1,20 @@
 import { deleteDoc, doc } from "firebase/firestore";
-import { useState } from "react";
+import React, { useState } from "react";
 import { MdOutlineClose, MdWarning } from "react-icons/md";
-import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import MuiModal from "../UI/Modal";
+import { db } from "../../lib/firebase";
 
 type Props = {
   showDialog: boolean;
   onClose: () => void;
 };
 
-const DeleteProductDialog = ({ showDialog, onClose }: Props) => {
+const DeleteEmployeeDialog = ({ showDialog, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const selectedProduct = useAppSelector((state) => state.products.product);
+  const selectedEmployee = useAppSelector((state) => state.employees.employee);
 
   return (
     <MuiModal showModal={showDialog} onClose={onClose}>
@@ -45,7 +45,9 @@ const DeleteProductDialog = ({ showDialog, onClose }: Props) => {
               <button
                 onClick={async () => {
                   setIsLoading(true);
-                  await deleteDoc(doc(db, "products", selectedProduct?.docId));
+                  await deleteDoc(
+                    doc(db, "employees", selectedEmployee?.docId)
+                  );
                   setIsLoading(false);
                   onClose();
                 }}
@@ -61,4 +63,4 @@ const DeleteProductDialog = ({ showDialog, onClose }: Props) => {
   );
 };
 
-export default DeleteProductDialog;
+export default DeleteEmployeeDialog;

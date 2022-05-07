@@ -1,6 +1,6 @@
 interface InputValues {
   id: number;
-  name: string;
+  productName: string;
   description: string;
   category: Category;
   price: number;
@@ -8,6 +8,11 @@ interface InputValues {
   year?: number | null;
   month?: number | null;
   imagePath: FileList;
+  role: "admin" | "manager" | "cashier" | "other";
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  email: string;
 }
 
 type Product = {
@@ -28,16 +33,48 @@ type Product = {
 type Employee = {
   id: string;
   docId: string;
+  firstName: string;
+  lastName: string;
+  contactNumber: string;
+  email: string;
+  role: string;
+  imageUrl: string;
+};
+
+type Customer = {
+  id: string;
+  docId: string;
   name: string;
   contactNumber: string;
   email: string;
   role: string;
 };
 
+type Sales = {
+  id: string;
+  docId: string;
+  name: string;
+  date: Date;
+};
+
 type ProductQuery = {
-  sort: SortQuery;
+  sortQuery: SortQuery;
   label: SortLabel;
-  queryConstraint: ProductQueryConstraint;
+  queryConstraint?: ProductQueryConstraint;
+  descending?: boolean;
+};
+
+type CustomerQuery = {
+  sortQuery: SortQuery;
+  label: SortLabel;
+  queryConstraint?: "dateAdded" | "dateModified" | "name";
+  descending?: boolean;
+};
+
+type EmployeeQuery = {
+  sortQuery: SortQuery;
+  label: SortLabel;
+  queryConstraint?: "dateAdded" | "dateModified" | "name";
   descending?: boolean;
 };
 

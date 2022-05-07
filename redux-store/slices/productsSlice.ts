@@ -15,7 +15,7 @@ const initialState: ProductsState = {
   showEditDialog: false,
   showDeleteDialog: false,
   productQuery: {
-    sort: "latest",
+    sortQuery: "latest",
     label: "Latest",
     queryConstraint: "dateModified",
     descending: true,
@@ -38,11 +38,14 @@ export const productSlice = createSlice({
     setShowDeleteDialog(state, action: PayloadAction<boolean>) {
       state.showDeleteDialog = action.payload;
     },
-    setProductQuery(state, action: PayloadAction<SortQuery>) {
+    // setSelectedSortQuery(state, action: PayloadAction<SortQuery>) {
+    //   state.selectedSortQuery = action.payload;
+    // },
+    setSortQuery(state, action: PayloadAction<SortQuery>) {
       switch (action.payload) {
         case "latest":
           state.productQuery = {
-            sort: "latest",
+            sortQuery: "latest",
             label: "Latest",
             queryConstraint: "dateAdded",
             descending: true,
@@ -50,21 +53,21 @@ export const productSlice = createSlice({
           break;
         case "priceAsc":
           state.productQuery = {
-            sort: "priceAsc",
+            sortQuery: "priceAsc",
             label: "Lowest Price",
             queryConstraint: "price",
           };
           break;
         case "nameAsc":
           state.productQuery = {
-            sort: "nameAsc",
+            sortQuery: "nameAsc",
             label: "Name A-Z",
             queryConstraint: "name",
           };
           break;
         case "nameDesc":
           state.productQuery = {
-            sort: "nameDesc",
+            sortQuery: "nameDesc",
             label: "Name Z-A",
             queryConstraint: "name",
             descending: true,
@@ -72,7 +75,7 @@ export const productSlice = createSlice({
           break;
         case "priceDesc":
           state.productQuery = {
-            sort: "priceDesc",
+            sortQuery: "priceDesc",
             label: "Highest Price",
             queryConstraint: "price",
             descending: true,
@@ -81,14 +84,14 @@ export const productSlice = createSlice({
         // state.queryConstraint = orderBy("price", "desc");
         case "quantityAsc":
           state.productQuery = {
-            sort: "quantityAsc",
+            sortQuery: "quantityAsc",
             label: "Lowest Quantity",
             queryConstraint: "quantity",
           };
           break;
         case "quantityDesc":
           state.productQuery = {
-            sort: "quantityDesc",
+            sortQuery: "quantityDesc",
             label: "Highest Quantity",
             queryConstraint: "quantity",
             descending: true,
@@ -98,7 +101,7 @@ export const productSlice = createSlice({
         // state.queryConstraint = orderBy("quantity", "desc");
         default:
           state.productQuery = {
-            sort: "latest",
+            sortQuery: "latest",
             label: "Latest",
             queryConstraint: "dateAdded",
             descending: true,
@@ -117,7 +120,8 @@ export const {
   setShowAddDialog,
   setShowEditDialog,
   setShowDeleteDialog,
-  setProductQuery,
+  setSortQuery,
+  // setSelectedSortQuery,
 } = productSlice.actions;
 
 // export const selectProduct = (state: RootState) => state.products.product;

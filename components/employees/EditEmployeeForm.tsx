@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
@@ -6,20 +6,22 @@ import { useUploadFile } from "react-firebase-hooks/storage";
 import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
-import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { setShowAddDialog } from "../../redux-store/slices/employeesSlice";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { setShowEditDialog } from "../../redux-store/slices/employeesSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const AddEmployeeForm = () => {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+const EditEmployeeForm = () => {
+  const employee = useAppSelector((state) => state.employees.employee);
+
+  const [imageUrl, setImageUrl] = useState<string | null>(employee?.imageUrl);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
   const [uploadFile] = useUploadFile();
-  const dispatch = useAppDispatch();
 
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, watch, reset } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = async (data) => {
@@ -28,12 +30,9 @@ const AddEmployeeForm = () => {
 
     const { firstName, lastName, contactNumber, email, role } = data;
 
-    const employeesCollectionRef = collection(db, "employees");
+    const employeeDocRef = doc(db, "employees", employee?.docId);
 
-    const id = Math.floor(Math.random() * 1000000);
-
-    await addDoc(employeesCollectionRef, {
-      id,
+    await updateDoc(employeeDocRef, {
       firstName,
       lastName,
       contactNumber,
@@ -47,7 +46,7 @@ const AddEmployeeForm = () => {
       .catch((error) => console.log(error.message));
 
     setIsLoading(false);
-    dispatch(setShowAddDialog(false));
+    dispatch(setShowEditDialog(false));
     reset();
   };
 
@@ -65,11 +64,11 @@ const AddEmployeeForm = () => {
 
   console.log(watch());
 
-  if (isLoading) return <CircularProgressCentered className="h-full" />;
+  if (isLoading) return <CircularProgressCentered />;
 
   return (
-    <div className="absolute top-32 right-28 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
-      <div className="text-center text-2xl mb-4">Add Employee</div>
+    <div className="absolute top-1/4 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
+      <div className="text-center text-2xl mb-4">Edit Employee</div>
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
           <Input
@@ -77,9 +76,10 @@ const AddEmployeeForm = () => {
             id="firstName"
             placeholder="Enter First Name"
             required
-            autoFocus
             inputValue="firstName"
+            autoFocus
             register={register}
+            defaultValue={employee?.firstName}
           />
           <Input
             label="Last Name *"
@@ -88,6 +88,7 @@ const AddEmployeeForm = () => {
             required
             inputValue="lastName"
             register={register}
+            defaultValue={employee?.lastName}
           />
           <Input
             id="contactNumber"
@@ -96,6 +97,7 @@ const AddEmployeeForm = () => {
             inputValue="contactNumber"
             required
             register={register}
+            defaultValue={employee?.contactNumber}
           />
           <Input
             type="email"
@@ -104,12 +106,14 @@ const AddEmployeeForm = () => {
             required
             inputValue="email"
             register={register}
+            defaultValue={employee?.email}
           />
           <div className="flex flex-col gap-[1px]">
             <label htmlFor="role">Role</label>
             <select
               id="role"
               className="form-control px-2"
+              defaultValue={employee?.role}
               {...register("role")}
             >
               <option value="admin">Admin</option>
@@ -160,4 +164,4 @@ const AddEmployeeForm = () => {
   );
 };
 
-export default AddEmployeeForm;
+export default EditEmployeeForm;

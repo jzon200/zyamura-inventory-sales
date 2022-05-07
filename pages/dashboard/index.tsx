@@ -1,7 +1,8 @@
 import { NextPage } from "next";
+import TitleHeader from "../../components/layout/TitleHeader";
 
 const Dashboard: NextPage = () => {
-  return <div>Dashboard</div>;
+  return <TitleHeader title="Dashboard" />;
 };
 
 export default Dashboard;

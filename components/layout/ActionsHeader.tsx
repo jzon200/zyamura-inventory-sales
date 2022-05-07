@@ -1,15 +1,27 @@
 import { MdAdd, MdFilterList } from "react-icons/md";
+import SortProducts from "../products/SortProducts";
 import Dropdown from "../UI/Dropdown";
 import TitleHeader from "./TitleHeader";
 
 type Props = {
   title: string;
+  addLabel?: string;
   className?: string;
+  sortItems: ProductQuery[];
+  selectedQuery: ProductQuery;
+  // onSortHandler: (sortQuery: SortQuery) => void;
   onAddHandler: () => void;
-  // TODO: searchHandler & dropdownHandler
+  // TODO: searchHandler
 };
 
-const ActionsHeader = ({ title, className, onAddHandler }: Props) => {
+const ActionsHeader = ({
+  title,
+  className,
+  sortItems,
+  selectedQuery,
+  // onSortHandler,
+  onAddHandler,
+}: Props) => {
   return (
     <div className={`flex justify-between items-center text-lg ${className}`}>
       <TitleHeader className="basis-48" title={title} />
@@ -26,7 +38,8 @@ const ActionsHeader = ({ title, className, onAddHandler }: Props) => {
             <MdFilterList size={24} />
           </button>
         </div>
-        <Dropdown />
+        {/* <SortProducts /> */}
+        <Dropdown items={sortItems} selectedQuery={selectedQuery} />
         {/* Add Items */}
         <button
           onClick={onAddHandler}

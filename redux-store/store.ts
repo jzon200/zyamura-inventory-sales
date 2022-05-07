@@ -1,8 +1,9 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import employeesReducer from "./slices/employeesSlice";
 import productReducer from "./slices/productsSlice";
 
 const store = configureStore({
-  reducer: { products: productReducer },
+  reducer: { products: productReducer, employees: employeesReducer },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
 });
