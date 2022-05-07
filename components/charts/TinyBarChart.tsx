@@ -47,7 +47,7 @@ const data = [
 
 const TinyBarChart = () => {
   return (
-    <ResponsiveContainer width="100%" height="80%" maxHeight={128}>
+    <ResponsiveContainer width="100%" height="80%" maxHeight={192}>
       <BarChart width={24} height={40} data={data}>
         <Bar dataKey="uv" fill="#C62BDE" radius={8} />
       </BarChart>

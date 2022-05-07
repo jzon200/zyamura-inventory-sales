@@ -39,7 +39,6 @@ const EditEmployeeForm = () => {
       email,
       role,
       imageUrl,
-      dateAdded: serverTimestamp(),
       dateModified: serverTimestamp(),
     })
       .then(() => console.log("success"))

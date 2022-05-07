@@ -64,7 +64,7 @@ const Sales: NextPage = () => {
         <div className="bg-white rounded-2xl col-span-2">
           <SimpleAreaChart />
         </div>
-        <div className="bg-slate-900 text-white rounded-2xl w-96 p-4">
+        <div className="bg-slate-900 text-white rounded-2xl p-4">
           <div className="text-center text-2xl font-semibold">
             Product Percentage
           </div>
