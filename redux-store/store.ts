@@ -1,9 +1,14 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import employeesReducer from "./slices/employeesSlice";
 import productReducer from "./slices/productsSlice";
+import salesReducer from "./slices/salesSlice";
 
 const store = configureStore({
-  reducer: { products: productReducer, employees: employeesReducer },
+  reducer: {
+    products: productReducer,
+    sales: salesReducer,
+    employees: employeesReducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
 });

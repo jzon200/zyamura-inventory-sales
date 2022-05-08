@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import { Fragment } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit, FiShoppingBag } from "react-icons/fi";
 import SimpleAreaChart from "../../components/charts/SimpleAreaChart";
@@ -8,6 +7,11 @@ import TwoWayPieChart from "../../components/charts/TwoWayPieChart";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
 import TitleHeader from "../../components/layout/TitleHeader";
+import AddSalesForm from "../../components/sales/AddSalesForm";
+import { Fragment } from "react";
+import MuiModal from "../../components/UI/Modal";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
 
 const TABLE_HEADERS = [
   { label: "Description" },
@@ -35,8 +39,17 @@ const SORT_QUERIES: ProductQuery[] = [
 ];
 
 const Sales: NextPage = () => {
+  const dispatch = useAppDispatch();
+  const showAddDialog = useAppSelector((state) => state.sales.showAddDialog);
   return (
-    <div className="h-screen">
+    <Fragment>
+      <MuiModal
+        showModal={showAddDialog}
+        onClose={() => dispatch(setShowAddDialog(false))}
+      >
+        <AddSalesForm />
+      </MuiModal>
+
       {/* Sales Report */}
       <TitleHeader title="Sales Report" className="mb-4" />
       <div className="grid grid-cols-4 gap-5 select-none">
@@ -77,7 +90,7 @@ const Sales: NextPage = () => {
         selectedQuery={SORT_QUERIES[0]}
         className="mt-16"
         title="All Sales"
-        onAddHandler={() => {}}
+        onAddHandler={() => dispatch(setShowAddDialog(true))}
         // onSortHandler={() => {}}
       />
       <TableHeader items={TABLE_HEADERS} />
@@ -184,7 +197,7 @@ const Sales: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
