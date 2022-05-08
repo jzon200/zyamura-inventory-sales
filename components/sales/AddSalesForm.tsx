@@ -27,10 +27,9 @@ const AddSalesForm = () => {
             className="form-control px-2 basis-64"
             name="sortbox"
             id="sort"
+            defaultValue={"latest"}
           >
-            <option value="highestPrice" selected>
-              Latest
-            </option>
+            <option value="latest">Latest</option>
             <option value="highestPrice">Highest Price</option>
             <option value="lowestPrice">Lowest Price</option>
           </select>
@@ -45,7 +44,6 @@ const AddSalesForm = () => {
         </div>
         {/* Grid */}
         <ProductsGrid />
-        <button className="btn-primary block ml-auto">Submit</button>
       </div>
     </div>
   );

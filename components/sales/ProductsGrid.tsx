@@ -1,13 +1,24 @@
-import { collection, DocumentData, orderBy, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { Fragment, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import ProductCard from "./ProductCard";
 
 const ProductsGrid = () => {
+  const [selectedItems, setSelectedItems] = useState<Product[]>([]);
   const collectionRef = collection(db, "products");
   const q = query(collectionRef, orderBy("dateAdded", "desc"));
   const [snapshot, loading] = useCollection(q);
+  const dispatch = useAppDispatch();
 
   if (loading)
     return (
@@ -23,12 +34,52 @@ const ProductsGrid = () => {
     };
   });
 
+  console.log(selectedItems);
+
   return (
-    <div className="grid grid-rows-2 grid-cols-5 gap-x-9 gap-y-5 mb-4">
-      {products.map((product: Product) => (
-        <ProductCard key={product.docId} product={product} />
-      ))}
-    </div>
+    <Fragment>
+      <div className="grid grid-cols-5 gap-x-1 gap-y-5 mb-4 h-[28rem] overflow-x-hidden overflow-y-scroll">
+        {products.map((product: Product) => {
+          return (
+            <ProductCard
+              key={product.docId}
+              product={product}
+              isSelected={selectedItems.some(
+                (item) => product.docId === item.docId
+              )}
+              onClick={() =>
+                setSelectedItems((prevItems) => {
+                  // if the previous state of array contains the existing product,
+                  // then it will be removed from the array without mutating the state
+                  if (prevItems.some((item) => product.docId === item.docId)) {
+                    return prevItems.filter(
+                      (item) => product.docId !== item.docId
+                    );
+                  }
+                  // otherwise it will add to the selectedItems state
+                  return [...prevItems, product];
+                })
+              }
+            />
+          );
+        })}
+      </div>
+      <button
+        onClick={async () => {
+          const colRef = collection(db, "sales");
+          const id = Math.floor(Math.random() * 1000000);
+
+          await addDoc(colRef, {
+            id,
+            selectedItems,
+          });
+          dispatch(setShowAddDialog(false));
+        }}
+        className="btn-primary block ml-auto"
+      >
+        Submit
+      </button>
+    </Fragment>
   );
 };
 
