@@ -8,7 +8,7 @@ import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
 import TitleHeader from "../../components/layout/TitleHeader";
 import AddSalesForm from "../../components/sales/AddSalesForm";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
@@ -38,9 +38,94 @@ const SORT_QUERIES: ProductQuery[] = [
   },
 ];
 
+const WEEKLY_SALES = [
+  {
+    name: "Mon",
+    "Total sales": 4000,
+  },
+  {
+    name: "Tue",
+    "Total sales": 3000,
+  },
+  {
+    name: "Wed",
+    "Total sales": 2000,
+  },
+  {
+    name: "Thu",
+    "Total sales": 2780,
+  },
+  {
+    name: "Fri",
+    "Total sales": 1890,
+  },
+  {
+    name: "Sat",
+    "Total sales": 2390,
+  },
+  {
+    name: "Sun",
+    "Total sales": 3490,
+  },
+];
+
+const MONTHLY_SALES = [
+  {
+    name: "Jan",
+    "Total sales": 20000,
+  },
+  {
+    name: "Feb",
+    "Total sales": 15000,
+  },
+  {
+    name: "Mar",
+    "Total sales": 13500,
+  },
+  {
+    name: "Apr",
+    "Total sales": 12080,
+  },
+  {
+    name: "May",
+    "Total sales": 7590,
+  },
+  {
+    name: "Jun",
+    "Total sales": 10390,
+  },
+  {
+    name: "Jul",
+    "Total sales": 5490,
+  },
+  {
+    name: "Aug",
+    "Total sales": 7430,
+  },
+  {
+    name: "Sep",
+    "Total sales": 18490,
+  },
+  {
+    name: "Oct",
+    "Total sales": 15090,
+  },
+  {
+    name: "Nov",
+    "Total sales": 13490,
+  },
+  {
+    name: "Dec",
+    "Total sales": 25000,
+  },
+];
+
 const Sales: NextPage = () => {
+  const [salesData, setSalesData] = useState(WEEKLY_SALES);
   const dispatch = useAppDispatch();
   const showAddDialog = useAppSelector((state) => state.sales.showAddDialog);
+
+  console.log(salesData);
   return (
     <Fragment>
       <MuiModal
@@ -74,8 +159,27 @@ const Sales: NextPage = () => {
             <TinyBarChart />
           </div>
         </div>
-        <div className="bg-white rounded-2xl col-span-2">
-          <SimpleAreaChart />
+        <div className="bg-white rounded-2xl col-span-2 p-4">
+          <select
+            className="ml-auto p-2 block border-2 border-blue-500 focus:outline-none"
+            name="salesISO"
+            id="salesISO"
+            onChange={(event) => {
+              switch (event.target.value) {
+                case "weekly":
+                  setSalesData(WEEKLY_SALES);
+                  break;
+                case "monthly":
+                  setSalesData(MONTHLY_SALES);
+                  break;
+              }
+            }}
+          >
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annualy</option>
+          </select>
+          <SimpleAreaChart data={salesData} />
         </div>
         <div className="bg-slate-900 text-white rounded-2xl p-4">
           <div className="text-center text-2xl font-semibold">
