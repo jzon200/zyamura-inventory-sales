@@ -1,10 +1,9 @@
-import { TextField } from "@mui/material";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
@@ -25,7 +24,6 @@ const AddProductForm = () => {
   const {
     register,
     handleSubmit,
-    control,
     watch,
     reset,
     formState: { errors },
@@ -35,22 +33,11 @@ const AddProductForm = () => {
     setIsLoading(true);
     console.log(data);
 
-    const {
-      productName: name,
-      category,
-      price,
-      description,
-      quantity,
-      year,
-      month,
-    } = data;
+    const { productName: name, category, price, description, quantity } = data;
 
     const productsCollectionRef = collection(db, "products");
 
     const id = Math.floor(Math.random() * 1000000);
-
-    const isNotIndividual = itemType !== "individual";
-    const isNotCollective = itemType !== "collective";
 
     await addDoc(productsCollectionRef, {
       id,
@@ -58,9 +45,7 @@ const AddProductForm = () => {
       description,
       category,
       price,
-      quantity: !quantity || isNotCollective ? null : quantity,
-      year: !year || isNotIndividual ? null : year,
-      month: !month || isNotIndividual ? null : month,
+      quantity: !quantity ? 1 : quantity,
       imageUrl,
       itemType,
       dateAdded: serverTimestamp(),
@@ -114,6 +99,7 @@ const AddProductForm = () => {
             required
             register={register}
           />
+
           {/* Select Category */}
           <div className="flex flex-col gap-[1px]">
             <label htmlFor="category">Category</label>
@@ -161,6 +147,7 @@ const AddProductForm = () => {
               )}
             </div>
           </div>
+
           <div>
             <label>Item Type</label>
             <div className="flex gap-4">
@@ -188,60 +175,27 @@ const AddProductForm = () => {
               </button>
             </div>
           </div>
-          {itemType === "individual" && (
-            <div>
-              <label htmlFor="age">Age</label>
-              <div className="flex gap-2">
-                <Controller
-                  name="year"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      id="age"
-                      type="number"
-                      label="year"
-                      variant="outlined"
-                      size="small"
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  name="month"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      type="number"
-                      label="month"
-                      variant="outlined"
-                      size="small"
-                      {...field}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-          )}
-          {itemType === "collective" && (
-            <Input
-              id="quantity"
-              label="Quantity"
-              className=""
-              type="number"
-              placeholder="2"
-              valueAsNumber
-              inputValue="quantity"
-              register={register}
-            />
-          )}
+          <Input
+            id="quantity"
+            label="Quantity"
+            type="number"
+            valueAsNumber
+            inputValue="quantity"
+            disabled={itemType === "individual"}
+            defaultValue={itemType === "individual" ? 1 : undefined}
+            register={register}
+          />
+
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
             className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
             rows={4}
-            placeholder="Enter some text..."
+            placeholder={"Enter details such as age, size, etc."}
+            maxLength={150}
             {...register("description")}
-          ></textarea>
+          />
+
           <button className="col-span-2 place-self-end btn-primary">
             Submit
           </button>

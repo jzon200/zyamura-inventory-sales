@@ -1,21 +1,20 @@
-import TextField from "@mui/material/TextField";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowEditDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
-import imgPlaceholder from "../../assets/image_placeholder.svg";
 
 const EditProductForm = () => {
   const product = useAppSelector((state) => state.products.product);
 
-  const [imageUrl, setImageUrl] = useState<string | null>(product?.imageUrl);
+  const [imageUrl, setImageUrl] = useState<string | null>(product!.imageUrl);
   const [itemType, setItemType] = useState<ItemType>(product!.itemType);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +26,6 @@ const EditProductForm = () => {
   const {
     register,
     handleSubmit,
-    control,
     watch,
     reset,
     formState: { errors },
@@ -43,23 +41,16 @@ const EditProductForm = () => {
       price,
       description,
       quantity,
-      year,
-      month,
     } = productData;
 
     const productDocRef = doc(db, "products", product?.docId);
-
-    const isNotIndividual = itemType !== "individual";
-    const isNotCollective = itemType !== "collective";
 
     await updateDoc(productDocRef, {
       name,
       description,
       category,
       price,
-      quantity: !quantity || isNotCollective ? null : quantity,
-      year: !year || isNotIndividual ? null : year,
-      month: !month || isNotIndividual ? null : month,
+      quantity: !quantity ? 1 : quantity,
       imageUrl,
       itemType,
       dateModified: serverTimestamp(),
@@ -192,66 +183,26 @@ const EditProductForm = () => {
             </div>
           </div>
 
-          {itemType === "individual" && (
-            <div>
-              <label htmlFor="age">Age</label>
-              <div className="flex gap-2">
-                <Controller
-                  name="year"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      id="age"
-                      type="number"
-                      label="year"
-                      variant="outlined"
-                      size="small"
-                      defaultValue={product?.year}
-                      {...field}
-                    />
-                  )}
-                />
-                <Controller
-                  name="month"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      type="number"
-                      label="month"
-                      variant="outlined"
-                      size="small"
-                      defaultValue={product?.month}
-                      {...field}
-                    />
-                  )}
-                />
-              </div>
-            </div>
-          )}
-
-          {itemType === "collective" && (
-            <Input
-              id="quantity"
-              label="Quantity"
-              className=""
-              type="number"
-              placeholder="2"
-              valueAsNumber
-              inputValue="quantity"
-              defaultValue={product?.quantity}
-              register={register}
-            />
-          )}
+          <Input
+            id="quantity"
+            label="Quantity"
+            type="number"
+            valueAsNumber
+            inputValue="quantity"
+            disabled={itemType === "individual"}
+            defaultValue={product?.quantity}
+            register={register}
+          />
 
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
             className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
             rows={4}
-            placeholder="Enter some text..."
-            defaultValue={product?.description}
+            placeholder={"Enter details such as age, size, etc."}
+            maxLength={150}
             {...register("description")}
-          ></textarea>
+          />
 
           <button className="col-span-2 place-self-end btn-primary">
             Submit

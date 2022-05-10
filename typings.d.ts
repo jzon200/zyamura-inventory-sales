@@ -4,9 +4,7 @@ interface InputValues {
   description: string;
   category: Category;
   price: number;
-  quantity?: number | null;
-  year?: number | null;
-  month?: number | null;
+  quantity: number;
   imagePath: FileList;
   role: "admin" | "manager" | "cashier" | "other";
   firstName: string;
@@ -23,9 +21,7 @@ type Product = {
   category: Category;
   itemType: ItemType;
   price: number;
-  quantity?: number | null;
-  year?: number | null;
-  month?: number | null;
+  quantity: number;
   imageUrl: string | null;
   dateAdded: string;
 };

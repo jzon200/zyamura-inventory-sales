@@ -1,34 +1,19 @@
 import { useState } from "react";
 import { Path, UseFormRegister } from "react-hook-form";
 
-// type Props = {
-//   label: string;
-//   id?: string;
-//   type?: string;
-//   placeholder?: string;
-//   defaultValue?: string | number;
-//   required?: boolean;
-//   autoFocus?: boolean;
-//   className?: string;
-//   register: UseFormRegister<IFormValues>;
-// };
-
-// interface IFormValues {
-//   "Item Name": string;
-//   Age: number;
-// }
-
 type InputProps = {
   id?: string;
   label?: string;
   type?: string;
   placeholder?: string;
   defaultValue?: string | number;
+  maxLength?: number;
   autoFocus?: boolean;
   className?: string;
   accept?: string;
   inputValue: Path<InputValues>;
   required?: boolean;
+  disabled?: boolean;
   valueAsNumber?: boolean;
   register: UseFormRegister<InputValues>;
 };
@@ -43,7 +28,9 @@ const Input = ({
   label,
   defaultValue,
   placeholder,
+  maxLength = 50,
   required,
+  disabled,
   valueAsNumber,
   accept,
 }: InputProps) => {
@@ -51,19 +38,27 @@ const Input = ({
 
   return (
     <div>
-      <label className={`${isTouched && "text-blue-500"}`} htmlFor={id}>
+      <label
+        className={`${isTouched && "text-blue-500"} ${
+          disabled && "text-gray-400"
+        }`}
+        htmlFor={id}
+      >
         {label}
       </label>
       <input
-        className={`form-control ${className}`}
+        className={`form-control disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-400 ${className}`}
         id={id}
         type={type}
         placeholder={placeholder}
-        min={0}
+        min={1}
+        maxLength={maxLength}
         step={"any"}
         accept={accept}
         autoFocus={autoFocus}
         defaultValue={defaultValue}
+        aria-disabled={disabled}
+        disabled={disabled}
         onFocus={() => setIsTouched(true)}
         {...register(inputValue, {
           required,

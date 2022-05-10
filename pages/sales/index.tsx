@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import { Fragment, useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit, FiShoppingBag } from "react-icons/fi";
 import SimpleAreaChart from "../../components/charts/SimpleAreaChart";
@@ -8,7 +9,6 @@ import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
 import TitleHeader from "../../components/layout/TitleHeader";
 import AddSalesForm from "../../components/sales/AddSalesForm";
-import { Fragment, useEffect, useRef, useState } from "react";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/salesSlice";

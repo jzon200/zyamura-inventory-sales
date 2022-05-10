@@ -55,7 +55,7 @@ const ProductsRowData = ({ product }: Props) => {
       ) : (
         <div className="chip bg-[#EFE0C1] text-[#B7995D]">collective</div>
       )}
-      {/* <div>{`${quantity?.toLocaleString()}`}</div> */}
+      <div>{`${quantity?.toLocaleString()}`}</div>
       <div>{`₱${price?.toLocaleString(undefined, {
         maximumFractionDigits: 2,
       })}`}</div>
