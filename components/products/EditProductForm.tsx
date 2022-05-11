@@ -202,6 +202,7 @@ const EditProductForm = () => {
             placeholder={"Enter details such as age, size, etc."}
             maxLength={150}
             {...register("description")}
+            defaultValue={product?.description}
           />
 
           <button className="col-span-2 place-self-end btn-primary">

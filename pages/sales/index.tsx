@@ -14,8 +14,8 @@ import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
 
 const TABLE_HEADERS = [
+  { label: "ID" },
   { label: "Description" },
-  { label: "" },
   { label: "Status" },
   { label: "Added by" },
   { label: "Date" },
@@ -201,7 +201,22 @@ const Sales: NextPage = () => {
       {/* Sales Table */}
       <div className="overflow-y-scroll h-96">
         <div className="mt-4 grid grid-cols-7 gap-y-8 text-xl place-items-center select-none text-[#3A512B]">
+          <div>123456</div>
           <div>Dog food and Cage</div>
+          {/* <div></div> */}
+          <div className="chip bg-[#CCF8B3] text-[#1D8F19]">Delivered</div>
+          <div>John Doe</div>
+          <div>Apr 12, 2022</div>
+          <div>₱ 1,400</div>
+          <div className="flex gap-4">
+            <button title="Edit">
+              <FiEdit />
+            </button>
+            <button title="Delete">
+              <BsTrash />
+            </button>
+          </div>
+          {/* <div>Dog food and Cage</div>
           <div></div>
           <div className="chip bg-[#CCF8B3] text-[#1D8F19]">Delivered</div>
           <div>John Doe</div>
@@ -284,21 +299,7 @@ const Sales: NextPage = () => {
             <button title="Delete">
               <BsTrash />
             </button>
-          </div>
-          <div>Dog food and Cage</div>
-          <div></div>
-          <div className="chip bg-[#CCF8B3] text-[#1D8F19]">Delivered</div>
-          <div>John Doe</div>
-          <div>Apr 12, 2022</div>
-          <div>₱ 1,400</div>
-          <div className="flex gap-4">
-            <button title="Edit">
-              <FiEdit />
-            </button>
-            <button title="Delete">
-              <BsTrash />
-            </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </Fragment>
