@@ -7,12 +7,12 @@ type Props = {
 };
 
 const InventoryCard = ({ product, isSelected, onClick }: Props) => {
-  const { id, name, description, imageUrl, category } = product;
+  const { id, name, description, imageUrl, category, quantity } = product;
 
   return (
     <div
       onClick={onClick}
-      className={`w-96 rounded-xl p-4 grid grid-cols-3 border-2 cursor-pointer hover:border-green-500 ${
+      className={`w-96 rounded-xl p-4 grid grid-cols-3 border-2 cursor-pointer ${
         isSelected && "border-green-500"
       }`}
     >
@@ -27,6 +27,7 @@ const InventoryCard = ({ product, isSelected, onClick }: Props) => {
             quality={100}
             objectFit="cover"
           />
+          <div className="font-medium">Quantity: {quantity}</div>
         </div>
       ) : (
         <div className="w-24" />

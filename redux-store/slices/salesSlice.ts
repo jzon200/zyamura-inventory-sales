@@ -19,7 +19,7 @@ export const salesSlice = createSlice({
   name: "sales",
   initialState,
   reducers: {
-    setSales(state, action: PayloadAction<Employee>) {
+    setSales(state, action: PayloadAction<Sales>) {
       state.sales = action.payload;
     },
     setShowAddDialog(state, action: PayloadAction<boolean>) {

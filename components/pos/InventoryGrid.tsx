@@ -1,16 +1,29 @@
-import { collection, DocumentData, orderBy, query } from "firebase/firestore";
-import Image from "next/image";
-import { useState } from "react";
+import {
+  collection,
+  DocumentData,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { addItems } from "../../redux-store/slices/posSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import InventoryCard from "./InventoryCard";
 
 const InventoryGrid = () => {
-  const [selectedItems, setSelectedItems] = useState<Product[]>([]);
+  // const [selectedItems, setSelectedItems] = useState<Product[]>([]);
   const collectionRef = collection(db, "products");
   const q = query(collectionRef, orderBy("dateAdded", "desc"));
+  // const q = query(collectionRef, where("category", "==", "fish"));
+
   const [snapshot, loading] = useCollection(q);
+
+  const selectedItems = useAppSelector((state) => state.pos.selectedItems);
+  const dispatch = useAppDispatch();
+
+  console.log(selectedItems);
 
   if (loading)
     return (
@@ -27,7 +40,7 @@ const InventoryGrid = () => {
   });
 
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid grid-cols-3 gap-4">
       {products.map((product: Product) => (
         <InventoryCard
           key={product.docId}
@@ -35,17 +48,7 @@ const InventoryGrid = () => {
           isSelected={selectedItems.some(
             (item) => product.docId === item.docId
           )}
-          onClick={() =>
-            setSelectedItems((prevItems) => {
-              // if the previous state of array contains the existing product,
-              // then it will be removed from the array without mutating the state
-              if (prevItems.some((item) => product.docId === item.docId)) {
-                return prevItems.filter((item) => product.docId !== item.docId);
-              }
-              // otherwise it will add to the selectedItems state
-              return [...prevItems, product];
-            })
-          }
+          onClick={() => dispatch(addItems(product))}
         />
       ))}
     </div>

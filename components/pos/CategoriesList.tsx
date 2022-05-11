@@ -24,8 +24,8 @@ const categoryData: CategoryData[] = [
   { label: "Dog", imageData: dogIcon, quantity: 59 },
   { label: "Bird", imageData: birdIcon, quantity: 41 },
   { label: "Rabbit", imageData: rabbitIcon, quantity: 21 },
-  { label: "Hamster", imageData: hamsterIcon, quantity: 16 },
   { label: "Hedgehog", imageData: hedgehogIcon, quantity: 17 },
+  { label: "Hamster", imageData: hamsterIcon, quantity: 16 },
   // { label: "All", imageData: allIcon, quantity: 246 },
   // { label: "All", imageData: allIcon, quantity: 246 },
 ];
@@ -34,7 +34,7 @@ const CategoriesList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <div className="my-8 flex gap-4">
+    <div className="my-4 flex gap-4">
       {categoryData.map((category, index) => (
         <CategoryItem
           key={index}
