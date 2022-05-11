@@ -27,7 +27,7 @@ const InventoryGrid = () => {
 
   if (loading)
     return (
-      <div className="h-[48rem]">
+      <div className="h-[48rem] min-w-[74rem]">
         <CircularProgressCentered />
       </div>
     );

@@ -6,7 +6,7 @@ import InventoryGrid from "../../components/pos/InventoryGrid";
 
 const PointOfSales = () => {
   return (
-    <div className="flex gap-14 w-[90%] m-auto">
+    <div className="flex gap-14 w-[90%] m-auto mt-1 overflow-hidden">
       <main>
         <div>
           <div className="flex justify-between items-center">
