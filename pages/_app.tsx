@@ -16,7 +16,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
-  // Otherwise, the use the Single Shared Layout with Sidebar as default
+  // Otherwise, use the Single Shared Layout with Sidebar as default
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
