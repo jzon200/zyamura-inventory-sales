@@ -49,8 +49,10 @@ type Customer = {
 type Sales = {
   id: string;
   docId: string;
-  name: string;
-  date: Date;
+  author: string;
+  purchasedItems: Product[];
+  totalPrice: number;
+  transactionDate: Date;
 };
 
 type ProductQuery = {

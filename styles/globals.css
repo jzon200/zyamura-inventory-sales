@@ -3,12 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  /* Styling for Scrollbar */
   ::-webkit-scrollbar {
-    @apply w-[10px];
+    @apply w-2;
   }
 
   ::-webkit-scrollbar-thumb {
     @apply bg-blue-400 rounded-md;
+  }
+
+  /* Removes the spinner for number input fields */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }
 

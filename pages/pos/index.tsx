@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { ReactElement } from "react";
 import { FiSearch } from "react-icons/fi";
 import BillsList from "../../components/pos/BillsList";
@@ -36,6 +37,13 @@ const PointOfSales = () => {
 };
 
 PointOfSales.getLayout = function getLayout(page: ReactElement) {
-  return <>{page}</>;
+  return (
+    <>
+      <Head>
+        <title>Point of Sales | Zyamura</title>
+      </Head>
+      {page}
+    </>
+  );
 };
 export default PointOfSales;
