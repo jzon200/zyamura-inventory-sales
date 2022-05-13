@@ -76,6 +76,10 @@ export const posSlice = createSlice({
       existingBillsItem!.quantity = payload.quantity;
       existingBillsItem!.price = existingItem!.price * payload.quantity;
     },
+    clearTransactions(state: PosState) {
+      state.purchasedItems = [];
+      state.totalPrice = 0;
+    },
   },
 });
 
@@ -86,6 +90,7 @@ export const {
   addAllItemsHandler,
   removeItemHandler,
   replaceItemQuantity,
+  clearTransactions,
 } = posSlice.actions;
 
 export default posReducer;

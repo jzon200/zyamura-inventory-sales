@@ -24,7 +24,6 @@ const AddProductForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm<InputValues>();
@@ -71,13 +70,12 @@ const AddProductForm = () => {
     }
   };
 
-  console.log(watch());
-
   if (isLoading) return <CircularProgressCentered className="h-full" />;
 
   return (
     <div className="absolute top-32 right-28 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
       <div className="text-center text-2xl mb-4">Add Items</div>
+      {/* TODO: Add Error Validation Helpers */}
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
           <Input

@@ -17,7 +17,7 @@ const initialState: ProductsState = {
   productQuery: {
     sortQuery: "latest",
     label: "Latest",
-    queryConstraint: "dateModified",
+    queryConstraint: "dateAdded",
     descending: true,
   },
 };
@@ -26,22 +26,22 @@ export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setProduct(state, action: PayloadAction<Product>) {
+    setProduct(state: ProductsState, action: PayloadAction<Product>) {
       state.product = action.payload;
     },
-    setShowAddDialog(state, action: PayloadAction<boolean>) {
+    setShowAddDialog(state: ProductsState, action: PayloadAction<boolean>) {
       state.showAddDialog = action.payload;
     },
-    setShowEditDialog(state, action: PayloadAction<boolean>) {
+    setShowEditDialog(state: ProductsState, action: PayloadAction<boolean>) {
       state.showEditDialog = action.payload;
     },
-    setShowDeleteDialog(state, action: PayloadAction<boolean>) {
+    setShowDeleteDialog(state: ProductsState, action: PayloadAction<boolean>) {
       state.showDeleteDialog = action.payload;
     },
     // setSelectedSortQuery(state, action: PayloadAction<SortQuery>) {
     //   state.selectedSortQuery = action.payload;
     // },
-    setSortQuery(state, action: PayloadAction<SortQuery>) {
+    setSortQuery(state: ProductsState, action: PayloadAction<SortQuery>) {
       switch (action.payload) {
         case "latest":
           state.productQuery = {

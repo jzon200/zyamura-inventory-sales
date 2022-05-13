@@ -26,7 +26,6 @@ const EditProductForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm<InputValues>();
@@ -75,13 +74,12 @@ const EditProductForm = () => {
     }
   };
 
-  console.log(watch());
-
   if (isLoading) return <CircularProgressCentered />;
 
   return (
-    <div className="absolute top-1/4 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
+    <div className="absolute top-52 right-1/3 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
       <div className="text-center text-2xl mb-4">Edit Item: #{product!.id}</div>
+      {/* TODO: Add Error Validation Helpers */}
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
           <Input

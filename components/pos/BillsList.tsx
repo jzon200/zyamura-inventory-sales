@@ -1,12 +1,14 @@
 import {
   addDoc,
   collection,
+  doc,
+  runTransaction,
   serverTimestamp,
-  updateDoc,
 } from "firebase/firestore";
 import { Fragment, useState } from "react";
 import { db } from "../../lib/firebase";
-import { useAppSelector } from "../../redux-store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { clearTransactions } from "../../redux-store/slices/posSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import BillsItem from "./BillsItem";
 
@@ -16,6 +18,49 @@ const BillsList = () => {
     purchasedItems: state.pos.purchasedItems,
     totalPrice: state.pos.totalPrice,
   }));
+
+  const dispatch = useAppDispatch();
+
+  const submitTransactionHandler = async () => {
+    setIsLoading(true);
+    const id = Math.floor(Math.random() * 1000000);
+
+    // Decrease the quantity of products inventory
+    // for every purchased items using Firestore Transaction
+    for (const item of purchasedItems) {
+      try {
+        await runTransaction(db, async (transaction) => {
+          const sfDocRef = doc(db, "products", item.docId);
+          const sfDoc = await transaction.get(sfDocRef);
+          if (!sfDoc.exists()) {
+            throw "Document does not exist!";
+          }
+
+          const newQuantity = sfDoc.data().quantity - item.quantity;
+          // Remove the existing item in the products inventory
+          if (newQuantity === 0) {
+            transaction.delete(sfDocRef);
+          } else {
+            transaction.update(sfDocRef, { quantity: newQuantity });
+          }
+        });
+        console.log("Transaction successfully committed!");
+      } catch (e) {
+        console.log("Transaction failed: ", e);
+      }
+    }
+
+    await addDoc(collection(db, "sales"), {
+      id,
+      purchasedItems,
+      totalPrice,
+      author: "Admin",
+      dateAdded: serverTimestamp(),
+    });
+
+    setIsLoading(false);
+    dispatch(clearTransactions());
+  };
 
   return (
     <Fragment>
@@ -32,25 +77,16 @@ const BillsList = () => {
         </div>
       </div>
       <button
-        onClick={async () => {
-          setIsLoading(true);
-          const id = Math.floor(Math.random() * 1000000);
-          await addDoc(collection(db, "sales"), {
-            id,
-            purchasedItems,
-            totalPrice,
-            author: "Admin",
-            dateAdded: serverTimestamp(),
-          });
-          // updateDoc()
-          setIsLoading(false);
-        }}
-        className="w-full rounded-2xl py-6 text-2xl font-semibold
-             bg-blue-500 text-blue-50 hover:bg-blue-400"
+        onClick={submitTransactionHandler}
+        className="w-full rounded-2xl py-6 text-2xl font-semibold bg-blue-500 text-blue-50 hover:bg-blue-400"
       >
         {!isLoading && "Submit"}
         {isLoading && (
-          <CircularProgressCentered className="text-white" size={32} />
+          <CircularProgressCentered
+            className="text-white"
+            size={32}
+            color="inherit"
+          />
         )}
       </button>
     </Fragment>

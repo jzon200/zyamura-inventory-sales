@@ -5,10 +5,8 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { BsTrash } from "react-icons/bs";
-import { FiEdit } from "react-icons/fi";
 import { db } from "../../lib/firebase";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 
@@ -26,8 +24,8 @@ const TransactionsGrid = () => {
   }));
 
   return (
-    <div className="overflow-y-auto h-96">
-      <div className="mt-4 grid grid-cols-5 gap-y-8 text-xl place-items-center select-none text-[#3A512B]">
+    <div className="overflow-y-auto h-[40rem]">
+      <div className="mt-4 grid grid-cols-5 gap-y-10 text-xl place-items-center select-none text-[#3A512B]">
         {sales.map((item: Sales) => (
           <Fragment key={item.docId}>
             <div>{item.id}</div>

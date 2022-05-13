@@ -7,7 +7,7 @@ import InventoryGrid from "../../components/pos/InventoryGrid";
 
 const PointOfSales = () => {
   return (
-    <div className="flex gap-14 w-[90%] m-auto mt-1 overflow-hidden">
+    <div className="flex gap-x-14 w-[90%] mx-auto mt-4 overflow-hidden">
       <main>
         <div>
           <div className="flex justify-between items-center">
@@ -15,8 +15,7 @@ const PointOfSales = () => {
             <div className="flex items-center">
               <input
                 className="w-[32rem] rounded-xl px-4 py-3 border border-gray-500 
-                focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 
-                placeholder:text-lg placeholder:text-[#94A3B8] placeholder:font-medium"
+                focus:outline-blue-500  placeholder:text-lg placeholder:text-[#94A3B8] placeholder:font-medium"
                 type="text"
                 placeholder="Search"
               />

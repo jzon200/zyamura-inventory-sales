@@ -8,10 +8,7 @@ import {
 import { useEffect } from "react";
 import { db } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import {
-  addAllItemsHandler,
-  addItemHandler,
-} from "../../redux-store/slices/posSlice";
+import { addAllItemsHandler } from "../../redux-store/slices/posSlice";
 import InventoryCard from "./InventoryCard";
 
 const InventoryGrid = () => {
@@ -26,7 +23,7 @@ const InventoryGrid = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProductsData = async () => {
       const docSnap = await getDocs(latestProducts);
       const products: Product[] | DocumentData = docSnap.docs.map((doc) => {
         return {
@@ -38,20 +35,13 @@ const InventoryGrid = () => {
       dispatch(addAllItemsHandler(products as Product[]));
     };
 
-    fetchData();
+    fetchProductsData();
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4 h-[40rem] overflow-y-scroll">
       {products.map((product: Product) => (
-        <InventoryCard
-          key={product.docId}
-          product={product}
-          // isSelected={selectedItems.some(
-          //   (item) => product.docId === item.docId
-          // )}
-          // onClick={() => dispatch(addItemHandler(product))}
-        />
+        <InventoryCard key={product.docId} product={product} />
       ))}
     </div>
   );

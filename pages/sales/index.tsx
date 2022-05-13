@@ -14,7 +14,7 @@ const TABLE_HEADERS = [
   { label: "Description" },
   { label: "Added by" },
   { label: "Total" },
-  { label: "Date" },
+  { label: "Transaction Date" },
 ];
 
 const SORT_QUERIES: ProductQuery[] = [
@@ -53,7 +53,7 @@ const Sales: NextPage = () => {
       {/* All Sales */}
       <ActionsHeader
         sortItems={SORT_QUERIES}
-        selectedQuery={SORT_QUERIES[0]}
+        selectedQuery={SORT_QUERIES[2]}
         title="All Sales"
         onAddHandler={() => {
           dispatch(setShowAddDialog(true));

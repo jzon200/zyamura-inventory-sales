@@ -14,10 +14,12 @@ type Props = {
 
 const BillsItem = ({ product }: Props) => {
   const { id, name, category, imageUrl, price, quantity } = product;
-  const { products, purchasedItems } = useAppSelector((state) => ({
-    products: state.pos.items,
-    purchasedItems: state.pos.purchasedItems,
-  }));
+
+  // const { products, purchasedItems } = useAppSelector((state) => ({
+  //   products: state.pos.items,
+  //   purchasedItems: state.pos.purchasedItems,
+  // }));
+
   const dispatch = useAppDispatch();
 
   return (
