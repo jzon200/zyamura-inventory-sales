@@ -6,19 +6,25 @@ import { addItemHandler } from "../../redux-store/slices/posSlice";
 
 type Props = {
   product: Product;
-  // isSelected: boolean;
-  // onClick: () => void;
 };
 
 const InventoryCard = ({ product }: Props) => {
   const [count, setCount] = useState(1);
   const dispatch = useAppDispatch();
-  const { id, name, description, imageUrl, category, price, quantity } =
-    product;
+  const {
+    id,
+    name,
+    description,
+    imageUrl,
+    category,
+    price,
+    quantity,
+    itemType,
+  } = product;
 
   return (
     <div
-      className={`w-96 rounded-xl p-4 grid grid-cols-3 border-2 border-blue-50`}
+      className={`w-96 rounded-xl p-4 grid grid-cols-3 border border-zinc-300 shadow-zinc-400 shadow-md`}
     >
       {imageUrl ? (
         <div className="w-24">
@@ -32,7 +38,7 @@ const InventoryCard = ({ product }: Props) => {
           />
           <div>
             In stock:{" "}
-            <span className="text-[#B7995D]">{quantity.toLocaleString()}</span>
+            <span className="font-medium">{quantity.toLocaleString()}</span>
           </div>
         </div>
       ) : (
@@ -43,8 +49,19 @@ const InventoryCard = ({ product }: Props) => {
           {name}
           <span className="ml-2 text-sm text-[gray]">#{id}</span>
         </div>
-        <div className="rounded px-2 mb-2 bg-blue-500 text-white w-fit">
-          {category}
+        <div className="mb-2">
+          <span className="inline-block rounded px-2 mr-1 bg-blue-500 text-white">
+            {category}
+          </span>
+          <span
+            className={`inline-block px-2 py-[2px] rounded-full ${
+              itemType === "individual"
+                ? "bg-[#C9EBEC] text-[#558DAB]"
+                : "bg-[#EFE0C1] text-[#B7995D]"
+            }`}
+          >
+            {itemType}
+          </span>
         </div>
         <div className="text-[gray] text-sm max-h-14 text-ellipsis">
           {description.substring(0, 95)}
@@ -101,7 +118,7 @@ const InventoryCard = ({ product }: Props) => {
           );
           setCount(1);
         }}
-        className="w-16 px-2 py-1 rounded bg-blue-500 text-blue-50 font-medium place-self-end"
+        className="w-16 px-2 py-1 rounded bg-blue-500 text-blue-50 font-medium place-self-end hover:shadow-blue-300 hover:shadow-md"
       >
         Add
       </button>

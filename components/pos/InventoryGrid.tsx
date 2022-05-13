@@ -39,7 +39,7 @@ const InventoryGrid = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-4 h-[40rem] overflow-y-scroll">
+    <div className="grid grid-cols-3 gap-4 h-[40rem] p-4 overflow-y-scroll">
       {products.map((product: Product) => (
         <InventoryCard key={product.docId} product={product} />
       ))}

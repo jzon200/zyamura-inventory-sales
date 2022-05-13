@@ -1,10 +1,13 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
+import { MdFilterList } from "react-icons/md";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
+import TitleHeader from "../../components/layout/TitleHeader";
 import AddSalesForm from "../../components/sales/AddSalesForm";
 import TransactionsGrid from "../../components/sales/TransactionsGrid";
+import Dropdown from "../../components/UI/Dropdown";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
@@ -51,15 +54,26 @@ const Sales: NextPage = () => {
       {/* <SalesReport /> */}
 
       {/* All Sales */}
-      <ActionsHeader
-        sortItems={SORT_QUERIES}
-        selectedQuery={SORT_QUERIES[2]}
-        title="All Sales"
-        onAddHandler={() => {
-          dispatch(setShowAddDialog(true));
-        }}
-        // onSortHandler={() => {}}
-      />
+      <div className={`flex justify-between items-center text-lg`}>
+        <TitleHeader className="basis-48" title={"All Sales"} />
+        {/* Search */}
+        <div className="w-full flex justify-end gap-8">
+          <div className="basis-96 flex items-center">
+            <input
+              type="text"
+              placeholder="Search"
+              className="max-h-14 w-full rounded-l-2xl p-4"
+            />
+            <button className="flex items-center gap-2 px-4 py-[14px] rounded-r-2xl font-medium bg-[#D1CEB2]">
+              Filters
+              <MdFilterList size={24} />
+            </button>
+          </div>
+          {/* <SortProducts /> */}
+          <Dropdown items={SORT_QUERIES} selectedQuery={SORT_QUERIES[2]} />
+          {/* Add Items */}
+        </div>
+      </div>
       <TableHeader items={TABLE_HEADERS} />
       {/* Sales Table */}
       <TransactionsGrid />

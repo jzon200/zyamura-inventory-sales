@@ -12,6 +12,10 @@
     @apply bg-blue-400 rounded-md;
   }
 
+  .sidebar div::-webkit-scrollbar-thumb {
+    @apply bg-[#ACA58E];
+  }
+
   /* Removes the spinner for number input fields */
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {

@@ -78,7 +78,7 @@ const BillsList = () => {
       </div>
       <button
         onClick={submitTransactionHandler}
-        className="w-full rounded-2xl py-6 text-2xl font-semibold bg-blue-500 text-blue-50 hover:bg-blue-400"
+        className="w-full rounded-2xl py-6 text-2xl font-semibold bg-blue-500 text-blue-50 shadow-gray-400 shadow-md hover:bg-blue-400"
       >
         {!isLoading && "Submit"}
         {isLoading && (
