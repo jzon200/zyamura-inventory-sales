@@ -30,7 +30,6 @@ const ProductCard = ({ product, isSelected, onClick }: Props) => {
               alt=""
               width={480}
               height={480}
-              quality={100}
               objectFit="cover"
             />
           </div>

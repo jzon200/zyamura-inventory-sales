@@ -31,7 +31,6 @@ const BillsItem = ({ product }: Props) => {
             src={imageUrl!}
             width={480}
             height={480}
-            quality={100}
             objectFit="cover"
           />
         </div>
