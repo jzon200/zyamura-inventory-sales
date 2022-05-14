@@ -87,12 +87,26 @@ const MONTHLY_SALES = [
   },
 ];
 
+const ANNUAL_SALES = [
+  {
+    name: "2020",
+    "Total sales": 100000,
+  },
+  {
+    name: "2021",
+    "Total sales": 125000,
+  },
+  {
+    name: "2022",
+    "Total sales": 200000,
+  },
+];
+
 const SalesReport = () => {
   const [salesData, setSalesData] = useState(WEEKLY_SALES);
 
   return (
     <Fragment>
-      <TitleHeader title="Sales Report" className="mb-4" />
       <div className="grid grid-cols-4 gap-5 select-none">
         <div className="grid grid-rows-3 gap-4">
           <div className="bg-green-500 rounded-2xl p-4">
@@ -106,10 +120,10 @@ const SalesReport = () => {
               ₱ 12,500
             </div>
           </div>
-          <div className="bg-[#12151C] text-white row-span-2 rounded-2xl p-4">
+          <div className="bg-[#E5E4DB] row-span-2 rounded-2xl p-4">
             <div className="text-lg">Weekly Report</div>
-            <div className="text-xs text-gray-400">This week sales</div>
-            <div className="text-2xl text-fuchsia-500 font-semibold mb-4">
+            <div className="text-gray-400">This week sales</div>
+            <div className="text-2xl text-green-500 font-semibold mb-4">
               ₱ 44,722
             </div>
             <TinyBarChart />
@@ -128,16 +142,19 @@ const SalesReport = () => {
                 case "monthly":
                   setSalesData(MONTHLY_SALES);
                   break;
+                case "annually":
+                  setSalesData(ANNUAL_SALES);
+                  break;
               }
             }}
           >
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
-            <option value="annually">Annualy</option>
+            <option value="annually">Annually</option>
           </select>
           <SimpleAreaChart data={salesData} />
         </div>
-        <div className="bg-slate-900 text-white rounded-2xl p-4">
+        <div className="bg-[#E5E4DB] rounded-2xl p-4">
           <div className="text-center text-2xl font-semibold">
             Product Percentage
           </div>

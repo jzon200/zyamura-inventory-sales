@@ -33,7 +33,7 @@ const Customers: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>Customers | Zyamura Inventory & Sales</title>
+        <title>Customers | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
       <ActionsHeader
         sortItems={SORT_QUERIES}

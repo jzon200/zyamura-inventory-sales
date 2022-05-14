@@ -39,7 +39,7 @@ PointOfSales.getLayout = function getLayout(page: ReactElement) {
   return (
     <>
       <Head>
-        <title>Point of Sales | Zyamura</title>
+        <title>Point of Sales | Zyamura Mix Pet Shop</title>
       </Head>
       {page}
     </>

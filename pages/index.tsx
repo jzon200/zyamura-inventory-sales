@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { ReactElement } from "react";
 
 const Login = () => {
@@ -5,7 +6,14 @@ const Login = () => {
 };
 
 Login.getLayout = function getLayout(page: ReactElement) {
-  return <div className="bg-red-500 h-screen">{page}</div>;
+  return (
+    <>
+      <Head>
+        <title>Login | Zyamura Mix Pet Shop Inventory & Sales System</title>
+      </Head>
+      <div className="bg-red-500 h-screen">{page}</div>
+    </>
+  );
 };
 
 export default Login;

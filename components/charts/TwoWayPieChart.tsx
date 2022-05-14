@@ -30,7 +30,6 @@ const TwoWayPieChart = () => {
           cx="50%"
           cy="50%"
           outerRadius={80}
-          stroke="#081830"
           fill="#47D4CA"
         >
           <LabelList
@@ -47,7 +46,6 @@ const TwoWayPieChart = () => {
           cy="50%"
           innerRadius={95}
           outerRadius={130}
-          stroke="#081830"
           fill="#D5639C"
           color="#fff"
           label

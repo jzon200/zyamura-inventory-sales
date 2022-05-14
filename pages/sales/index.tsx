@@ -42,7 +42,7 @@ const Sales: NextPage = () => {
   return (
     <Fragment>
       <Head>
-        <title>All Sales | Zyamura</title>
+        <title>Sales | Zyamura Mix Petshop Inventory & Sales System</title>
       </Head>
       <MuiModal
         showModal={showAddDialog}

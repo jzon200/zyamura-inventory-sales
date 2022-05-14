@@ -70,7 +70,7 @@ const Employees: NextPage = () => {
         onClose={() => dispatch(setShowDeleteDialog(false))}
       />
       <Head>
-        <title>Employees | Zyamura Inventory & Sales</title>
+        <title>Employees | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
       <ActionsHeader
         sortItems={SORT_QUERIES}

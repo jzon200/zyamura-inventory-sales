@@ -12,7 +12,7 @@ import {
   MdOutlineSpaceDashboard,
   MdPets,
 } from "react-icons/md";
-import { VscAccount, VscGraphLine } from "react-icons/vsc";
+import { VscAccount, VscGraphLine, VscHistory } from "react-icons/vsc";
 import SidebarItem from "./SidebarItem";
 
 const sidebarItems = [
@@ -23,6 +23,7 @@ const sidebarItems = [
   { label: "Customers", icon: IoPeopleOutline },
   { label: "Employees", icon: MdOutlineGroups },
   { label: "Accounts", icon: VscAccount },
+  { label: "Logs", icon: VscHistory },
   { label: "Settings", icon: IoSettingsOutline },
 ];
 

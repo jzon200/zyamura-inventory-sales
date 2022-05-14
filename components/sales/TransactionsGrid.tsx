@@ -1,6 +1,7 @@
 import {
   collection,
   DocumentData,
+  limit,
   orderBy,
   query,
   Timestamp,
@@ -25,11 +26,18 @@ const TransactionsGrid = () => {
 
   return (
     <div className="overflow-y-auto h-[40rem]">
-      <div className="mt-4 grid grid-cols-5 gap-y-10 text-xl place-items-center select-none text-[#3A512B]">
+      {/* TODO: ADD More Details */}
+      <div className="mt-4 grid grid-cols-5 gap-y-10 -ml-2 text-xl place-items-center select-none text-[#3A512B]">
         {sales.map((item: Sales) => (
           <Fragment key={item.docId}>
             <div>{item.id}</div>
-            <div>{`${item.purchasedItems[0].name}`}</div>
+            <div>
+              {`${item.purchasedItems[0].name} ${
+                item.purchasedItems[1]
+                  ? "and " + item.purchasedItems[1].name
+                  : ""
+              }`}
+            </div>
             <div>{item.author}</div>
             <div>₱{item.totalPrice.toLocaleString()}</div>
             <div>
