@@ -38,6 +38,7 @@ const TransactionsGrid = () => {
                   : ""
               }`}
             </div>
+
             <div>{item.author}</div>
             <div>₱{item.totalPrice.toLocaleString()}</div>
             <div>

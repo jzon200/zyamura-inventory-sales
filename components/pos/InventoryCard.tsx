@@ -53,7 +53,7 @@ const InventoryCard = ({ product }: Props) => {
           <span className="inline-block rounded px-2 mr-1 bg-blue-500 text-white">
             {category}
           </span>
-          <span
+          {/* <span
             className={`inline-block px-2 py-[2px] rounded-full ${
               itemType === "individual"
                 ? "bg-[#C9EBEC] text-[#558DAB]"
@@ -61,7 +61,7 @@ const InventoryCard = ({ product }: Props) => {
             }`}
           >
             {itemType}
-          </span>
+          </span> */}
         </div>
         <div className="text-[gray] text-sm max-h-14 text-ellipsis">
           {description.substring(0, 95)}

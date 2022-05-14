@@ -162,6 +162,7 @@ const EditProductForm = () => {
             valueAsNumber
             inputValue="cost"
             required
+            defaultValue={product?.cost}
             register={register}
           />
           {/* <div>
