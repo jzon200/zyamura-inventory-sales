@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
+import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
 
 const SORT_QUERIES: ProductQuery[] = [
   {
@@ -26,10 +27,12 @@ const Expenses: NextPage = () => {
       </Head>
       <ActionsHeader
         title="Expenses"
+        addLabel="Expenses"
         sortItems={SORT_QUERIES}
         selectedQuery={SORT_QUERIES[0]}
         onAddHandler={() => {}}
       />
+      <EmptyPlaceholder />
     </Fragment>
   );
 };

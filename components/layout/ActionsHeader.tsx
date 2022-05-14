@@ -19,6 +19,7 @@ const ActionsHeader = ({
   className,
   sortItems,
   selectedQuery,
+  addLabel = "Items",
   // onSortHandler,
   onAddHandler,
 }: Props) => {
@@ -45,7 +46,7 @@ const ActionsHeader = ({
           onClick={onAddHandler}
           className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
         >
-          <div>Add Items</div>
+          <div>Add {addLabel}</div>
           <MdAdd size={24} />
         </button>
       </div>

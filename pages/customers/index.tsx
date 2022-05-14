@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
+import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -42,6 +43,7 @@ const Customers: NextPage = () => {
         onAddHandler={() => {}}
       />
       <TableHeader items={TABLE_HEADERS} />
+      <EmptyPlaceholder />
     </Fragment>
   );
 };

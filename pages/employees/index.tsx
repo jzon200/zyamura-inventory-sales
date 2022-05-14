@@ -76,6 +76,7 @@ const Employees: NextPage = () => {
         sortItems={SORT_QUERIES}
         selectedQuery={selectedQuery}
         title="Employees"
+        addLabel="Employees"
         onAddHandler={() => dispatch(setShowAddDialog(true))}
       />
       <TableHeader items={TABLE_HEADERS} />
