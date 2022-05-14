@@ -3,6 +3,7 @@ interface InputValues {
   productName: string;
   description: string;
   category: Category;
+  cost: number;
   price: number;
   quantity: number;
   imagePath: FileList;
@@ -20,6 +21,7 @@ type Product = {
   description: string;
   category: Category;
   itemType: ItemType;
+  cost: number;
   price: number;
   quantity: number;
   imageUrl: string | null;

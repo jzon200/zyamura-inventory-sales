@@ -20,8 +20,9 @@ const TABLE_HEADERS = [
   { label: "ID" },
   { label: "NAME" },
   { label: "CATEGORY" },
-  { label: "ITEM TYPE" },
+  // { label: "ITEM TYPE" },
   { label: "Quantity" },
+  { label: "Cost" },
   { label: "PRICE" },
   { label: "ACTION" },
 ];

@@ -37,6 +37,7 @@ const EditProductForm = () => {
     const {
       productName: name,
       category,
+      cost,
       price,
       description,
       quantity,
@@ -49,6 +50,7 @@ const EditProductForm = () => {
       description,
       category,
       price,
+      cost,
       quantity: !quantity ? 1 : quantity,
       imageUrl,
       itemType,
@@ -152,7 +154,17 @@ const EditProductForm = () => {
             </div>
           </div>
 
-          <div>
+          <Input
+            type="number"
+            id="cost"
+            label="Cost *"
+            placeholder="0.00"
+            valueAsNumber
+            inputValue="cost"
+            required
+            register={register}
+          />
+          {/* <div>
             <label>Item Type</label>
             <div className="flex gap-4">
               <button
@@ -178,7 +190,7 @@ const EditProductForm = () => {
                 collective
               </button>
             </div>
-          </div>
+          </div> */}
 
           <Input
             id="quantity"
@@ -186,7 +198,7 @@ const EditProductForm = () => {
             type="number"
             valueAsNumber
             inputValue="quantity"
-            disabled={itemType === "individual"}
+            // disabled={itemType === "individual"}
             defaultValue={product?.quantity}
             register={register}
           />

@@ -32,7 +32,14 @@ const AddProductForm = () => {
     setIsLoading(true);
     console.log(data);
 
-    const { productName: name, category, price, description, quantity } = data;
+    const {
+      productName: name,
+      category,
+      price,
+      description,
+      quantity,
+      cost,
+    } = data;
 
     const productsCollectionRef = collection(db, "products");
 
@@ -44,6 +51,7 @@ const AddProductForm = () => {
       description,
       category,
       price,
+      cost,
       quantity: !quantity ? 1 : quantity,
       imageUrl,
       itemType,
@@ -145,7 +153,18 @@ const AddProductForm = () => {
             </div>
           </div>
 
-          <div>
+          <Input
+            type="number"
+            id="cost"
+            label="Cost *"
+            placeholder="0.00"
+            valueAsNumber
+            inputValue="cost"
+            required
+            register={register}
+          />
+
+          {/* <div>
             <label>Item Type</label>
             <div className="flex gap-4">
               <button
@@ -171,15 +190,15 @@ const AddProductForm = () => {
                 collective
               </button>
             </div>
-          </div>
+          </div> */}
           <Input
             id="quantity"
             label="Quantity"
             type="number"
             valueAsNumber
             inputValue="quantity"
-            disabled={itemType === "individual"}
-            defaultValue={itemType === "individual" ? 1 : undefined}
+            // disabled={itemType === "individual"}
+            defaultValue={1}
             register={register}
           />
 
@@ -189,7 +208,7 @@ const AddProductForm = () => {
             className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
             rows={4}
             placeholder={"Enter details such as age, size, etc."}
-            maxLength={150}
+            maxLength={500}
             {...register("description")}
           />
 
