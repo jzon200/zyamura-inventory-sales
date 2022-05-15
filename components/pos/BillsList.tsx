@@ -1,65 +1,23 @@
-import {
-  addDoc,
-  collection,
-  doc,
-  runTransaction,
-  serverTimestamp,
-} from "firebase/firestore";
-import { Fragment, useState } from "react";
-import { db } from "../../lib/firebase";
+import { Fragment } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { clearTransactions } from "../../redux-store/slices/posSlice";
+import {
+  addSalesData,
+  clearTransactions,
+} from "../../redux-store/slices/posSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import BillsItem from "./BillsItem";
 
 const BillsList = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { purchasedItems, totalPrice } = useAppSelector((state) => ({
-    purchasedItems: state.pos.purchasedItems,
-    totalPrice: state.pos.totalPrice,
+  const { posState, isLoading } = useAppSelector((state) => ({
+    posState: state.pos,
+    isLoading: state.ui.isLoading,
   }));
-
   const dispatch = useAppDispatch();
 
-  const submitTransactionHandler = async () => {
-    setIsLoading(true);
-    const id = Math.floor(Math.random() * 1000000);
+  const { purchasedItems, totalPrice } = posState;
 
-    // Decrease the quantity of products inventory
-    // for every purchased items using Firestore Transaction
-    for (const item of purchasedItems) {
-      try {
-        await runTransaction(db, async (transaction) => {
-          const sfDocRef = doc(db, "products", item.docId);
-          const sfDoc = await transaction.get(sfDocRef);
-          if (!sfDoc.exists()) {
-            throw "Document does not exist!";
-          }
-
-          const newQuantity = sfDoc.data().quantity - item.quantity;
-          // Remove the existing item in the products inventory
-          if (newQuantity === 0) {
-            transaction.delete(sfDocRef);
-          } else {
-            transaction.update(sfDocRef, { quantity: newQuantity });
-          }
-        });
-        console.log("Transaction successfully committed!");
-      } catch (e) {
-        console.log("Transaction failed: ", e);
-      }
-    }
-
-    await addDoc(collection(db, "sales"), {
-      id,
-      purchasedItems,
-      totalPrice,
-      author: "Admin",
-      dateAdded: serverTimestamp(),
-    });
-
-    setIsLoading(false);
-    dispatch(clearTransactions());
+  const submitTransactionHandler = () => {
+    dispatch(addSalesData(posState));
   };
 
   return (
@@ -76,19 +34,29 @@ const BillsList = () => {
           ₱{totalPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
         </div>
       </div>
-      <button
-        onClick={submitTransactionHandler}
-        className="w-full rounded-2xl py-6 text-2xl font-semibold bg-blue-500 text-blue-50 shadow-gray-400 shadow-md hover:bg-blue-400"
-      >
-        {!isLoading && "Submit"}
-        {isLoading && (
-          <CircularProgressCentered
-            className="text-white"
-            size={32}
-            color="inherit"
-          />
-        )}
-      </button>
+      <div className="grid grid-cols-2 gap-4">
+        {/* TODO: Fix the Logic for bringing back the initial state */}
+        <button
+          onClick={() => dispatch(clearTransactions())}
+          className="w-full rounded-2xl py-6 text-2xl font-semibold border border-blue-400 text-blue-500  hover:border-blue-500"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={submitTransactionHandler}
+          className="w-full rounded-2xl py-6 text-2xl font-semibold bg-blue-500 text-blue-50 hover:bg-blue-400"
+        >
+          {!isLoading ? (
+            "Confirm"
+          ) : (
+            <CircularProgressCentered
+              className="text-white"
+              size={32}
+              color="inherit"
+            />
+          )}
+        </button>
+      </div>
     </Fragment>
   );
 };

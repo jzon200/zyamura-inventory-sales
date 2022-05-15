@@ -1,4 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  addDoc,
+  collection,
+  doc,
+  runTransaction,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { AppThunk } from "../store";
+import { setLoadingState } from "./uiSlice";
 
 export type PosState = {
   items: Product[];
@@ -82,6 +92,51 @@ export const posSlice = createSlice({
     },
   },
 });
+
+export const addSalesData = (posState: PosState): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setLoadingState(true));
+    const { purchasedItems, totalPrice } = posState;
+
+    const id = Math.floor(Math.random() * 1000000);
+
+    // Decrease the quantity of products inventory
+    // for every purchased items using Firestore Transaction
+    for (const item of purchasedItems) {
+      try {
+        await runTransaction(db, async (transaction) => {
+          const sfDocRef = doc(db, "products", item.docId);
+          const sfDoc = await transaction.get(sfDocRef);
+          if (!sfDoc.exists()) {
+            throw "Document does not exist!";
+          }
+
+          const newQuantity = sfDoc.data().quantity - item.quantity;
+          // Remove the existing item in the products inventory
+          if (newQuantity === 0) {
+            transaction.delete(sfDocRef);
+          } else {
+            transaction.update(sfDocRef, { quantity: newQuantity });
+          }
+        });
+        console.log("Transaction successfully committed!");
+      } catch (e) {
+        console.log("Transaction failed: ", e);
+      }
+    }
+
+    await addDoc(collection(db, "sales"), {
+      id,
+      purchasedItems,
+      totalPrice,
+      author: "Admin",
+      dateAdded: serverTimestamp(),
+    });
+
+    dispatch(clearTransactions());
+    dispatch(setLoadingState(false));
+  };
+};
 
 const posReducer = posSlice.reducer;
 
