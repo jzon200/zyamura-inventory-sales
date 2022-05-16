@@ -1,8 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DocumentData } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { AppThunk } from "../store";
+import { setLoadingState } from "./uiSlice";
 
 export type ProductsState = {
-  product: Product | DocumentData | null;
+  selectedProduct: Product | DocumentData | null;
   showAddDialog: boolean;
   showEditDialog: boolean;
   showDeleteDialog: boolean;
@@ -10,7 +20,7 @@ export type ProductsState = {
 };
 
 const initialState: ProductsState = {
-  product: null,
+  selectedProduct: null,
   showAddDialog: false,
   showEditDialog: false,
   showDeleteDialog: false,
@@ -26,8 +36,8 @@ export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setProduct(state: ProductsState, action: PayloadAction<Product>) {
-      state.product = action.payload;
+    setProduct(state: ProductsState, action: PayloadAction<Product | null>) {
+      state.selectedProduct = action.payload;
     },
     setShowAddDialog(state: ProductsState, action: PayloadAction<boolean>) {
       state.showAddDialog = action.payload;
@@ -38,9 +48,6 @@ export const productSlice = createSlice({
     setShowDeleteDialog(state: ProductsState, action: PayloadAction<boolean>) {
       state.showDeleteDialog = action.payload;
     },
-    // setSelectedSortQuery(state, action: PayloadAction<SortQuery>) {
-    //   state.selectedSortQuery = action.payload;
-    // },
     setSortQuery(state: ProductsState, action: PayloadAction<SortQuery>) {
       switch (action.payload) {
         case "latest":
@@ -113,6 +120,77 @@ export const productSlice = createSlice({
   },
 });
 
+//! Cannot use yet
+export const addProductData = (data: InputValues): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setLoadingState(true));
+
+    const {
+      productName: name,
+      category,
+      price,
+      description,
+      quantity,
+      cost,
+    } = data;
+
+    const productsCollectionRef = collection(db, "products");
+
+    const id = Math.floor(Math.random() * 1000000);
+
+    await addDoc(productsCollectionRef, {
+      id,
+      name,
+      description,
+      category,
+      price,
+      cost,
+      quantity,
+      // imageUrl,
+      dateAdded: serverTimestamp(),
+      dateModified: serverTimestamp(),
+    })
+      .then(() => console.log("success"))
+      .catch((error) => console.log(error.message));
+
+    dispatch(setLoadingState(false));
+  };
+};
+
+export const editProductData = (
+  data: InputValues,
+  selectedProduct: Product
+): AppThunk => {
+  return async (dispatch) => {
+    dispatch(setLoadingState(true));
+
+    const {
+      productName: name,
+      category,
+      price,
+      description,
+      quantity,
+      cost,
+    } = data;
+
+    const productDocRef = doc(db, "products", selectedProduct?.docId);
+
+    await updateDoc(productDocRef, {
+      name,
+      description,
+      category,
+      price,
+      cost,
+      quantity,
+      dateModified: serverTimestamp(),
+    })
+      .then(() => console.log("success"))
+      .catch((error) => console.log(error.message));
+
+    dispatch(setLoadingState(false));
+  };
+};
+
 const productReducer = productSlice.reducer;
 
 export const {
@@ -121,9 +199,6 @@ export const {
   setShowEditDialog,
   setShowDeleteDialog,
   setSortQuery,
-  // setSelectedSortQuery,
 } = productSlice.actions;
-
-// export const selectProduct = (state: RootState) => state.products.product;
 
 export default productReducer;

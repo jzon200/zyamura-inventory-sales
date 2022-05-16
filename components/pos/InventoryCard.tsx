@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { addItemHandler } from "../../redux-store/slices/posSlice";
+import { addBillsItem } from "../../redux-store/slices/posSlice";
 
 type Props = {
   product: Product;
@@ -110,7 +110,7 @@ const InventoryCard = ({ product }: Props) => {
           }
 
           dispatch(
-            addItemHandler({
+            addBillsItem({
               ...product,
               quantity: count,
               price: price * count,

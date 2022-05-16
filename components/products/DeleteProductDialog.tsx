@@ -14,7 +14,9 @@ type Props = {
 const DeleteProductDialog = ({ showDialog, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const selectedProduct = useAppSelector((state) => state.products.product);
+  const selectedProduct = useAppSelector(
+    (state) => state.products.selectedProduct
+  );
 
   return (
     <MuiModal showModal={showDialog} onClose={onClose}>

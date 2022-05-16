@@ -12,15 +12,16 @@ import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
 const EditProductForm = () => {
-  const product = useAppSelector((state) => state.products.product);
+  const product = useAppSelector(
+    (state) => state.products.selectedProduct
+  ) as Product;
 
-  const [imageUrl, setImageUrl] = useState<string | null>(product!.imageUrl);
-  const [itemType, setItemType] = useState<ItemType>(product!.itemType);
+  const [imageUrl, setImageUrl] = useState<string | null>(product.imageUrl);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [uploadFile, uploading, snapshot] = useUploadFile();
+  const [uploadFile] = useUploadFile();
 
   const dispatch = useAppDispatch();
   const {
@@ -43,7 +44,7 @@ const EditProductForm = () => {
       quantity,
     } = productData;
 
-    const productDocRef = doc(db, "products", product?.docId);
+    const productDocRef = doc(db, "products", product.docId);
 
     await updateDoc(productDocRef, {
       name,
@@ -51,9 +52,8 @@ const EditProductForm = () => {
       category,
       price,
       cost,
-      quantity: !quantity ? 1 : quantity,
+      quantity,
       imageUrl,
-      itemType,
       dateModified: serverTimestamp(),
     })
       .then(() => console.log("success"))
@@ -92,18 +92,17 @@ const EditProductForm = () => {
             autoFocus
             inputValue="productName"
             register={register}
-            defaultValue={product?.name}
+            defaultValue={product.name}
           />
           <Input
+            id="quantity"
+            label="Quantity"
             type="number"
-            id="price"
-            label="Price *"
-            placeholder="0.00"
             valueAsNumber
-            inputValue="price"
-            required
+            inputValue="quantity"
+            // disabled={itemType === "individual"}
+            defaultValue={product.quantity}
             register={register}
-            defaultValue={product?.price}
           />
 
           {/* Select Category */}
@@ -112,7 +111,7 @@ const EditProductForm = () => {
             <select
               id="category"
               className="form-control px-2"
-              defaultValue={product?.category}
+              defaultValue={product.category}
               {...register("category")}
             >
               <option value="fish">Fish</option>
@@ -122,6 +121,31 @@ const EditProductForm = () => {
               <option value="other">Define New</option>
             </select>
           </div>
+
+          <Input
+            type="number"
+            id="price"
+            label="Price *"
+            placeholder="0.00"
+            valueAsNumber
+            inputValue="price"
+            required
+            register={register}
+            defaultValue={product.price}
+          />
+
+          <Input
+            type="number"
+            id="cost"
+            label="Cost *"
+            placeholder="0.00"
+            valueAsNumber
+            inputValue="cost"
+            required
+            defaultValue={product.cost}
+            register={register}
+          />
+
           <div className="flex gap-2">
             <div>
               <label htmlFor="imgUpload">Image</label>
@@ -145,8 +169,8 @@ const EditProductForm = () => {
                 <Image
                   className="rounded-md text-blue-500"
                   src={imageUrl !== null ? imageUrl : imgPlaceholder}
-                  width={720}
-                  height={720}
+                  width={360}
+                  height={360}
                   objectFit="cover"
                   alt=""
                 />
@@ -154,65 +178,15 @@ const EditProductForm = () => {
             </div>
           </div>
 
-          <Input
-            type="number"
-            id="cost"
-            label="Cost *"
-            placeholder="0.00"
-            valueAsNumber
-            inputValue="cost"
-            required
-            defaultValue={product?.cost}
-            register={register}
-          />
-          {/* <div>
-            <label>Item Type</label>
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={() => setItemType("individual")}
-                className={`chip ${
-                  itemType === "individual"
-                    ? "bg-blue-300 text-blue-50"
-                    : "bg-gray-300 text-gray-500"
-                }`}
-              >
-                individual
-              </button>
-              <button
-                type="button"
-                onClick={() => setItemType("collective")}
-                className={`chip w-full ${
-                  itemType === "collective"
-                    ? "bg-blue-300 text-blue-50"
-                    : "bg-gray-300 text-gray-500"
-                }`}
-              >
-                collective
-              </button>
-            </div>
-          </div> */}
-
-          <Input
-            id="quantity"
-            label="Quantity"
-            type="number"
-            valueAsNumber
-            inputValue="quantity"
-            // disabled={itemType === "individual"}
-            defaultValue={product?.quantity}
-            register={register}
-          />
-
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
             className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
             rows={4}
             placeholder={"Enter details such as age, size, etc."}
-            maxLength={150}
+            maxLength={500}
             {...register("description")}
-            defaultValue={product?.description}
+            defaultValue={product.description}
           />
 
           <button className="col-span-2 place-self-end btn-primary">

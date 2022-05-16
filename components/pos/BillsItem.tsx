@@ -3,9 +3,9 @@ import { Fragment } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
-  addItemHandler,
-  removeItemHandler,
-  replaceItemQuantity,
+  addBillsItem,
+  removeBillsItem,
+  setItemQuantity,
 } from "../../redux-store/slices/posSlice";
 
 type Props = {
@@ -47,7 +47,7 @@ const BillsItem = ({ product }: Props) => {
               <button
                 onClick={() => {
                   dispatch(
-                    removeItemHandler({
+                    removeBillsItem({
                       ...product,
                       quantity: 1,
                       price: price / quantity,
@@ -63,7 +63,7 @@ const BillsItem = ({ product }: Props) => {
                 min={1}
                 value={quantity}
                 onBlur={() => {
-                  if (quantity === 0) dispatch(removeItemHandler(product));
+                  if (quantity === 0) dispatch(removeBillsItem(product));
                 }}
                 onChange={(event) => {
                   const value = event.target.value;
@@ -71,7 +71,7 @@ const BillsItem = ({ product }: Props) => {
                   //   return;
                   // }
                   dispatch(
-                    replaceItemQuantity({
+                    setItemQuantity({
                       ...product,
                       quantity: parseInt(value),
                     })
@@ -82,7 +82,7 @@ const BillsItem = ({ product }: Props) => {
               <button
                 onClick={() => {
                   dispatch(
-                    addItemHandler({
+                    addBillsItem({
                       ...product,
                       quantity: 1,
                       price: price / quantity,

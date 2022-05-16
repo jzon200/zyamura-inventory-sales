@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { useUploadFile } from "react-firebase-hooks/storage";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { MdOutlineClose } from "react-icons/md";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
@@ -13,8 +14,6 @@ import Input from "../UI/Input";
 
 const AddProductForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [itemType, setItemType] = useState<ItemType>("individual");
-
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -54,7 +53,6 @@ const AddProductForm = () => {
       cost,
       quantity: !quantity ? 1 : quantity,
       imageUrl,
-      itemType,
       dateAdded: serverTimestamp(),
       dateModified: serverTimestamp(),
     })
@@ -78,11 +76,19 @@ const AddProductForm = () => {
     }
   };
 
-  if (isLoading) return <CircularProgressCentered className="h-full" />;
+  if (isLoading) return <CircularProgressCentered />;
 
   return (
-    <div className="absolute top-32 right-28 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
-      <div className="text-center text-2xl mb-4">Add Items</div>
+    <div className="absolute top-24 right-14 w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500">
+      <div className="flex justify-center items-center mb-4">
+        <div className="ml-44 text-2xl">Add Items</div>
+        <button
+          className="ml-auto pt-2 text-gray-500 hover:text-gray-700"
+          onClick={() => dispatch(setShowAddDialog(false))}
+        >
+          <MdOutlineClose size={24} />
+        </button>
+      </div>
       {/* TODO: Add Error Validation Helpers */}
       <form onSubmit={handleSubmit(submitHandler)}>
         <div className="grid grid-cols-2 gap-4">
@@ -93,6 +99,26 @@ const AddProductForm = () => {
             required
             autoFocus
             inputValue="productName"
+            register={register}
+          />
+          <Input
+            id="quantity"
+            label="Quantity"
+            type="number"
+            valueAsNumber
+            inputValue="quantity"
+            defaultValue={1}
+            register={register}
+          />
+
+          <Input
+            type="number"
+            id="cost"
+            label="Cost *"
+            placeholder="0.00"
+            valueAsNumber
+            inputValue="cost"
+            required
             register={register}
           />
           <Input
@@ -153,55 +179,6 @@ const AddProductForm = () => {
             </div>
           </div>
 
-          <Input
-            type="number"
-            id="cost"
-            label="Cost *"
-            placeholder="0.00"
-            valueAsNumber
-            inputValue="cost"
-            required
-            register={register}
-          />
-
-          {/* <div>
-            <label>Item Type</label>
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={() => setItemType("individual")}
-                className={`chip ${
-                  itemType === "individual"
-                    ? "bg-blue-300 text-blue-50"
-                    : "bg-gray-300 text-gray-500"
-                }`}
-              >
-                individual
-              </button>
-              <button
-                type="button"
-                onClick={() => setItemType("collective")}
-                className={`chip w-full ${
-                  itemType === "collective"
-                    ? "bg-blue-300 text-blue-50"
-                    : "bg-gray-300 text-gray-500"
-                }`}
-              >
-                collective
-              </button>
-            </div>
-          </div> */}
-          <Input
-            id="quantity"
-            label="Quantity"
-            type="number"
-            valueAsNumber
-            inputValue="quantity"
-            // disabled={itemType === "individual"}
-            defaultValue={1}
-            register={register}
-          />
-
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
@@ -212,9 +189,7 @@ const AddProductForm = () => {
             {...register("description")}
           />
 
-          <button className="col-span-2 place-self-end btn-primary">
-            Submit
-          </button>
+          <button className="col-span-2 place-self-end btn-primary">Add</button>
         </div>
       </form>
     </div>

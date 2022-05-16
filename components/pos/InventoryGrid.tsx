@@ -8,7 +8,10 @@ import {
 import { useEffect } from "react";
 import { db } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { addAllItemsHandler } from "../../redux-store/slices/posSlice";
+import {
+  addAllItems,
+  setInitialItems,
+} from "../../redux-store/slices/posSlice";
 import InventoryCard from "./InventoryCard";
 
 const InventoryGrid = () => {
@@ -32,7 +35,8 @@ const InventoryGrid = () => {
         };
       });
 
-      dispatch(addAllItemsHandler(products as Product[]));
+      dispatch(addAllItems(products as Product[]));
+      dispatch(setInitialItems(products as Product[]));
     };
 
     fetchProductsData();

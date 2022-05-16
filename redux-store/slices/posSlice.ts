@@ -12,12 +12,14 @@ import { setLoadingState } from "./uiSlice";
 
 export type PosState = {
   items: Product[];
+  initialItems: Product[];
   purchasedItems: Product[];
   totalPrice: number;
 };
 
 const initialState: PosState = {
   items: [],
+  initialItems: [],
   purchasedItems: [],
   totalPrice: 0,
 };
@@ -26,15 +28,19 @@ export const posSlice = createSlice({
   name: "pos",
   initialState,
   reducers: {
-    addAllItemsHandler(state: PosState, action: PayloadAction<Product[]>) {
+    setInitialItems(state: PosState, action: PayloadAction<Product[]>) {
+      state.initialItems = action.payload;
+    },
+    addAllItems(state: PosState, action: PayloadAction<Product[]>) {
       state.items = action.payload;
     },
-
-    addItemHandler(state: PosState, action: PayloadAction<Product>) {
+    addBillsItem(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
-      const existingItem = state.items.find((item) => item.id === payload.id);
+      const existingItem = state.items.find(
+        (item) => item.docId === payload.docId
+      );
       const existingBillsItem = state.purchasedItems.find(
-        (item) => item.id === payload.id
+        (item) => item.docId === payload.docId
       );
 
       if (!existingBillsItem) {
@@ -47,16 +53,18 @@ export const posSlice = createSlice({
       existingItem!.quantity -= payload.quantity;
       state.totalPrice += payload!.price;
     },
-    removeItemHandler(state: PosState, action: PayloadAction<Product>) {
+    removeBillsItem(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
-      const existingItem = state.items.find((item) => item.id === payload.id)!;
+      const existingItem = state.items.find(
+        (item) => item.docId === payload.docId
+      )!;
       const existingBillsItem = state.purchasedItems.find(
-        (item) => item.id === payload.id
+        (item) => item.docId === payload.docId
       )!;
 
       if (existingBillsItem.quantity <= 1) {
         state.purchasedItems = state.purchasedItems.filter(
-          (item) => item.id !== payload.id
+          (item) => item.docId !== payload.docId
         );
       }
 
@@ -65,28 +73,44 @@ export const posSlice = createSlice({
       existingBillsItem.price -= existingItem.price;
       state.totalPrice -= payload.price;
     },
-    // TODO: Fix the Logic!
-    replaceItemQuantity(state: PosState, action: PayloadAction<Product>) {
+    // TODO: Fix the NaN value!
+    setItemQuantity(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
-      const existingItem = state.items.find((item) => item.id === payload.id);
+      const existingInitialItem = state.initialItems.find(
+        (item) => item.docId === payload.docId
+      );
+      const existingItem = state.items.find(
+        (item) => item.docId === payload.docId
+      );
       const existingBillsItem = state.purchasedItems.find(
-        (item) => item.id === payload.id
+        (item) => item.docId === payload.docId
       );
 
+      let isLess = false;
       if (existingBillsItem!.quantity > payload.quantity) {
         console.log("is less");
-        existingItem!.quantity += payload.quantity;
-        // state.totalPrice -= existingItem!.price * payload.quantity;
+        isLess = true;
+        existingItem!.quantity =
+          existingInitialItem!.quantity + (payload.quantity - 2);
       } else {
         console.log("is greater");
-        existingItem!.quantity -= payload.quantity;
-        // state.totalPrice += existingItem!.price * payload.quantity;
+        existingItem!.quantity =
+          existingInitialItem!.quantity - payload.quantity;
       }
 
       existingBillsItem!.quantity = payload.quantity;
       existingBillsItem!.price = existingItem!.price * payload.quantity;
+
+      //* This approach is kinda hacky🐱‍💻
+      if (isLess) {
+        state.totalPrice -= payload.price + existingBillsItem!.price;
+        state.totalPrice = Math.abs(state.totalPrice);
+        return;
+      }
+      state.totalPrice += existingBillsItem!.price - payload.price;
     },
     clearTransactions(state: PosState) {
+      state.items = state.initialItems;
       state.purchasedItems = [];
       state.totalPrice = 0;
     },
@@ -141,10 +165,11 @@ export const addSalesData = (posState: PosState): AppThunk => {
 const posReducer = posSlice.reducer;
 
 export const {
-  addItemHandler,
-  addAllItemsHandler,
-  removeItemHandler,
-  replaceItemQuantity,
+  addBillsItem,
+  addAllItems,
+  setInitialItems,
+  removeBillsItem,
+  setItemQuantity,
   clearTransactions,
 } = posSlice.actions;
 

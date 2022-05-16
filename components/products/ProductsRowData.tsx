@@ -14,17 +14,7 @@ type Props = {
 };
 
 const ProductsRowData = ({ product }: Props) => {
-  const {
-    id,
-    docId,
-    name,
-    category,
-    imageUrl,
-    price,
-    quantity,
-    itemType,
-    cost,
-  } = product;
+  const { id, name, category, imageUrl, price, quantity, cost } = product;
 
   const dispatch = useAppDispatch();
 
@@ -57,12 +47,6 @@ const ProductsRowData = ({ product }: Props) => {
       <div>{id}</div>
       <div>{name}</div>
       <div>{category}</div>
-      {/* <div>{description}</div> */}
-      {/* {itemType === "individual" ? (
-        <div className="chip bg-[#C9EBEC] text-[#558DAB]">individual</div>
-      ) : (
-        <div className="chip bg-[#EFE0C1] text-[#B7995D]">collective</div>
-      )} */}
       <div>{`${quantity?.toLocaleString()}`}</div>
       {/* Cost */}
       <div>{`₱${cost?.toLocaleString(undefined, {
