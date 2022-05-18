@@ -9,7 +9,6 @@ import { Fragment, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import ProductCard from "./ProductCard";
 
@@ -73,7 +72,7 @@ const ProductsGrid = () => {
             id,
             selectedItems,
           });
-          dispatch(setShowAddDialog(false));
+          // dispatch(setShowAddDialog(false));
         }}
         className="btn-primary block ml-auto"
       >
