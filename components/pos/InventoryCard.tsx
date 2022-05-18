@@ -38,7 +38,9 @@ const InventoryCard = ({ product }: Props) => {
           />
           <div>
             In stock:{" "}
-            <span className="font-medium">{quantity.toLocaleString()}</span>
+            <span className="font-medium">
+              {Math.floor(quantity).toLocaleString()}
+            </span>
           </div>
         </div>
       ) : (

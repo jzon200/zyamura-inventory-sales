@@ -1,4 +1,10 @@
-import { collection, DocumentData, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  orderBy,
+  query,
+  Timestamp,
+} from "firebase/firestore";
 import React, { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
@@ -21,9 +27,18 @@ const EmployeesTable = () => {
   if (loading) return <CircularProgressCentered />;
 
   const employees: Employee[] | DocumentData = snapshot!.docs.map((doc) => {
+    const dateAdded = doc.data().dateAdded as Timestamp;
+    const dateModified = doc.data().dateModified as Timestamp;
+
     return {
       ...doc.data(),
       docId: doc.id,
+      dateAdded: dateAdded
+        ? dateAdded.toDate().toLocaleDateString()
+        : dateAdded,
+      dateModified: dateModified
+        ? dateModified.toDate().toLocaleDateString()
+        : dateModified,
     };
   });
 

@@ -7,7 +7,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { db, storage } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { setShowEditDialog } from "../../redux-store/slices/productsSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
@@ -60,7 +59,7 @@ const EditProductForm = () => {
       .catch((error) => console.log(error.message));
 
     setIsLoading(false);
-    dispatch(setShowEditDialog(false));
+    // dispatch(setShowEditDialog(false));
     reset();
   };
 
@@ -190,7 +189,7 @@ const EditProductForm = () => {
           />
 
           <button className="col-span-2 place-self-end btn-primary">
-            Submit
+            Save
           </button>
         </div>
       </form>

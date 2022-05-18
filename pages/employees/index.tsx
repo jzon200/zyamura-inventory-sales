@@ -1,19 +1,19 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import AddEmployeeForm from "../../components/employees/AddEmployeeForm";
+import AddOrEditEmployee from "../../components/employees/AddOrEditEmployee";
 import DeleteEmployeeDialog from "../../components/employees/DeleteEmployeeDialog";
-import EditEmployeeForm from "../../components/employees/EditEmployeeForm";
 import EmployeesTable from "../../components/employees/EmployeesTable";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { setEmployee } from "../../redux-store/slices/employeesSlice";
 import {
-  setShowAddDialog,
+  setFormAction,
   setShowDeleteDialog,
-  setShowEditDialog,
-} from "../../redux-store/slices/employeesSlice";
+  setShowFormModal,
+} from "../../redux-store/slices/uiSlice";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -41,29 +41,23 @@ const SORT_QUERIES: EmployeeQuery[] = [
 ];
 
 const Employees: NextPage = () => {
-  const { showAddDialog, showEditDialog, showDeleteDialog, selectedQuery } =
-    useAppSelector((state) => ({
-      showAddDialog: state.employees.showAddDialog,
-      showEditDialog: state.employees.showEditDialog,
-      showDeleteDialog: state.employees.showDeleteDialog,
+  const { showFormModal, showDeleteDialog, selectedQuery } = useAppSelector(
+    (state) => ({
+      showFormModal: state.ui.showFormModal,
+      showDeleteDialog: state.ui.showDeleteDialog,
       selectedQuery: state.employees.employeeQuery,
-    }));
+    })
+  );
 
   const dispatch = useAppDispatch();
 
   return (
     <Fragment>
       <MuiModal
-        showModal={showAddDialog}
-        onClose={() => dispatch(setShowAddDialog(false))}
+        showModal={showFormModal}
+        onClose={() => dispatch(setShowFormModal(false))}
       >
-        <AddEmployeeForm />
-      </MuiModal>
-      <MuiModal
-        showModal={showEditDialog}
-        onClose={() => dispatch(setShowEditDialog(false))}
-      >
-        <EditEmployeeForm />
+        <AddOrEditEmployee />
       </MuiModal>
       <DeleteEmployeeDialog
         showDialog={showDeleteDialog}
@@ -77,7 +71,11 @@ const Employees: NextPage = () => {
         selectedQuery={selectedQuery}
         title="Employees"
         addLabel="Employees"
-        onAddHandler={() => dispatch(setShowAddDialog(true))}
+        onAddHandler={() => {
+          dispatch(setEmployee(null));
+          dispatch(setFormAction("add"));
+          dispatch(setShowFormModal(true));
+        }}
       />
       <TableHeader items={TABLE_HEADERS} />
       <EmployeesTable />

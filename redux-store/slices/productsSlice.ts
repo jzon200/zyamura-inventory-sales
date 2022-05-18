@@ -9,21 +9,15 @@ import {
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { AppThunk } from "../store";
-import { setLoadingState } from "./uiSlice";
+import { setShowFormModal, setShowLoadingSpinner } from "./uiSlice";
 
 export type ProductsState = {
   selectedProduct: Product | DocumentData | null;
-  showAddDialog: boolean;
-  showEditDialog: boolean;
-  showDeleteDialog: boolean;
   productQuery: ProductQuery;
 };
 
 const initialState: ProductsState = {
   selectedProduct: null,
-  showAddDialog: false,
-  showEditDialog: false,
-  showDeleteDialog: false,
   productQuery: {
     sortQuery: "latest",
     label: "Latest",
@@ -38,15 +32,6 @@ export const productSlice = createSlice({
   reducers: {
     setProduct(state: ProductsState, action: PayloadAction<Product | null>) {
       state.selectedProduct = action.payload;
-    },
-    setShowAddDialog(state: ProductsState, action: PayloadAction<boolean>) {
-      state.showAddDialog = action.payload;
-    },
-    setShowEditDialog(state: ProductsState, action: PayloadAction<boolean>) {
-      state.showEditDialog = action.payload;
-    },
-    setShowDeleteDialog(state: ProductsState, action: PayloadAction<boolean>) {
-      state.showDeleteDialog = action.payload;
     },
     setSortQuery(state: ProductsState, action: PayloadAction<SortQuery>) {
       switch (action.payload) {
@@ -120,11 +105,11 @@ export const productSlice = createSlice({
   },
 });
 
-//! Cannot use yet
-export const addProductData = (data: InputValues): AppThunk => {
+export const addProductData = (
+  data: InputValues,
+  imageUrl: string | null
+): AppThunk => {
   return async (dispatch) => {
-    dispatch(setLoadingState(true));
-
     const {
       productName: name,
       category,
@@ -134,36 +119,40 @@ export const addProductData = (data: InputValues): AppThunk => {
       cost,
     } = data;
 
-    const productsCollectionRef = collection(db, "products");
+    const collectionRef = collection(db, "products");
 
     const id = Math.floor(Math.random() * 1000000);
 
-    await addDoc(productsCollectionRef, {
-      id,
-      name,
-      description,
-      category,
-      price,
-      cost,
-      quantity,
-      // imageUrl,
-      dateAdded: serverTimestamp(),
-      dateModified: serverTimestamp(),
-    })
-      .then(() => console.log("success"))
-      .catch((error) => console.log(error.message));
-
-    dispatch(setLoadingState(false));
+    dispatch(setShowLoadingSpinner(true));
+    try {
+      await addDoc(collectionRef, {
+        id,
+        name,
+        description,
+        category,
+        price,
+        cost,
+        quantity,
+        imageUrl,
+        dateAdded: serverTimestamp(),
+        dateModified: serverTimestamp(),
+      });
+      console.log("Added Product successfully!");
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      dispatch(setShowLoadingSpinner(false));
+      dispatch(setShowFormModal(false));
+    }
   };
 };
 
 export const editProductData = (
   data: InputValues,
-  selectedProduct: Product
+  selectedProduct: Product | DocumentData | null,
+  imageUrl: string | null
 ): AppThunk => {
   return async (dispatch) => {
-    dispatch(setLoadingState(true));
-
     const {
       productName: name,
       category,
@@ -173,32 +162,33 @@ export const editProductData = (
       cost,
     } = data;
 
-    const productDocRef = doc(db, "products", selectedProduct?.docId);
+    const docRef = doc(db, "products", selectedProduct?.docId);
 
-    await updateDoc(productDocRef, {
-      name,
-      description,
-      category,
-      price,
-      cost,
-      quantity,
-      dateModified: serverTimestamp(),
-    })
-      .then(() => console.log("success"))
-      .catch((error) => console.log(error.message));
+    dispatch(setShowLoadingSpinner(true));
+    try {
+      await updateDoc(docRef, {
+        name,
+        description,
+        category,
+        price,
+        cost,
+        quantity,
+        imageUrl,
+        dateModified: serverTimestamp(),
+      });
 
-    dispatch(setLoadingState(false));
+      console.log("Updated Product successfully!");
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      dispatch(setShowLoadingSpinner(false));
+      dispatch(setShowFormModal(false));
+    }
   };
 };
 
 const productReducer = productSlice.reducer;
 
-export const {
-  setProduct,
-  setShowAddDialog,
-  setShowEditDialog,
-  setShowDeleteDialog,
-  setSortQuery,
-} = productSlice.actions;
+export const { setProduct, setSortQuery } = productSlice.actions;
 
 export default productReducer;

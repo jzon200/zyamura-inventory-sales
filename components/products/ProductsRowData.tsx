@@ -6,8 +6,11 @@ import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import {
   setProduct,
   setShowDeleteDialog,
-  setShowEditDialog,
 } from "../../redux-store/slices/productsSlice";
+import {
+  setFormAction,
+  setShowFormModal,
+} from "../../redux-store/slices/uiSlice";
 
 type Props = {
   product: Product;
@@ -20,7 +23,9 @@ const ProductsRowData = ({ product }: Props) => {
 
   const editHandler = () => {
     dispatch(setProduct(product));
-    dispatch(setShowEditDialog(true));
+    dispatch(setFormAction("edit"));
+    dispatch(setShowFormModal(true));
+    // dispatch(setShowEditDialog(true));
   };
 
   const deleteHandler = () => {

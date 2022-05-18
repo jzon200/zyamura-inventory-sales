@@ -1,24 +1,44 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type UiState = {
-  isLoading: boolean;
+  showLoadingSpinner: boolean;
+  showFormModal: boolean;
+  showDeleteDialog: boolean;
+  formAction: FormAction;
 };
 
 const initialState: UiState = {
-  isLoading: false,
+  showLoadingSpinner: false,
+  showDeleteDialog: false,
+  showFormModal: false,
+  formAction: "add",
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setLoadingState(state: UiState, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
+    setShowLoadingSpinner(state: UiState, action: PayloadAction<boolean>) {
+      state.showLoadingSpinner = action.payload;
+    },
+    setShowDeleteDialog(state: UiState, action: PayloadAction<boolean>) {
+      state.showDeleteDialog = action.payload;
+    },
+    setShowFormModal(state: UiState, action: PayloadAction<boolean>) {
+      state.showFormModal = action.payload;
+    },
+    setFormAction(state: UiState, action: PayloadAction<FormAction>) {
+      state.formAction = action.payload;
     },
   },
 });
 
-export const { setLoadingState } = uiSlice.actions;
+export const {
+  setShowLoadingSpinner,
+  setShowFormModal,
+  setShowDeleteDialog,
+  setFormAction,
+} = uiSlice.actions;
 
 const uiReducer = uiSlice.reducer;
 

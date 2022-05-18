@@ -80,6 +80,8 @@ type EmployeeQuery = {
 
 type ItemType = "individual" | "collective";
 
+type FormAction = "add" | "edit";
+
 type Category = "fish" | "dog" | "materials" | "other";
 
 type ProductQueryConstraint =

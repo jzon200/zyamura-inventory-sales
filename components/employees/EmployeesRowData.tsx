@@ -1,13 +1,14 @@
-import React, { Fragment } from "react";
-import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import {
-  setEmployee,
-  setShowDeleteDialog,
-  setShowEditDialog,
-} from "../../redux-store/slices/employeesSlice";
 import Image from "next/image";
-import { FiEdit } from "react-icons/fi";
+import { Fragment } from "react";
 import { BsTrash } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { setEmployee } from "../../redux-store/slices/employeesSlice";
+import {
+  setFormAction,
+  setShowDeleteDialog,
+  setShowFormModal,
+} from "../../redux-store/slices/uiSlice";
 
 type Props = {
   employee: Employee;
@@ -21,7 +22,8 @@ const EmployeesRowData = ({ employee }: Props) => {
 
   const editHandler = () => {
     dispatch(setEmployee(employee));
-    dispatch(setShowEditDialog(true));
+    dispatch(setFormAction("edit"));
+    dispatch(setShowFormModal(true));
   };
 
   const deleteHandler = () => {

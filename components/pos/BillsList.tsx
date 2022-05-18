@@ -10,7 +10,7 @@ import BillsItem from "./BillsItem";
 const BillsList = () => {
   const { posState, isLoading } = useAppSelector((state) => ({
     posState: state.pos,
-    isLoading: state.ui.isLoading,
+    isLoading: state.ui.showLoadingSpinner,
   }));
   const dispatch = useAppDispatch();
 

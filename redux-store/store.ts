@@ -2,14 +2,12 @@ import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import employeesReducer from "./slices/employeesSlice";
 import posReducer from "./slices/posSlice";
 import productReducer from "./slices/productsSlice";
-import salesReducer from "./slices/salesSlice";
 import uiReducer from "./slices/uiSlice";
 
 const store = configureStore({
   reducer: {
     ui: uiReducer,
     products: productReducer,
-    sales: salesReducer,
     employees: employeesReducer,
     pos: posReducer,
   },

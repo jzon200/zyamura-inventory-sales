@@ -3,17 +3,17 @@ import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
+import AddOrEditProduct from "../../components/products/AddOrEditProduct";
 import DeleteProductDialog from "../../components/products/DeleteProductDialog";
-import EditProductForm from "../../components/products/EditProductForm";
-import AddProductForm from "../../components/products/AddProductForm";
 import ProductsTable from "../../components/products/ProductsTable";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
+import { setProduct } from "../../redux-store/slices/productsSlice";
 import {
-  setShowAddDialog,
+  setFormAction,
   setShowDeleteDialog,
-  setShowEditDialog,
-} from "../../redux-store/slices/productsSlice";
+  setShowFormModal,
+} from "../../redux-store/slices/uiSlice";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -59,13 +59,13 @@ const SORT_QUERIES: ProductQuery[] = [
 ];
 
 const Products: NextPage = () => {
-  const { showAddDialog, showEditDialog, showDeleteDialog, selectedQuery } =
-    useAppSelector((state) => ({
-      showAddDialog: state.products.showAddDialog,
-      showEditDialog: state.products.showEditDialog,
-      showDeleteDialog: state.products.showDeleteDialog,
+  const { showFormModal, showDeleteDialog, selectedQuery } = useAppSelector(
+    (state) => ({
+      showFormModal: state.ui.showFormModal,
+      showDeleteDialog: state.ui.showDeleteDialog,
       selectedQuery: state.products.productQuery,
-    }));
+    })
+  );
 
   const dispatch = useAppDispatch();
 
@@ -75,16 +75,10 @@ const Products: NextPage = () => {
         <title>Products | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
       <MuiModal
-        showModal={showAddDialog}
-        onClose={() => dispatch(setShowAddDialog(false))}
+        showModal={showFormModal}
+        onClose={() => dispatch(setShowFormModal(false))}
       >
-        <AddProductForm />
-      </MuiModal>
-      <MuiModal
-        showModal={showEditDialog}
-        onClose={() => dispatch(setShowEditDialog(false))}
-      >
-        <EditProductForm />
+        <AddOrEditProduct />
       </MuiModal>
       <DeleteProductDialog
         showDialog={showDeleteDialog}
@@ -96,7 +90,11 @@ const Products: NextPage = () => {
         selectedQuery={selectedQuery}
         sortItems={SORT_QUERIES}
         // sortHandler={() => dispatch(setProductQuery(selectedSortQuery))}
-        onAddHandler={() => dispatch(setShowAddDialog(true))}
+        onAddHandler={() => {
+          dispatch(setProduct(null));
+          dispatch(setFormAction("add"));
+          dispatch(setShowFormModal(true));
+        }}
       />
       <TableHeader items={TABLE_HEADERS} />
       <ProductsTable />

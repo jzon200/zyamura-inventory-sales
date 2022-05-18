@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { AppThunk } from "../store";
-import { setLoadingState } from "./uiSlice";
+import { setShowLoadingSpinner } from "./uiSlice";
 
 export type PosState = {
   items: Product[];
@@ -74,6 +74,7 @@ export const posSlice = createSlice({
       state.totalPrice -= payload.price;
     },
     // TODO: Fix the NaN value!
+    // ! This method is not yet 100% accurate
     setItemQuantity(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
       const existingInitialItem = state.initialItems.find(
@@ -119,7 +120,7 @@ export const posSlice = createSlice({
 
 export const addSalesData = (posState: PosState): AppThunk => {
   return async (dispatch) => {
-    dispatch(setLoadingState(true));
+    dispatch(setShowLoadingSpinner(true));
     const { purchasedItems, totalPrice } = posState;
 
     const id = Math.floor(Math.random() * 1000000);
@@ -136,12 +137,16 @@ export const addSalesData = (posState: PosState): AppThunk => {
           }
 
           const newQuantity = sfDoc.data().quantity - item.quantity;
-          // Remove the existing item in the products inventory
-          if (newQuantity === 0) {
-            transaction.delete(sfDocRef);
-          } else {
-            transaction.update(sfDocRef, { quantity: newQuantity });
-          }
+
+          transaction.update(sfDocRef, { quantity: newQuantity });
+
+          //! Remove the existing item in the products inventory
+          //! if the quantity is 0, this is revised by the panelists
+          // if (newQuantity === 0) {
+          //   transaction.delete(sfDocRef);
+          // } else {
+          //   transaction.update(sfDocRef, { quantity: newQuantity });
+          // }
         });
         console.log("Transaction successfully committed!");
       } catch (e) {
@@ -158,7 +163,7 @@ export const addSalesData = (posState: PosState): AppThunk => {
     });
 
     dispatch(clearTransactions());
-    dispatch(setLoadingState(false));
+    dispatch(setShowLoadingSpinner(false));
   };
 };
 

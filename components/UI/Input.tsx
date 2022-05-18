@@ -59,6 +59,15 @@ const Input = ({
         defaultValue={defaultValue}
         aria-disabled={disabled}
         disabled={disabled}
+        onKeyDown={(event) => {
+          // if the input type is number, this will disable this keys
+          const disabledKeys = type === "number" ? ["e", "E", "+", "-"] : [];
+
+          // Only disable decimal in Quantity Input
+          if (inputValue === "quantity") disabledKeys.push(".");
+
+          disabledKeys.includes(event.key) && event.preventDefault();
+        }}
         onFocus={() => setIsTouched(true)}
         {...register(inputValue, {
           required,

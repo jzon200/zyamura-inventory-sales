@@ -2,15 +2,10 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { MdFilterList } from "react-icons/md";
-import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
 import TitleHeader from "../../components/layout/TitleHeader";
-import AddSalesForm from "../../components/sales/AddSalesForm";
 import TransactionsGrid from "../../components/sales/TransactionsGrid";
 import Dropdown from "../../components/UI/Dropdown";
-import MuiModal from "../../components/UI/Modal";
-import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { setShowAddDialog } from "../../redux-store/slices/salesSlice";
 
 const TABLE_HEADERS = [
   { label: "ID" },
@@ -36,20 +31,11 @@ const SORT_QUERIES: ProductQuery[] = [
 ];
 
 const Sales: NextPage = () => {
-  const dispatch = useAppDispatch();
-  const showAddDialog = useAppSelector((state) => state.sales.showAddDialog);
-
   return (
     <Fragment>
       <Head>
         <title>Sales | Zyamura Mix Petshop Inventory & Sales System</title>
       </Head>
-      <MuiModal
-        showModal={showAddDialog}
-        onClose={() => dispatch(setShowAddDialog(false))}
-      >
-        <AddSalesForm />
-      </MuiModal>
 
       {/* <SalesReport /> */}
 

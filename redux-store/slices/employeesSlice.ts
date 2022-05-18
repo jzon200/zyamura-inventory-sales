@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DocumentData } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { AppThunk } from "../store";
+import { setShowFormModal, setShowLoadingSpinner } from "./uiSlice";
 
 export type EmployeesState = {
-  employee: Employee | DocumentData | null;
-  showAddDialog: boolean;
-  showEditDialog: boolean;
-  showDeleteDialog: boolean;
+  selectedEmployee: Employee | DocumentData | null;
   employeeQuery: EmployeeQuery;
 };
 
 const initialState: EmployeesState = {
-  employee: null,
-  showAddDialog: false,
-  showEditDialog: false,
-  showDeleteDialog: false,
+  selectedEmployee: null,
   employeeQuery: {
     sortQuery: "latest",
     label: "Latest",
@@ -26,19 +30,10 @@ export const employeesSlice = createSlice({
   name: "employess",
   initialState,
   reducers: {
-    setEmployee(state, action: PayloadAction<Employee>) {
-      state.employee = action.payload;
+    setEmployee(state: EmployeesState, action: PayloadAction<Employee | null>) {
+      state.selectedEmployee = action.payload;
     },
-    setShowAddDialog(state, action: PayloadAction<boolean>) {
-      state.showAddDialog = action.payload;
-    },
-    setShowEditDialog(state, action: PayloadAction<boolean>) {
-      state.showEditDialog = action.payload;
-    },
-    setShowDeleteDialog(state, action: PayloadAction<boolean>) {
-      state.showDeleteDialog = action.payload;
-    },
-    setEmployeeQuery(state, action: PayloadAction<SortQuery>) {
+    setEmployeeQuery(state: EmployeesState, action: PayloadAction<SortQuery>) {
       switch (action.payload) {
         case "latest":
           state.employeeQuery = {
@@ -76,16 +71,75 @@ export const employeesSlice = createSlice({
   },
 });
 
+export const addEmployeeData = (
+  data: InputValues,
+  imageUrl: string | null
+): AppThunk => {
+  return async (dispatch) => {
+    const { firstName, lastName, contactNumber, email, role } = data;
+
+    const collectionRef = collection(db, "employees");
+
+    const id = Math.floor(Math.random() * 1000000);
+
+    dispatch(setShowLoadingSpinner(true));
+    try {
+      await addDoc(collectionRef, {
+        id,
+        firstName,
+        lastName,
+        contactNumber,
+        email,
+        role,
+        imageUrl,
+        dateAdded: serverTimestamp(),
+        dateModified: serverTimestamp(),
+      });
+
+      console.log("Added Employee successfully!");
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      dispatch(setShowLoadingSpinner(false));
+      dispatch(setShowFormModal(false));
+    }
+  };
+};
+
+export const editEmployeeData = (
+  data: InputValues,
+  selectedEmployee: Employee | DocumentData | null,
+  imageUrl: string | null
+): AppThunk => {
+  return async (dispatch) => {
+    const { firstName, lastName, contactNumber, email, role } = data;
+
+    const docRef = doc(db, "employees", selectedEmployee?.docId);
+
+    dispatch(setShowLoadingSpinner(true));
+    try {
+      await updateDoc(docRef, {
+        firstName,
+        lastName,
+        contactNumber,
+        email,
+        role,
+        imageUrl,
+        dateModified: serverTimestamp(),
+      });
+
+      console.log("Updated Employee successfully!");
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      dispatch(setShowLoadingSpinner(false));
+      dispatch(setShowFormModal(false));
+    }
+  };
+};
+
 const employeesReducer = employeesSlice.reducer;
 
-export const {
-  setEmployee,
-  setShowAddDialog,
-  setShowEditDialog,
-  setShowDeleteDialog,
-  setEmployeeQuery,
-} = employeesSlice.actions;
-
-// export const selectemployee = (state: RootState) => state.employees.employee;
+export const { setEmployee, setEmployeeQuery } = employeesSlice.actions;
 
 export default employeesReducer;
