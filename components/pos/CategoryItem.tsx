@@ -22,7 +22,7 @@ const CategoryItem = ({
         isSelected && "border-blue-500"
       }`}
     >
-      <Image src={imageData} width={72} height={72} />
+      <Image src={imageData} width={72} height={72} alt="" />
       <div className="text-xs font-medium">{label}</div>
       <div className={"text-xs text-slate-400"}>{`${quantity} Items`}</div>
     </div>

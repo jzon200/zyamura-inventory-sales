@@ -32,6 +32,7 @@ const BillsItem = ({ product }: Props) => {
             width={480}
             height={480}
             objectFit="cover"
+            alt=""
           />
         </div>
         <div className="grow">

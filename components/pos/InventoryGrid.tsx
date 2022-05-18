@@ -40,7 +40,7 @@ const InventoryGrid = () => {
     };
 
     fetchProductsData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="grid grid-cols-3 gap-4 h-[40rem] p-4 overflow-y-scroll">
