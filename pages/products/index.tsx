@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
 import TableHeader from "../../components/layout/TableHeader";
-import AddOrEditProduct from "../../components/products/AddOrEditProduct";
+import ProductEntryForm from "../../components/products/ProductEntryForm";
 import DeleteProductDialog from "../../components/products/DeleteProductDialog";
 import ProductsTable from "../../components/products/ProductsTable";
 import MuiModal from "../../components/UI/Modal";
@@ -78,7 +78,7 @@ const Products: NextPage = () => {
         showModal={showFormModal}
         onClose={() => dispatch(setShowFormModal(false))}
       >
-        <AddOrEditProduct />
+        <ProductEntryForm />
       </MuiModal>
       <DeleteProductDialog
         showDialog={showDeleteDialog}

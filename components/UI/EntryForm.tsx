@@ -10,7 +10,7 @@ type Props = {
   onSubmit: () => void;
 };
 
-const AddOrEditForm = ({
+const EntryForm = ({
   title,
   className,
   children,
@@ -57,4 +57,4 @@ const AddOrEditForm = ({
   );
 };
 
-export default AddOrEditForm;
+export default EntryForm;

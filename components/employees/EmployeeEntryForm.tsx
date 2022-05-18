@@ -7,44 +7,39 @@ import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { storage } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
-  addProductData,
-  editProductData,
-} from "../../redux-store/slices/productsSlice";
+  addEmployeeData,
+  editEmployeeData,
+} from "../../redux-store/slices/employeesSlice";
 import { setShowFormModal } from "../../redux-store/slices/uiSlice";
-import AddOrEditForm from "../UI/AddOrEditForm";
+import EntryForm from "../UI/EntryForm";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import Input from "../UI/Input";
 
-const AddOrEditProduct = () => {
-  const { selectedProduct, formAction, showLoadingSpinner } = useAppSelector(
+const EmployeeEntryForm = () => {
+  const { selectedEmployee, formAction, showLoadingSpinner } = useAppSelector(
     (state) => ({
-      selectedProduct: state.products.selectedProduct,
+      selectedEmployee: state.employees.selectedEmployee,
       formAction: state.ui.formAction,
       showLoadingSpinner: state.ui.showLoadingSpinner,
     })
   );
 
   const [imageUrl, setImageUrl] = useState<string | null>(
-    selectedProduct ? selectedProduct.imageUrl : null
+    selectedEmployee ? selectedEmployee.imageUrl : null
   );
+
   const [isUploading, setIsUploading] = useState(false);
 
   const [uploadFile] = useUploadFile();
-
   const dispatch = useAppDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<InputValues>();
+  const { register, handleSubmit, reset } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
-      dispatch(editProductData(data, selectedProduct, imageUrl));
+      dispatch(editEmployeeData(data, selectedEmployee, imageUrl));
     } else {
-      dispatch(addProductData(data, imageUrl));
+      dispatch(addEmployeeData(data, imageUrl));
     }
     reset();
   };
@@ -52,7 +47,7 @@ const AddOrEditProduct = () => {
   const uploadImgHandler = async (event: ChangeEvent<HTMLInputElement>) => {
     const imgPath = event.target.files ? event.target.files[0] : null;
     if (imgPath) {
-      const storageRef = ref(storage, `products/images/${imgPath?.name}`);
+      const storageRef = ref(storage, `employees/images/${imgPath?.name}`);
       setIsUploading(true);
       await uploadFile(storageRef, imgPath);
       const imgUrl = await getDownloadURL(storageRef);
@@ -64,65 +59,60 @@ const AddOrEditProduct = () => {
   if (showLoadingSpinner) return <CircularProgressCentered />;
 
   return (
-    <AddOrEditForm
-      title={"Product"}
+    <EntryForm
+      title="Employee"
       onClose={() => dispatch(setShowFormModal(false))}
       onSubmit={handleSubmit(submitHandler)}
     >
       <Input
-        label="Item Name *"
-        id="itemName"
-        placeholder="Enter Item Name"
+        label="First Name *"
+        id="firstName"
+        placeholder="Enter First Name"
         required
         autoFocus
-        inputValue="productName"
+        inputValue="firstName"
+        defaultValue={selectedEmployee?.firstName}
         register={register}
-        defaultValue={selectedProduct?.name}
       />
       <Input
-        id="quantity"
-        label="Quantity"
-        type="number"
-        valueAsNumber
-        inputValue="quantity"
-        register={register}
-        defaultValue={selectedProduct ? selectedProduct.quantity : 1}
-      />
-      <Input
-        type="number"
-        id="cost"
-        label="Product Cost *"
-        placeholder="0.00"
-        valueAsNumber
-        inputValue="cost"
+        label="Last Name *"
+        id="lastName"
+        placeholder="Enter Last Name"
         required
+        inputValue="lastName"
+        defaultValue={selectedEmployee?.lastName}
         register={register}
-        defaultValue={selectedProduct?.cost}
       />
       <Input
-        type="number"
-        id="price"
-        label="Selling Price *"
-        placeholder="0.00"
-        valueAsNumber
-        inputValue="price"
+        id="contactNumber"
+        label="Contact Number *"
+        placeholder="09123456789"
+        inputValue="contactNumber"
         required
+        defaultValue={selectedEmployee?.contactNumber}
         register={register}
-        defaultValue={selectedProduct?.price}
       />
-      {/* Select Category */}
+      <Input
+        type="email"
+        label="Email *"
+        id="email"
+        placeholder="Enter Email"
+        required
+        inputValue="email"
+        defaultValue={selectedEmployee?.email}
+        register={register}
+      />
       <div className="flex flex-col gap-[1px]">
-        <label htmlFor="category">Category</label>
+        <label htmlFor="role">Role</label>
         <select
-          id="category"
+          id="role"
           className="form-control px-2"
-          defaultValue={selectedProduct?.category}
-          {...register("category")}
+          defaultValue={selectedEmployee?.role}
+          {...register("role")}
         >
-          <option value="fish">Fish</option>
-          <option value="dog">Dog</option>
-          <option value="materials">Materials</option>
-          <option value="food">Food</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="cashier">Cashier</option>
           <option value="other">Other</option>
         </select>
       </div>
@@ -157,18 +147,8 @@ const AddOrEditProduct = () => {
           )}
         </div>
       </div>
-      <label htmlFor="description">Description</label>
-      <textarea
-        id="description"
-        className="-mt-4 col-span-2 p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
-        rows={4}
-        placeholder={"Enter details such as age, size, etc."}
-        maxLength={500}
-        defaultValue={selectedProduct?.description}
-        {...register("description")}
-      />
-    </AddOrEditForm>
+    </EntryForm>
   );
 };
 
-export default AddOrEditProduct;
+export default EmployeeEntryForm;

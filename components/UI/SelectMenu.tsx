@@ -2,14 +2,15 @@ import { useState } from "react";
 import { UseFormRegister } from "react-hook-form";
 
 type Props = {
+  items: string[];
   id: string;
   label: string;
   register: UseFormRegister<InputValues>;
 };
 
-const items: Category[] = ["fish", "dog", "materials", "other"];
+// const items: Category[] = ["fish", "dog", "materials", "other"];
 
-const CategoryBox = ({ id, label, register }: Props) => {
+const SelectMenu = ({ items, id, label, register }: Props) => {
   const [isTouched, setIsTouched] = useState(false);
   return (
     <div className="flex flex-col gap-[1px]">
@@ -36,4 +37,4 @@ const CategoryBox = ({ id, label, register }: Props) => {
   );
 };
 
-export default CategoryBox;
+export default SelectMenu;

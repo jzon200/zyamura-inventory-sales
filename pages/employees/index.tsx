@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import AddOrEditEmployee from "../../components/employees/AddOrEditEmployee";
+import EmployeeEntryForm from "../../components/employees/EmployeeEntryForm";
 import DeleteEmployeeDialog from "../../components/employees/DeleteEmployeeDialog";
 import EmployeesTable from "../../components/employees/EmployeesTable";
 import ActionsHeader from "../../components/layout/ActionsHeader";
@@ -57,7 +57,7 @@ const Employees: NextPage = () => {
         showModal={showFormModal}
         onClose={() => dispatch(setShowFormModal(false))}
       >
-        <AddOrEditEmployee />
+        <EmployeeEntryForm />
       </MuiModal>
       <DeleteEmployeeDialog
         showDialog={showDeleteDialog}
