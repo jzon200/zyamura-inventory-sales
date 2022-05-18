@@ -3,12 +3,10 @@ import { Fragment } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import {
-  setProduct,
-  setShowDeleteDialog,
-} from "../../redux-store/slices/productsSlice";
+import { setProduct } from "../../redux-store/slices/productsSlice";
 import {
   setFormAction,
+  setShowDeleteDialog,
   setShowFormModal,
 } from "../../redux-store/slices/uiSlice";
 
@@ -25,7 +23,6 @@ const ProductsRowData = ({ product }: Props) => {
     dispatch(setProduct(product));
     dispatch(setFormAction("edit"));
     dispatch(setShowFormModal(true));
-    // dispatch(setShowEditDialog(true));
   };
 
   const deleteHandler = () => {

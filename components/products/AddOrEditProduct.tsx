@@ -40,7 +40,7 @@ const AddOrEditProduct = () => {
     formState: { errors },
   } = useForm<InputValues>();
 
-  const submitHandler: SubmitHandler<InputValues> = async (data) => {
+  const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
       dispatch(editProductData(data, selectedProduct, imageUrl));
     } else {

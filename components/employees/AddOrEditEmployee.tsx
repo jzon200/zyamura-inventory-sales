@@ -35,7 +35,7 @@ const AddOrEditEmployee = () => {
 
   const { register, handleSubmit, reset } = useForm<InputValues>();
 
-  const submitHandler: SubmitHandler<InputValues> = async (data) => {
+  const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
       dispatch(editEmployeeData(data, selectedEmployee, imageUrl));
     } else {
