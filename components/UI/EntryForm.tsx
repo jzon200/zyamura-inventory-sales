@@ -27,27 +27,26 @@ const EntryForm = ({
         className={`${className} relative w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500`}
       >
         <button
-          className="absolute top-6 right-6 text-red-400 hover:text-red-500"
+          className="absolute top-5 right-6 text-red-400 hover:text-red-500"
           onClick={onClose}
         >
-          <MdOutlineClose size={24} />
+          <MdOutlineClose size={28} />
         </button>
         <div className="text-center text-2xl mb-4">{`${
           isEditing ? "Edit" : "Add"
         } ${title}`}</div>
-        {/* TODO: Add Error Validation Helpers */}
         <form className="grid grid-cols-2 gap-4" onSubmit={onSubmit}>
           {children}
           <div className="col-span-2 place-self-end">
             <button
-              className="outline outline-1 outline-blue-500 p-2 rounded-lg text-lg text-blue-500 mr-4
+              className="outline outline-1 outline-blue-500 px-3 py-2 rounded-lg text-lg text-blue-500 mr-4
                   hover:outline-blue-600 hover:text-blue-600"
               type="button"
               onClick={onClose}
             >
               Cancel
             </button>
-            <button className="btn-primary">
+            <button className="btn-primary w-20">
               {isEditing ? "Save" : "Add"}
             </button>
           </div>

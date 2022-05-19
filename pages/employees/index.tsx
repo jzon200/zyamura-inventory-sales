@@ -70,7 +70,7 @@ const Employees: NextPage = () => {
         sortItems={SORT_QUERIES}
         selectedQuery={selectedQuery}
         title="Employees"
-        addLabel="Employees"
+        addLabel="Employee"
         onAddHandler={() => {
           dispatch(setEmployee(null));
           dispatch(setFormAction("add"));

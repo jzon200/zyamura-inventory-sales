@@ -7,10 +7,10 @@ interface InputValues {
   price: number;
   quantity: number;
   imagePath: FileList;
-  role: "admin" | "manager" | "cashier" | "other";
+  role: Role;
   firstName: string;
   lastName: string;
-  contactNumber: string;
+  contactNumber: number;
   email: string;
 }
 
@@ -19,7 +19,7 @@ type Product = {
   docId: string;
   name: string;
   description: string;
-  category: Category;
+  category: Category | null;
   itemType: ItemType;
   cost: number;
   price: number;
@@ -83,6 +83,8 @@ type ItemType = "individual" | "collective";
 type FormAction = "add" | "edit";
 
 type Category = "fish" | "dog" | "materials" | "other";
+
+type Role = "admin" | "manager" | "cashier" | "other";
 
 type ProductQueryConstraint =
   | "dateAdded"

@@ -1,19 +1,19 @@
-import { getDownloadURL, ref } from "firebase/storage";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
-import { useUploadFile } from "react-firebase-hooks/storage";
 import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
-import { storage } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
   addEmployeeData,
   editEmployeeData,
 } from "../../redux-store/slices/employeesSlice";
 import { setShowFormModal } from "../../redux-store/slices/uiSlice";
-import EntryForm from "../UI/EntryForm";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
+import EntryForm from "../UI/EntryForm";
 import Input from "../UI/Input";
+import SelectMenu from "../UI/SelectMenu";
+
+const ROLE_ITEMS: Role[] = ["admin", "cashier", "manager", "other"];
 
 const EmployeeEntryForm = () => {
   const { selectedEmployee, formAction, showLoadingSpinner } = useAppSelector(
@@ -27,32 +27,33 @@ const EmployeeEntryForm = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(
     selectedEmployee ? selectedEmployee.imageUrl : null
   );
+  const [imagePath, setImagePath] = useState<File | null>(null);
 
-  const [isUploading, setIsUploading] = useState(false);
-
-  const [uploadFile] = useUploadFile();
   const dispatch = useAppDispatch();
 
-  const { register, handleSubmit, reset } = useForm<InputValues>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
-      dispatch(editEmployeeData(data, selectedEmployee, imageUrl));
+      dispatch(editEmployeeData(data, selectedEmployee, imagePath));
     } else {
-      dispatch(addEmployeeData(data, imageUrl));
+      dispatch(addEmployeeData(data, imagePath));
     }
     reset();
   };
 
-  const uploadImgHandler = async (event: ChangeEvent<HTMLInputElement>) => {
+  const uploadImgHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const imgPath = event.target.files ? event.target.files[0] : null;
+
     if (imgPath) {
-      const storageRef = ref(storage, `employees/images/${imgPath?.name}`);
-      setIsUploading(true);
-      await uploadFile(storageRef, imgPath);
-      const imgUrl = await getDownloadURL(storageRef);
+      const imgUrl = URL.createObjectURL(imgPath);
       setImageUrl(imgUrl);
-      setIsUploading(false);
+      setImagePath(imgPath);
     }
   };
 
@@ -70,27 +71,33 @@ const EmployeeEntryForm = () => {
         placeholder="Enter First Name"
         required
         autoFocus
-        inputValue="firstName"
         defaultValue={selectedEmployee?.firstName}
+        inputValue="firstName"
         register={register}
+        error={errors.firstName}
       />
       <Input
         label="Last Name *"
         id="lastName"
         placeholder="Enter Last Name"
         required
-        inputValue="lastName"
         defaultValue={selectedEmployee?.lastName}
+        inputValue="lastName"
         register={register}
+        error={errors.lastName}
       />
+
       <Input
+        type="number"
         id="contactNumber"
         label="Contact Number *"
         placeholder="09123456789"
         inputValue="contactNumber"
+        valueAsNumber
         required
         defaultValue={selectedEmployee?.contactNumber}
         register={register}
+        error={errors.contactNumber}
       />
       <Input
         type="email"
@@ -101,21 +108,18 @@ const EmployeeEntryForm = () => {
         inputValue="email"
         defaultValue={selectedEmployee?.email}
         register={register}
+        error={errors.email}
       />
-      <div className="flex flex-col gap-[1px]">
-        <label htmlFor="role">Role</label>
-        <select
-          id="role"
-          className="form-control px-2"
-          defaultValue={selectedEmployee?.role}
-          {...register("role")}
-        >
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
-          <option value="cashier">Cashier</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
+
+      <SelectMenu
+        items={ROLE_ITEMS}
+        id="role"
+        label="Role"
+        inputValue="role"
+        register={register}
+        defaultValue={selectedEmployee?.role}
+      />
+      {/* Image File Upload */}
       <div className="flex gap-2">
         <div>
           <label htmlFor="imgUpload">Image</label>
@@ -124,27 +128,21 @@ const EmployeeEntryForm = () => {
             className="form-control upload-input"
             type="file"
             accept="image/*"
-            onChange={uploadImgHandler}
+            {...(register("imagePath"),
+            {
+              onChange: uploadImgHandler,
+            })}
           />
         </div>
-        <div
-          className={`w-full max-w-[4rem] max-h-16 ${
-            (imageUrl !== null || isUploading) &&
-            "rounded-lg border-2 border-gray-500"
-          }`}
-        >
-          {isUploading ? (
-            <CircularProgressCentered size={24} />
-          ) : (
-            <Image
-              className="rounded-md text-blue-500"
-              src={imageUrl !== null ? imageUrl : imgPlaceholder}
-              width={720}
-              height={720}
-              objectFit="cover"
-              alt=""
-            />
-          )}
+        <div className={`w-full max-w-[4rem] min-h-[64px] h-16`}>
+          <Image
+            className="rounded-md"
+            src={imageUrl !== null ? imageUrl : imgPlaceholder}
+            width={480}
+            height={480}
+            objectFit="cover"
+            alt=""
+          />
         </div>
       </div>
     </EntryForm>

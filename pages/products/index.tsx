@@ -76,13 +76,19 @@ const Products: NextPage = () => {
       </Head>
       <MuiModal
         showModal={showFormModal}
-        onClose={() => dispatch(setShowFormModal(false))}
+        onClose={() => {
+          dispatch(setProduct(null));
+          dispatch(setShowFormModal(false));
+        }}
       >
         <ProductEntryForm />
       </MuiModal>
       <DeleteProductDialog
         showDialog={showDeleteDialog}
-        onClose={() => dispatch(setShowDeleteDialog(false))}
+        onClose={() => {
+          dispatch(setProduct(null));
+          dispatch(setShowDeleteDialog(false));
+        }}
       />
       {/* Products Container */}
       <ActionsHeader

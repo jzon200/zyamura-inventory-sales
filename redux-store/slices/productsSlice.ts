@@ -7,7 +7,8 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../../lib/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "../../lib/firebase";
 import { AppThunk } from "../store";
 import { setShowFormModal, setShowLoadingSpinner } from "./uiSlice";
 
@@ -107,16 +108,16 @@ export const productSlice = createSlice({
 
 export const addProductData = (
   data: InputValues,
-  imageUrl: string | null
+  imagePath: File | null
 ): AppThunk => {
   return async (dispatch) => {
     const {
       productName: name,
-      category,
-      price,
-      description,
       quantity,
       cost,
+      price,
+      category,
+      description,
     } = data;
 
     const collectionRef = collection(db, "products");
@@ -125,14 +126,21 @@ export const addProductData = (
 
     dispatch(setShowLoadingSpinner(true));
     try {
+      let imageUrl: string | null = null;
+      if (imagePath) {
+        const storageRef = ref(storage, `products/images/${imagePath.name}`);
+        await uploadBytes(storageRef, imagePath);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
       await addDoc(collectionRef, {
         id,
         name,
-        description,
-        category,
-        price,
-        cost,
         quantity,
+        cost,
+        price,
+        category: category ? category : null,
+        description: description ? description : null,
         imageUrl,
         dateAdded: serverTimestamp(),
         dateModified: serverTimestamp(),
@@ -141,6 +149,7 @@ export const addProductData = (
     } catch (error: any) {
       alert(error.message);
     } finally {
+      dispatch(setProduct(null));
       dispatch(setShowLoadingSpinner(false));
       dispatch(setShowFormModal(false));
     }
@@ -150,7 +159,7 @@ export const addProductData = (
 export const editProductData = (
   data: InputValues,
   selectedProduct: Product | DocumentData | null,
-  imageUrl: string | null
+  imagePath: File | null
 ): AppThunk => {
   return async (dispatch) => {
     const {
@@ -166,13 +175,20 @@ export const editProductData = (
 
     dispatch(setShowLoadingSpinner(true));
     try {
+      let imageUrl: string | null = selectedProduct?.imageUrl;
+      if (imagePath) {
+        const storageRef = ref(storage, `products/images/${imagePath.name}`);
+        await uploadBytes(storageRef, imagePath);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
       await updateDoc(docRef, {
         name,
-        description,
-        category,
-        price,
-        cost,
         quantity,
+        cost,
+        price,
+        category,
+        description,
         imageUrl,
         dateModified: serverTimestamp(),
       });
@@ -181,6 +197,7 @@ export const editProductData = (
     } catch (error: any) {
       alert(error.message);
     } finally {
+      dispatch(setProduct(null));
       dispatch(setShowLoadingSpinner(false));
       dispatch(setShowFormModal(false));
     }
