@@ -1,49 +1,21 @@
-import {
-  collection,
-  DocumentData,
-  getDocs,
-  orderBy,
-  query,
-} from "firebase/firestore";
 import { useEffect } from "react";
-import { db } from "../../lib/firebase";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import {
-  addAllItems,
-  setInitialItems,
-} from "../../redux-store/slices/posSlice";
+import { fetchProductsData } from "../../redux-store/slices/posSlice";
 import InventoryCard from "./InventoryCard";
 
 const InventoryGrid = () => {
-  const collectionRef = collection(db, "products");
-  const latestProducts = query(collectionRef, orderBy("dateAdded", "desc"));
-  // const q = query(collectionRef, where("category", "==", "fish"));
-
-  const { products, purchasedItems } = useAppSelector((state) => ({
-    products: state.pos.items,
-    purchasedItems: state.pos.purchasedItems,
-  }));
+  const products = useAppSelector((state) => state.pos.items);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchProductsData = async () => {
-      const docSnap = await getDocs(latestProducts);
-      const products: Product[] | DocumentData = docSnap.docs.map((doc) => {
-        return {
-          ...doc.data(),
-          docId: doc.id,
-        };
-      });
-
-      dispatch(addAllItems(products as Product[]));
-      dispatch(setInitialItems(products as Product[]));
-    };
-
-    fetchProductsData();
+    dispatch(fetchProductsData());
   }, [dispatch]);
 
   return (
-    <div className="grid grid-cols-3 gap-4 h-[40rem] p-4 overflow-y-scroll">
+    <div
+      className="grid gap-4 overflow-x-hidden overflow-y-auto
+    md:p-4 md:grid-cols-2 lg:grid-cols-3 lg:max-h-[40rem]"
+    >
       {products.map((product: Product) => (
         <InventoryCard key={product.docId} product={product} />
       ))}

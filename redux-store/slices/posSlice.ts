@@ -3,8 +3,13 @@ import {
   addDoc,
   collection,
   doc,
+  DocumentData,
+  getDocs,
+  orderBy,
+  query,
   runTransaction,
   serverTimestamp,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../../lib/firebase";
 import { AppThunk } from "../store";
@@ -118,6 +123,37 @@ export const posSlice = createSlice({
   },
 });
 
+export const fetchProductsData = (): AppThunk => {
+  return async (dispatch) => {
+    const collectionRef = collection(db, "products");
+    const latestProducts = query(
+      collectionRef,
+      orderBy("dateAdded", "desc")
+      // where("quantity", "!=", 0)
+    );
+
+    const docSnap = await getDocs(latestProducts);
+    const productsDocs: Product[] | DocumentData = docSnap.docs.map((doc) => {
+      const dateAdded = doc.data().dateAdded as Timestamp;
+      const dateModified = doc.data().dateModified as Timestamp;
+
+      return {
+        ...doc.data(),
+        docId: doc.id,
+        dateAdded: dateAdded
+          ? dateAdded.toDate().toLocaleDateString()
+          : dateAdded,
+        dateModified: dateModified
+          ? dateModified.toDate().toLocaleDateString()
+          : dateModified,
+      };
+    });
+
+    dispatch(addAllItems(productsDocs as Product[]));
+    dispatch(setInitialItems(productsDocs as Product[]));
+  };
+};
+
 export const addSalesData = (posState: PosState): AppThunk => {
   return async (dispatch) => {
     dispatch(setShowLoadingSpinner(true));
@@ -164,6 +200,7 @@ export const addSalesData = (posState: PosState): AppThunk => {
 
     dispatch(clearTransactions());
     dispatch(setShowLoadingSpinner(false));
+    dispatch(fetchProductsData());
   };
 };
 

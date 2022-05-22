@@ -49,12 +49,14 @@ const ProductsRowData = ({ product }: Props) => {
       <div>{id}</div>
       <div>{name}</div>
       <div>{category}</div>
-      <div>{`${quantity?.toLocaleString()}`}</div>
+      <div>{`${
+        quantity > 0 ? quantity.toLocaleString() : "Not in stock"
+      }`}</div>
       {/* Cost */}
-      <div>{`₱${cost?.toLocaleString(undefined, {
+      <div>{`₱${cost.toLocaleString(undefined, {
         maximumFractionDigits: 2,
       })}`}</div>
-      <div>{`₱${price?.toLocaleString(undefined, {
+      <div>{`₱${price.toLocaleString(undefined, {
         maximumFractionDigits: 2,
       })}`}</div>
       <div className="flex gap-4">

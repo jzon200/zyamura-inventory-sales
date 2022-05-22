@@ -5,7 +5,7 @@ import ProductsGrid from "./ProductsGrid";
 
 const AddSalesForm = () => {
   return (
-    <div className="w-1/2 m-auto mt-40 select-none">
+    <div className="w-1/2 m-auto mt-40 ">
       <div className="min-w-[64rem] rounded-3xl bg-white px-12 py-6">
         <div className="text-center text-xl text-[#64748B] uppercase font-bold mb-4">
           Add Sales

@@ -13,11 +13,13 @@ import { AppThunk } from "../store";
 import { setShowFormModal, setShowLoadingSpinner } from "./uiSlice";
 
 export type ProductsState = {
+  items: Product[];
   selectedProduct: Product | DocumentData | null;
   productQuery: ProductQuery;
 };
 
 const initialState: ProductsState = {
+  items: [],
   selectedProduct: null,
   productQuery: {
     sortQuery: "latest",
@@ -31,6 +33,9 @@ export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
+    addAllProducts(state: ProductsState, action: PayloadAction<Product[]>) {
+      state.items = action.payload;
+    },
     setProduct(state: ProductsState, action: PayloadAction<Product | null>) {
       state.selectedProduct = action.payload;
     },
@@ -206,6 +211,7 @@ export const editProductData = (
 
 const productReducer = productSlice.reducer;
 
-export const { setProduct, setSortQuery } = productSlice.actions;
+export const { addAllProducts, setProduct, setSortQuery } =
+  productSlice.actions;
 
 export default productReducer;

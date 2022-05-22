@@ -82,7 +82,7 @@ const ProductEntryForm = () => {
 
       <Input
         id="quantity"
-        label="Quantity"
+        label="Quantity *"
         type="number"
         placeholder="1"
         valueAsNumber

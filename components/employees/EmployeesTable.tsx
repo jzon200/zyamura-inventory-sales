@@ -46,7 +46,7 @@ const EmployeesTable = () => {
     <Fragment>
       {/* <TableHeader /> */}
       <div className="overflow-y-scroll py-8 h-4/5">
-        <div className="grid grid-cols-7 gap-y-8 place-items-center select-none text-[#3A512B] text-xl">
+        <div className="grid grid-cols-7 gap-y-8 place-items-center  text-[#3A512B] text-xl">
           {employees.map((employee: Employee) => (
             <EmployeesRowData key={employee.docId} employee={employee} />
           ))}

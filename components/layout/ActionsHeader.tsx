@@ -1,5 +1,4 @@
 import { MdAdd, MdFilterList } from "react-icons/md";
-import SortProducts from "../products/SortProducts";
 import Dropdown from "../UI/Dropdown";
 import TitleHeader from "./TitleHeader";
 
@@ -25,7 +24,7 @@ const ActionsHeader = ({
 }: Props) => {
   return (
     <div className={`flex justify-between items-center text-lg ${className}`}>
-      <TitleHeader className="basis-48" title={title} />
+      <TitleHeader className="basis-52" title={title} />
       {/* Search */}
       <div className="w-full flex justify-end gap-8">
         <div className="basis-96 flex items-center">

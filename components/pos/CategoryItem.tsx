@@ -18,7 +18,7 @@ const CategoryItem = ({
   return (
     <div
       onClick={onClick}
-      className={`grid place-items-center w-36 p-2 select-none cursor-pointer rounded-3xl border-2 hover:border-blue-500 ${
+      className={`grid place-items-center w-36 p-2  cursor-pointer rounded-3xl border-2 hover:border-blue-500 ${
         isSelected && "border-blue-500"
       }`}
     >

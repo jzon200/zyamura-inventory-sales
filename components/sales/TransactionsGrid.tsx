@@ -27,7 +27,7 @@ const TransactionsGrid = () => {
   return (
     <div className="overflow-y-auto h-[40rem]">
       {/* TODO: ADD More Details */}
-      <div className="mt-4 grid grid-cols-5 gap-y-10 -ml-2 text-xl place-items-center select-none text-[#3A512B]">
+      <div className="mt-4 grid grid-cols-5 gap-y-10 -ml-2 text-xl place-items-center  text-[#3A512B]">
         {sales.map((item: Sales) => (
           <Fragment key={item.docId}>
             <div>{item.id}</div>

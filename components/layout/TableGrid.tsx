@@ -9,7 +9,7 @@ type Props = {
 
 {
   /* <div className="overflow-y-scroll py-8 h-5/6">
-  <div className="grid grid-cols-7 gap-y-8 place-items-center select-none text-[#3A512B] text-xl">
+  <div className="grid grid-cols-7 gap-y-8 place-items-center  text-[#3A512B] text-xl">
     {products.map((product: Product) => (
       <ProductsRowData key={product.docId} product={product} />
     ))}
@@ -21,7 +21,7 @@ const TableGrid = ({ items, className, children }: Props) => {
   return (
     <div className="overflow-y-scroll py-8 h-5/6">
       <div
-        className={`grid grid-cols-${items.length} gap-y-8 place-items-center select-none ${className}`}
+        className={`grid grid-cols-${items.length} gap-y-8 place-items-center  ${className}`}
       >
         {children}
       </div>

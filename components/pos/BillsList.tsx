@@ -28,14 +28,13 @@ const BillsList = () => {
           <BillsItem key={item.id} product={item} />
         ))}
       </div>
-      <div className="bottom-0 flex justify-between items-center w-full mt-12 mb-4 text-xl font-semibold">
+      <div className="bottom-0 flex justify-between items-center w-full mt-12 mb-4 text-2xl font-semibold">
         <div>Total</div>
         <div className="mr-4">
-          ₱{totalPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          ₱ {totalPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {/* TODO: Fix the Logic for bringing back the initial state */}
         <button
           onClick={() => dispatch(clearTransactions())}
           className="w-full rounded-2xl py-6 text-2xl font-semibold border border-blue-400 text-blue-500  hover:border-blue-500"

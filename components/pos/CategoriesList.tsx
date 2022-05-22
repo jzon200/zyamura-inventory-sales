@@ -34,7 +34,7 @@ const CategoriesList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <div className="my-4 flex gap-4">
+    <div className="hidden lg:flex my-4 gap-4">
       {categoryData.map((category, index) => (
         <CategoryItem
           key={index}

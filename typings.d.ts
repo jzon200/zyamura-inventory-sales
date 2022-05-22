@@ -18,7 +18,7 @@ type Product = {
   id: string;
   docId: string;
   name: string;
-  description: string;
+  description: string | null;
   category: Category | null;
   itemType: ItemType;
   cost: number;

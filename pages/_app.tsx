@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { ReactElement, ReactNode } from "react";
+import Head from "next/head";
+import { Fragment, ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import Layout from "../components/layout/Layout";
 import store from "../redux-store/store";
@@ -20,7 +21,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
-    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+    <Fragment>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <Provider store={store}>
+        {getLayout(<Component {...pageProps} />)}
+      </Provider>
+    </Fragment>
   );
 }
 

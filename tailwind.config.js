@@ -1,5 +1,3 @@
-const { url } = require("inspector");
-
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -7,11 +5,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "bank-note": url("/assets/bank-note.svg"),
-      },
       fontFamily: {
         sriracha: ["Sriracha", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
       },
       colors: {
         surface: "#e0e4d9",

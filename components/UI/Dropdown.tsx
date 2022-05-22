@@ -48,7 +48,7 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="relative basis-72 select-none">
+    <div className="relative basis-72 ">
       <button
         className={`btn-rounded bg-[#D1CEB2] w-full ${
           isExpanded && "rounded-b-none"
