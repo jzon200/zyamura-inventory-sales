@@ -2,9 +2,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
-import TableHeader from "../../components/layout/TableHeader";
-import ProductEntryForm from "../../components/products/ProductEntryForm";
 import DeleteProductDialog from "../../components/products/DeleteProductDialog";
+import ProductEntryForm from "../../components/products/ProductEntryForm";
 import ProductsTable from "../../components/products/ProductsTable";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
@@ -14,18 +13,6 @@ import {
   setShowDeleteDialog,
   setShowFormModal,
 } from "../../redux-store/slices/uiSlice";
-
-const TABLE_HEADERS = [
-  { label: "" },
-  { label: "ID" },
-  { label: "NAME" },
-  { label: "CATEGORY" },
-  // { label: "ITEM TYPE" },
-  { label: "Quantity" },
-  { label: "Cost" },
-  { label: "PRICE" },
-  { label: "ACTION" },
-];
 
 const SORT_QUERIES: ProductQuery[] = [
   {
@@ -102,7 +89,6 @@ const Products: NextPage = () => {
           dispatch(setShowFormModal(true));
         }}
       />
-      <TableHeader items={TABLE_HEADERS} />
       <ProductsTable />
     </Fragment>
   );

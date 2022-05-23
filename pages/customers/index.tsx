@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
-import TableHeader from "../../components/layout/TableHeader";
 import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
 
 const TABLE_HEADERS = [
@@ -17,16 +16,16 @@ const TABLE_HEADERS = [
 
 const SORT_QUERIES: ProductQuery[] = [
   {
+    sortQuery: "latest",
+    label: "Latest",
+  },
+  {
     sortQuery: "priceAsc",
     label: "Lowest Price",
   },
   {
     sortQuery: "priceDesc",
     label: "Highest Price",
-  },
-  {
-    sortQuery: "latest",
-    label: "Latest",
   },
 ];
 
@@ -42,7 +41,6 @@ const Customers: NextPage = () => {
         title="Customers"
         onAddHandler={() => {}}
       />
-      <TableHeader items={TABLE_HEADERS} />
       <EmptyPlaceholder />
     </Fragment>
   );

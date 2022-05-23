@@ -71,7 +71,7 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
       </button>
       {/* Dropdown Items */}
       {isExpanded && (
-        <ul className="absolute rounded-b-3xl shadow-md w-full bg-white">
+        <ul className="absolute rounded-b-3xl shadow-md w-full bg-white z-20">
           {items.map((item, index) => (
             <DropdownItem
               key={index}

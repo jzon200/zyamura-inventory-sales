@@ -7,6 +7,10 @@
     @apply font-poppins;
   }
 
+  table {
+    border-spacing: 1rem;
+  }
+
   /* Styling for Scrollbar */
   ::-webkit-scrollbar {
     @apply w-2;

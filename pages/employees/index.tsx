@@ -1,11 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import EmployeeEntryForm from "../../components/employees/EmployeeEntryForm";
 import DeleteEmployeeDialog from "../../components/employees/DeleteEmployeeDialog";
+import EmployeeEntryForm from "../../components/employees/EmployeeEntryForm";
 import EmployeesTable from "../../components/employees/EmployeesTable";
 import ActionsHeader from "../../components/layout/ActionsHeader";
-import TableHeader from "../../components/layout/TableHeader";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import { setEmployee } from "../../redux-store/slices/employeesSlice";
@@ -14,16 +13,6 @@ import {
   setShowDeleteDialog,
   setShowFormModal,
 } from "../../redux-store/slices/uiSlice";
-
-const TABLE_HEADERS = [
-  { label: "" },
-  { label: "Employee ID" },
-  { label: "Name" },
-  { label: "Contact number" },
-  { label: "Email" },
-  { label: "Role" },
-  { label: "Action " },
-];
 
 const SORT_QUERIES: EmployeeQuery[] = [
   {
@@ -77,7 +66,6 @@ const Employees: NextPage = () => {
           dispatch(setShowFormModal(true));
         }}
       />
-      <TableHeader items={TABLE_HEADERS} />
       <EmployeesTable />
     </Fragment>
   );

@@ -2,18 +2,9 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { MdFilterList } from "react-icons/md";
-import TableHeader from "../../components/layout/TableHeader";
 import TitleHeader from "../../components/layout/TitleHeader";
-import TransactionsGrid from "../../components/sales/TransactionsGrid";
+import TransactionsGrid from "../../components/sales/SalesTable";
 import Dropdown from "../../components/UI/Dropdown";
-
-const TABLE_HEADERS = [
-  { label: "ID" },
-  { label: "Description" },
-  { label: "Added by" },
-  { label: "Total" },
-  { label: "Transaction Date" },
-];
 
 const SORT_QUERIES: ProductQuery[] = [
   {
@@ -60,8 +51,6 @@ const Sales: NextPage = () => {
           {/* Add Items */}
         </div>
       </div>
-      <TableHeader items={TABLE_HEADERS} />
-      {/* Sales Table */}
       <TransactionsGrid />
     </Fragment>
   );

@@ -5,12 +5,20 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import React, { Fragment } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
-import EmployeesRowData from "./EmployeesRowData";
+import Table from "../UI/Table";
+
+const TABLE_HEADERS = {
+  id: "Employee ID",
+  firstName: "First Name",
+  lastName: "Last Name",
+  email: "Email",
+  contactNumber: "Contact Number",
+  role: "Role ",
+};
 
 const EmployeesTable = () => {
   const productQuery = useAppSelector((state) => state.employees.employeeQuery);
@@ -42,18 +50,7 @@ const EmployeesTable = () => {
     };
   });
 
-  return (
-    <Fragment>
-      {/* <TableHeader /> */}
-      <div className="overflow-y-scroll py-8 h-4/5">
-        <div className="grid grid-cols-7 gap-y-8 place-items-center  text-[#3A512B] text-xl">
-          {employees.map((employee: Employee) => (
-            <EmployeesRowData key={employee.docId} employee={employee} />
-          ))}
-        </div>
-      </div>
-    </Fragment>
-  );
+  return <Table headers={TABLE_HEADERS} cellsData={employees} containsImage />;
 };
 
 export default EmployeesTable;
