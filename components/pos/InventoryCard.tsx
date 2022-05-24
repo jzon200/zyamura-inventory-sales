@@ -144,7 +144,10 @@ const InventoryCard = ({ product }: Props) => {
         </button>
       </div>
       <div className="place-self-center text-lg font-medium">
-        {getCurrency(price)}
+        {price.toLocaleString("en-PH", {
+          currency: "PHP",
+          style: "currency",
+        })}
       </div>
       <button
         onClick={addItemHandler}

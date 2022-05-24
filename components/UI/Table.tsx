@@ -78,7 +78,14 @@ const Table = ({
 
                 // for price or cost
                 if (key == "price" || key == "cost" || key == "totalPrice") {
-                  cell = <span>{getCurrency(data)}</span>;
+                  cell = (
+                    <span>
+                      {data.toLocaleString("en-PH", {
+                        currency: "PHP",
+                        style: "currency",
+                      })}
+                    </span>
+                  );
                 }
 
                 return <td key={index}>{cell}</td>;

@@ -4,18 +4,18 @@ import { createElement } from "react";
 import { IconType } from "react-icons";
 
 type Props = {
-  label: string;
+  title: string;
   icon: IconType;
 };
 
-const SidebarItem = ({ label, icon }: Props) => {
+const SidebarNavLink = ({ title, icon }: Props) => {
   const router = useRouter();
-  const currentRoute = router.pathname.substring(1); // /dashboard => dashboard
-  const routeName = label.toLowerCase();
+  const currentRoute = router.pathname;
+  const routeName = `/${title.toLowerCase()}`;
   const isSelected = currentRoute === routeName;
 
   return (
-    <Link href={`/${label.toLowerCase()}`}>
+    <Link href={routeName}>
       <div
         className={`${
           isSelected &&
@@ -25,11 +25,11 @@ const SidebarItem = ({ label, icon }: Props) => {
         <li className={`${isSelected && "-ml-2"} flex gap-4 items-center`}>
           {/* Icon */}
           {createElement(icon, { width: 24 })}
-          {label}
+          {title}
         </li>
       </div>
     </Link>
   );
 };
 
-export default SidebarItem;
+export default SidebarNavLink;

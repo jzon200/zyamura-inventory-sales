@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FiBox } from "react-icons/fi";
 import {
   IoPeopleOutline,
@@ -13,18 +12,18 @@ import {
   MdPets,
 } from "react-icons/md";
 import { VscAccount, VscGraphLine, VscHistory } from "react-icons/vsc";
-import SidebarItem from "./SidebarItem";
+import SidebarNavLink from "./SidebarNavLink";
 
-const sidebarItems = [
-  { label: "Dashboard", icon: MdOutlineSpaceDashboard },
-  { label: "Products", icon: FiBox },
-  { label: "Sales", icon: VscGraphLine },
-  { label: "Expenses", icon: IoReceiptOutline },
-  { label: "Customers", icon: IoPeopleOutline },
-  { label: "Employees", icon: MdOutlineGroups },
-  { label: "Accounts", icon: VscAccount },
-  { label: "Logs", icon: VscHistory },
-  { label: "Settings", icon: IoSettingsOutline },
+const SIDEBAR_DATA = [
+  { title: "Dashboard", icon: MdOutlineSpaceDashboard },
+  { title: "Products", icon: FiBox },
+  { title: "Sales", icon: VscGraphLine },
+  { title: "Expenses", icon: IoReceiptOutline },
+  { title: "Customers", icon: IoPeopleOutline },
+  { title: "Employees", icon: MdOutlineGroups },
+  { title: "Accounts", icon: VscAccount },
+  { title: "Logs", icon: VscHistory },
+  { title: "Settings", icon: IoSettingsOutline },
 ];
 
 const Sidebar = () => {
@@ -42,17 +41,25 @@ const Sidebar = () => {
           </Link>
         </div>
         <ul className="mt-24">
-          {sidebarItems.slice(0, 6).map((item, index) => (
-            <SidebarItem key={index} label={item.label} icon={item.icon} />
+          {SIDEBAR_DATA.slice(0, 6).map((item, index) => (
+            <SidebarNavLink
+              key={`nav-${index}`}
+              title={item.title}
+              icon={item.icon}
+            />
           ))}
         </ul>
         {/* Preferences */}
         <ul className="mt-auto mb-10">
-          {sidebarItems.map((item, index) => {
+          {SIDEBAR_DATA.map((item, index) => {
             if (index < 6) return;
 
             return (
-              <SidebarItem key={index} label={item.label} icon={item.icon} />
+              <SidebarNavLink
+                key={`nav-${index}`}
+                title={item.title}
+                icon={item.icon}
+              />
             );
           })}
         </ul>
