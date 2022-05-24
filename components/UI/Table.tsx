@@ -60,6 +60,14 @@ const Table = ({
                   cell = <span>{`${data[0].name}`}</span>;
                 }
 
+                if (
+                  typeof data === "number" &&
+                  key != "id" &&
+                  key != "contactNumber"
+                ) {
+                  cell = <span>{data.toLocaleString()}</span>;
+                }
+
                 if (key == "quantity") {
                   cell = (
                     <span>
@@ -69,16 +77,10 @@ const Table = ({
                 }
 
                 // for price or cost
-                if (key == "price" || key == "cost") {
-                  cell = (
-                    <span>
-                      {data.toLocaleString("en-PH", {
-                        currency: "PHP",
-                        style: "currency",
-                      })}
-                    </span>
-                  );
+                if (key == "price" || key == "cost" || key == "totalPrice") {
+                  cell = <span>{getCurrency(data)}</span>;
                 }
+
                 return <td key={index}>{cell}</td>;
               })}
               <td>

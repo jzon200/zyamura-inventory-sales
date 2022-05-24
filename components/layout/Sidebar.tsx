@@ -28,17 +28,9 @@ const sidebarItems = [
 ];
 
 const Sidebar = () => {
-  const router = useRouter();
-
-  const routeName = router.pathname.substring(1); // /dashboard => dashboard
-
-  const routeHandler = (routeName: string) => {
-    router.push(routeName.toLowerCase());
-  };
-
   return (
-    <aside className="hidden order-1 basis-52 bg-primary-dark md:block min-w-[208px] max-h-screen">
-      <nav className="flex flex-col text-xl text-[#AFB29C] h-full">
+    <aside className="fixed top-0 left-0 z-10 w-52 h-full bg-primary-dark hidden md:block">
+      <nav className="flex flex-col h-full text-xl text-[#AFB29C]">
         <div className="flex gap-2 items-center text-primary-light p-4 mt-4">
           <button className="ml-2">
             <MdMenu size={24} />
@@ -51,13 +43,7 @@ const Sidebar = () => {
         </div>
         <ul className="mt-24">
           {sidebarItems.slice(0, 6).map((item, index) => (
-            <SidebarItem
-              key={index}
-              label={item.label}
-              icon={item.icon}
-              isSelected={routeName === item.label.toLowerCase()}
-              onSelected={routeHandler.bind(null, item.label)}
-            />
+            <SidebarItem key={index} label={item.label} icon={item.icon} />
           ))}
         </ul>
         {/* Preferences */}
@@ -66,13 +52,7 @@ const Sidebar = () => {
             if (index < 6) return;
 
             return (
-              <SidebarItem
-                key={index}
-                label={item.label}
-                icon={item.icon}
-                isSelected={routeName === item.label.toLowerCase()}
-                onSelected={routeHandler.bind(null, item.label)}
-              />
+              <SidebarItem key={index} label={item.label} icon={item.icon} />
             );
           })}
         </ul>

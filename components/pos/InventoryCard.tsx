@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
-import { BsImage } from "react-icons/bs";
-import { MdAdd, MdOutlineImageNotSupported, MdRemove } from "react-icons/md";
+import { MdAdd, MdRemove } from "react-icons/md";
+import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import { addBillsItem } from "../../redux-store/slices/posSlice";
-import imgPlaceholder from "../../assets/image_placeholder.svg";
 
 type Props = {
   product: Product;
@@ -145,7 +144,7 @@ const InventoryCard = ({ product }: Props) => {
         </button>
       </div>
       <div className="place-self-center text-lg font-medium">
-        ₱ {price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+        {getCurrency(price)}
       </div>
       <button
         onClick={addItemHandler}
