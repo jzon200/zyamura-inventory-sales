@@ -6,10 +6,9 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { MdExpandMore } from "react-icons/md";
 import { db } from "../../lib/firebase";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
-import Table from "../UI/Table";
+import GridList from "../UI/GridList";
 
 const TABLE_HEADERS = {
   id: "Transaction ID",
@@ -38,7 +37,7 @@ const TransactionsGrid = () => {
       }),
   }));
 
-  return <Table headers={TABLE_HEADERS} cellsData={sales} />;
+  return <div></div>;
 };
 
 export default TransactionsGrid;

@@ -1,17 +1,16 @@
 import { DocumentData } from "@firebase/firestore";
-import Image from "next/image";
-import { MdExpandMore } from "react-icons/md";
-import imgPlaceHolder from "../../assets/image_placeholder.svg";
+import TableRow from "./TableRow";
 
 // * Headers key must be the same name
 // * as DocumentData in Firestore
 type Props = {
-  headers: object;
+  headers: Record<string, string>;
   cellsData: object[] | DocumentData;
   //   actionComponent?: ReactElement;
   containsImage?: boolean;
 };
 
+//! Will be removed tommorow cause i will use grid Instead
 const Table = ({
   headers,
   cellsData,
@@ -25,10 +24,10 @@ const Table = ({
           <tr>
             {/* empty header for spacing image */}
             {containsImage && <th scope="col" />}
-            {Object.values(headers).map((header) => {
+            {Object.keys(headers).map((key) => {
               return (
-                <th className="font-medium" key={Math.random()} scope="col">
-                  <span>{header}</span>
+                <th className={`font-medium`} key={Math.random()} scope="col">
+                  <span>{headers[key]}</span>
                 </th>
               );
             })}
@@ -36,64 +35,12 @@ const Table = ({
         </thead>
         <tbody className="h-96 overflow-x-hidden overflow-y-auto text-[#3A512B] text-xl">
           {cellsData.map((docData: DocumentData) => (
-            <tr
-              className="h-28 text-center rounded-3xl hover:outline outline-1 outline-[#554A33] cursor-pointer"
-              key={docData.docId}
-            >
-              {containsImage && (
-                <td>
-                  <Image
-                    src={!docData.imageUrl ? imgPlaceHolder : docData.imageUrl}
-                    className="rounded-md "
-                    width={80}
-                    height={80}
-                    objectFit={"cover"}
-                    alt=""
-                  />
-                </td>
-              )}
-              {Object.keys(headers).map((key, index) => {
-                const data = docData[key];
-                let cell = <span>{data}</span>;
-                // for purchasedItems in Sales
-                if (Array.isArray(data)) {
-                  cell = <span>{`${data[0].name}`}</span>;
-                }
-
-                if (
-                  typeof data === "number" &&
-                  key != "id" &&
-                  key != "contactNumber"
-                ) {
-                  cell = <span>{data.toLocaleString()}</span>;
-                }
-
-                if (key == "quantity") {
-                  cell = (
-                    <span>
-                      {data < 1 ? "Not in stock" : data.toLocaleString()}
-                    </span>
-                  );
-                }
-
-                // for price or cost
-                if (key == "price" || key == "cost" || key == "totalPrice") {
-                  cell = (
-                    <span>
-                      {data.toLocaleString("en-PH", {
-                        currency: "PHP",
-                        style: "currency",
-                      })}
-                    </span>
-                  );
-                }
-
-                return <td key={index}>{cell}</td>;
-              })}
-              <td>
-                <MdExpandMore size={24} />
-              </td>
-            </tr>
+            <TableRow
+              key={docData.id}
+              headers={headers}
+              docData={docData}
+              containsImage={containsImage}
+            />
           ))}
         </tbody>
       </table>

@@ -9,14 +9,16 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
-import Table from "../UI/Table";
+import GridList from "../UI/GridList";
 
 const TABLE_HEADERS = {
+  imageUrl: "",
   id: "Product ID",
+  name: "Name",
   category: "Category",
   quantity: "Quantity",
-  cost: "Cost",
-  price: "Price",
+  cost: "Product Cost",
+  price: "Selling Price",
 };
 
 const ProductsTable = () => {
@@ -50,7 +52,7 @@ const ProductsTable = () => {
     };
   });
 
-  return <Table headers={TABLE_HEADERS} cellsData={products} containsImage />;
+  return <GridList headers={TABLE_HEADERS} rowData={products} />;
 };
 
 export default ProductsTable;

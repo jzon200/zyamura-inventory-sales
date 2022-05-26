@@ -1,39 +1,8 @@
 import { useState } from "react";
-import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
 import { setSortQuery } from "../../redux-store/slices/productsSlice";
 import DropdownItem from "./DropdownItem";
-
-// const items: ProductQuery[] = [
-//   {
-//     sort: "nameAsc",
-//     label: "Name A-Z",
-//   },
-//   {
-//     sort: "nameDesc",
-//     label: "Name Z-A",
-//   },
-//   {
-//     sort: "priceAsc",
-//     label: "Lowest Price",
-//   },
-//   {
-//     sort: "priceDesc",
-//     label: "Highest Price",
-//   },
-//   {
-//     sort: "quantityAsc",
-//     label: "Lowest Quantity",
-//   },
-//   {
-//     sort: "quantityDesc",
-//     label: "Highest Quantity",
-//   },
-//   {
-//     sort: "latest",
-//     label: "Latest",
-//   },
-// ];
 
 type Props = {
   items: ProductQuery[];
@@ -48,10 +17,10 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="relative basis-72 ">
+    <div className="relative basis-72">
       <button
-        className={`btn-rounded bg-[#D1CEB2] w-full ${
-          isExpanded && "rounded-b-none"
+        className={`btn-rounded bg-[#D1CEB2] w-full transition-all ${
+          isExpanded ? "rounded-b-none duration-300 " : "duration-[1.7s]"
         }`}
         onClick={() => {
           setIsExpanded((prevState) => !prevState);
@@ -63,29 +32,34 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
             {selectedQuery.label}
           </span>
         </div>
-        {isExpanded ? (
-          <MdOutlineArrowDropUp size={24} />
-        ) : (
-          <MdOutlineArrowDropDown size={24} />
-        )}
+        <MdOutlineArrowDropDown
+          size={24}
+          className={`transition-all duration-700 ${
+            isExpanded ? "rotate-180" : "rotate-0"
+          }`}
+        />
       </button>
       {/* Dropdown Items */}
-      {isExpanded && (
-        <ul className="absolute rounded-b-3xl shadow-md w-full bg-white z-20">
-          {items.map((item, index) => (
-            <DropdownItem
-              key={index}
-              label={item.label}
-              isSelected={selectedQuery.label === item.label}
-              onClick={() => {
-                dispatch(setSortQuery(item.sortQuery));
-                // onSortHandler(item.sortQuery);
-                setIsExpanded(false);
-              }}
-            />
-          ))}
-        </ul>
-      )}
+      <ul
+        className={`absolute rounded-b-3xl w-full z-20 shadow-md transition-all ${
+          isExpanded
+            ? "h-[26rem] overflow-visible"
+            : "duration-700 h-0 overflow-hidden"
+        }`}
+      >
+        {items.map((item, index) => (
+          <DropdownItem
+            key={index}
+            label={item.label}
+            isSelected={selectedQuery.label === item.label}
+            onClick={() => {
+              dispatch(setSortQuery(item.sortQuery));
+              // onSortHandler(item.sortQuery);
+              setIsExpanded(false);
+            }}
+          />
+        ))}
+      </ul>
     </div>
   );
 };

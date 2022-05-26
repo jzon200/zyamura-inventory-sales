@@ -147,6 +147,7 @@ const InventoryCard = ({ product }: Props) => {
         {price.toLocaleString("en-PH", {
           currency: "PHP",
           style: "currency",
+          maximumFractionDigits: 0,
         })}
       </div>
       <button
