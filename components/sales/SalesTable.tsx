@@ -11,11 +11,11 @@ import CircularProgressCentered from "../UI/CircularProgressCentered";
 import GridList from "../UI/GridList";
 
 const TABLE_HEADERS = {
+  purchasedItems: "",
   id: "Transaction ID",
-  purchasedItems: "Description",
   author: "Added by",
   totalPrice: "Total",
-  transactionDate: "Transaction Date",
+  dateAdded: "Transaction Date",
 };
 
 const TransactionsGrid = () => {
@@ -28,7 +28,7 @@ const TransactionsGrid = () => {
   const sales: Sales[] | DocumentData = snapshot!.docs.map((doc) => ({
     ...doc.data(),
     docId: doc.id,
-    transactionDate: (doc.data().dateAdded as Timestamp)
+    dateAdded: (doc.data().dateAdded as Timestamp)
       .toDate()
       .toLocaleDateString("en-PH", {
         month: "short",
@@ -37,7 +37,7 @@ const TransactionsGrid = () => {
       }),
   }));
 
-  return <div></div>;
+  return <GridList headers={TABLE_HEADERS} rowData={sales} />;
 };
 
 export default TransactionsGrid;

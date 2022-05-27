@@ -55,7 +55,7 @@
   }
 
   .chip {
-    @apply px-4 py-2 rounded-full text-base font-medium;
+    @apply px-4 py-2 rounded-full text-base font-medium h-fit;
   }
 
   .dropdown-item {

@@ -19,6 +19,7 @@ const TABLE_HEADERS = {
   quantity: "Quantity",
   cost: "Product Cost",
   price: "Selling Price",
+  status: "Status",
 };
 
 const ProductsTable = () => {

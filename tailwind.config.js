@@ -15,16 +15,9 @@ module.exports = {
         "primary-light": "#D9D7C4",
         "primary-dark": "#667061",
       },
-      gridTemplateColumns: {
-        "fixed-4": "repeat(4, minmax(0, 200px))",
-        "fixed-5": "repeat(5, minmax(0, 200px))",
-        "fixed-6": "repeat(6, minmax(0, 200px))",
-        "fixed-7": "repeat(7, minmax(0, 200px))",
-        fixed: "repeat(7, minmax(0, 200px))",
-
-        // Complex site-specific column configuration
-        footer: "200px minmax(900px, 1fr) 100px",
-      },
+      // gridTemplateColumns: {
+      //   "auto-fill": "repeat(auto-fill, minmax(100px, 1fr))",
+      // },
     },
   },
 };

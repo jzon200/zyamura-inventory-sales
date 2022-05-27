@@ -35,12 +35,7 @@ const Table = ({
         </thead>
         <tbody className="h-96 overflow-x-hidden overflow-y-auto text-[#3A512B] text-xl">
           {cellsData.map((docData: DocumentData) => (
-            <TableRow
-              key={docData.id}
-              headers={headers}
-              docData={docData}
-              containsImage={containsImage}
-            />
+            <TableRow key={docData.id} headers={headers} docData={docData} />
           ))}
         </tbody>
       </table>

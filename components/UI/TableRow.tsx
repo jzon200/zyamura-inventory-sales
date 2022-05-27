@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 type Props = {
   headers: Record<string, string>;
   docData: DocumentData;
-  containsImage?: boolean;
 };
 
 const variants = {
@@ -26,7 +25,7 @@ const variants = {
   },
 };
 
-const TableRow = ({ headers, docData, containsImage = false }: Props) => {
+const TableRow = ({ headers, docData }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const ExpandButton = motion(MdExpandMore);
@@ -45,7 +44,7 @@ const TableRow = ({ headers, docData, containsImage = false }: Props) => {
       variants={variants}
       layout
     >
-      {containsImage && (
+      {/* {containsImage && (
         <motion.td
           // animate={{ y: isExpanded ? [0, -50] : [-50, 0] }}
           transition={{ type: "tween", duration: 0.5 }}
@@ -60,7 +59,7 @@ const TableRow = ({ headers, docData, containsImage = false }: Props) => {
             alt=""
           />
         </motion.td>
-      )}
+      )} */}
 
       {Object.keys(headers).map((key, index) => {
         const data = docData[key];
