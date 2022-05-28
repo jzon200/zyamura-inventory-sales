@@ -1,19 +1,22 @@
+import { QueryConstraint } from "firebase/firestore";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { setSortQuery } from "../../redux-store/slices/productsSlice";
+import { setSortQuery } from "../../redux-store/slices/firestoreSlice";
 import DropdownItem from "./DropdownItem";
 
 type Props = {
-  items: ProductQuery[];
-  selectedQuery: ProductQuery;
-  // onSortHandler: () => void;
-  // onSortHandler: (sortQuery: SortQuery) => void;
+  items: Record<string, { label: string; queryConstraint: QueryConstraint }>;
 };
 
-const Dropdown = ({ items, selectedQuery }: Props) => {
+// TODO: Change the logic
+const Dropdown = ({ items }: Props) => {
+  const values = Object.values(items);
+
   const [isExpanded, setIsExpanded] = useState(false);
-  // const selectedQuery = useAppSelector((state) => state.products.productQuery);
+  const [selectedIndex, setSelectedIndex] = useState(values.length - 1);
+
   const dispatch = useAppDispatch();
 
   return (
@@ -27,9 +30,9 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
         }}
       >
         <div>
-          Sort by{" "}
+          <span>Sort by </span>
           <span className="font-medium text-[#13240D]">
-            {selectedQuery.label}
+            {values[selectedIndex].label}
           </span>
         </div>
         <MdOutlineArrowDropDown
@@ -40,26 +43,26 @@ const Dropdown = ({ items, selectedQuery }: Props) => {
         />
       </button>
       {/* Dropdown Items */}
-      <ul
-        className={`absolute rounded-b-3xl w-full z-20 shadow-md transition-all ${
-          isExpanded
-            ? "h-[26rem] overflow-visible"
-            : "duration-700 h-0 overflow-hidden"
-        }`}
+      <motion.ul
+        animate={{
+          height: isExpanded ? "auto" : 0,
+          overflow: isExpanded ? "visible" : "hidden",
+        }}
+        className="absolute rounded-b-3xl w-full z-30 shadow-md"
       >
-        {items.map((item, index) => (
+        {values.map((item, index) => (
           <DropdownItem
             key={index}
             label={item.label}
-            isSelected={selectedQuery.label === item.label}
+            isSelected={selectedIndex === index}
             onClick={() => {
-              dispatch(setSortQuery(item.sortQuery));
-              // onSortHandler(item.sortQuery);
+              dispatch(setSortQuery(item.queryConstraint));
+              setSelectedIndex(index);
               setIsExpanded(false);
             }}
           />
         ))}
-      </ul>
+      </motion.ul>
     </div>
   );
 };

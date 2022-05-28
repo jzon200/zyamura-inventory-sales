@@ -1,18 +1,21 @@
-interface InputValues {
-  id: number;
-  productName: string;
+interface ProductsInput {
+  name: string;
   description: string;
   category: Category;
   cost: number;
   price: number;
   quantity: number;
-  imagePath: FileList;
-  role: Role;
+}
+
+interface EmployeesInput {
   firstName: string;
   lastName: string;
   contactNumber: number;
   email: string;
+  role: Role;
 }
+
+interface InputValues extends ProductsInput, EmployeesInput {}
 
 type Product = {
   id: string;
@@ -57,26 +60,7 @@ type Sales = {
   transactionDate: Date;
 };
 
-type ProductQuery = {
-  sortQuery: SortQuery;
-  label: SortLabel;
-  queryConstraint?: ProductQueryConstraint;
-  descending?: boolean;
-};
-
-type CustomerQuery = {
-  sortQuery: SortQuery;
-  label: SortLabel;
-  queryConstraint?: "dateAdded" | "dateModified" | "name";
-  descending?: boolean;
-};
-
-type EmployeeQuery = {
-  sortQuery: SortQuery;
-  label: SortLabel;
-  queryConstraint?: "dateAdded" | "dateModified" | "name";
-  descending?: boolean;
-};
+type CollectionName = "products" | "sales" | "employees";
 
 type ItemType = "individual" | "collective";
 
@@ -85,28 +69,3 @@ type FormAction = "add" | "edit";
 type Category = "fish" | "dog" | "materials" | "other";
 
 type Role = "admin" | "manager" | "cashier" | "other";
-
-type ProductQueryConstraint =
-  | "dateAdded"
-  | "dateModified"
-  | "price"
-  | "quantity"
-  | "name";
-
-type SortLabel =
-  | "Latest"
-  | "Highest Price"
-  | "Lowest Price"
-  | "Lowest Quantity"
-  | "Highest Quantity"
-  | "Name A-Z"
-  | "Name Z-A";
-
-type SortQuery =
-  | "latest"
-  | "priceAsc"
-  | "priceDesc"
-  | "quantityAsc"
-  | "quantityDesc"
-  | "nameAsc"
-  | "nameDesc";

@@ -1,58 +1,49 @@
+import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import ActionsHeader from "../../components/layout/ActionsHeader";
-import DeleteProductDialog from "../../components/products/DeleteProductDialog";
 import ProductEntryForm from "../../components/products/ProductEntryForm";
 import ProductsTable from "../../components/products/ProductsTable";
+import DeleteDialog from "../../components/UI/DeleteDialog";
 import MuiModal from "../../components/UI/Modal";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { setProduct } from "../../redux-store/slices/productsSlice";
-import {
-  setFormAction,
-  setShowDeleteDialog,
-  setShowFormModal,
-} from "../../redux-store/slices/uiSlice";
+import { setShowFormModal } from "../../redux-store/slices/uiSlice";
 
-const SORT_QUERIES: ProductQuery[] = [
-  {
-    sortQuery: "nameAsc",
+const SORT_OBJECTS = {
+  nameAsc: {
     label: "Name A-Z",
+    queryConstraint: orderBy("name", "asc"),
   },
-  {
-    sortQuery: "nameDesc",
+  nameDesc: {
     label: "Name Z-A",
+    queryConstraint: orderBy("name", "desc"),
   },
-  {
-    sortQuery: "priceAsc",
+  priceAsc: {
     label: "Lowest Price",
+    queryConstraint: orderBy("price", "asc"),
   },
-  {
-    sortQuery: "priceDesc",
+  priceDesc: {
     label: "Highest Price",
+    queryConstraint: orderBy("price", "desc"),
   },
-  {
-    sortQuery: "quantityAsc",
-    label: "Lowest Quantity",
+  quantityAsc: {
+    label: "Lowest Price",
+    queryConstraint: orderBy("quantity", "asc"),
   },
-  {
-    sortQuery: "quantityDesc",
-    label: "Highest Quantity",
+  quantityDesc: {
+    label: "Highest Price",
+    queryConstraint: orderBy("quantity", "desc"),
   },
-  {
-    sortQuery: "latest",
+  latest: {
     label: "Latest",
+    queryConstraint: orderBy("dateAdded", "desc"),
   },
-];
+};
 
 const Products: NextPage = () => {
-  const { showFormModal, showDeleteDialog, selectedQuery } = useAppSelector(
-    (state) => ({
-      showFormModal: state.ui.showFormModal,
-      showDeleteDialog: state.ui.showDeleteDialog,
-      selectedQuery: state.products.productQuery,
-    })
-  );
+  // TODO: Manage the State to prevent re-rendering
+  const showFormModal = useAppSelector((state) => state.ui.showFormModal);
 
   const dispatch = useAppDispatch();
 
@@ -64,31 +55,14 @@ const Products: NextPage = () => {
       <MuiModal
         showModal={showFormModal}
         onClose={() => {
-          dispatch(setProduct(null));
           dispatch(setShowFormModal(false));
         }}
       >
         <ProductEntryForm />
       </MuiModal>
-      <DeleteProductDialog
-        showDialog={showDeleteDialog}
-        onClose={() => {
-          dispatch(setProduct(null));
-          dispatch(setShowDeleteDialog(false));
-        }}
-      />
+      <DeleteDialog collectionName="products" />
       {/* Products Container */}
-      <ActionsHeader
-        title="All Products"
-        selectedQuery={selectedQuery}
-        sortItems={SORT_QUERIES}
-        // sortHandler={() => dispatch(setProductQuery(selectedSortQuery))}
-        onAddHandler={() => {
-          dispatch(setProduct(null));
-          dispatch(setFormAction("add"));
-          dispatch(setShowFormModal(true));
-        }}
-      />
+      <ActionsHeader title="All Products" sortItems={SORT_OBJECTS} />
       <ProductsTable />
     </Fragment>
   );

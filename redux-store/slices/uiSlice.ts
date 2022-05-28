@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { DocumentData } from "firebase/firestore";
+import { AppThunk } from "../store";
+import { setSelectedDocument } from "./firestoreSlice";
 
 export type UiState = {
   showLoadingSpinner: boolean;
@@ -32,6 +35,23 @@ const uiSlice = createSlice({
     },
   },
 });
+
+const showAddForm = (): AppThunk => {
+  return (dispatch) => {
+    dispatch(setFormAction("add"));
+    dispatch(setShowFormModal(true));
+    dispatch(setSelectedDocument(null));
+  };
+};
+
+const showEditForm = (docData: DocumentData): AppThunk => {
+  return (dispatch) => {
+    dispatch(setSelectedDocument(docData));
+    dispatch(setShowDeleteDialog(true));
+  };
+};
+
+export { showAddForm, showEditForm };
 
 export const {
   setShowLoadingSpinner,

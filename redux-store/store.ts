@@ -1,18 +1,14 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import employeesReducer from "./slices/employeesSlice";
+import firestoreReducer from "./slices/firestoreSlice";
 import posReducer from "./slices/posSlice";
-import productReducer from "./slices/productsSlice";
 import uiReducer from "./slices/uiSlice";
 
 const store = configureStore({
   reducer: {
     ui: uiReducer,
-    products: productReducer,
-    employees: employeesReducer,
     pos: posReducer,
+    firestore: firestoreReducer,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export default store;

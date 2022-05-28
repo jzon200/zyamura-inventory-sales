@@ -1,3 +1,4 @@
+import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -6,20 +7,35 @@ import TitleHeader from "../../components/layout/TitleHeader";
 import TransactionsGrid from "../../components/sales/SalesTable";
 import Dropdown from "../../components/UI/Dropdown";
 
-const SORT_QUERIES: ProductQuery[] = [
-  {
-    sortQuery: "priceAsc",
+// const SORT_QUERIES: ProductQuery[] = [
+//   {
+//     sortQuery: "priceAsc",
+//     label: "Lowest Price",
+//   },
+//   {
+//     sortQuery: "priceDesc",
+//     label: "Highest Price",
+//   },
+//   {
+//     sortQuery: "latest",
+//     label: "Latest",
+//   },
+// ];
+
+const SORT_OBJECTS = {
+  priceAsc: {
     label: "Lowest Price",
+    queryConstraint: orderBy("totalPrice", "asc"),
   },
-  {
-    sortQuery: "priceDesc",
+  priceDesc: {
     label: "Highest Price",
+    queryConstraint: orderBy("totalPrice", "desc"),
   },
-  {
-    sortQuery: "latest",
+  latest: {
     label: "Latest",
+    queryConstraint: orderBy("dateAdded", "desc"),
   },
-];
+};
 
 const Sales: NextPage = () => {
   return (
@@ -47,7 +63,7 @@ const Sales: NextPage = () => {
             </button>
           </div>
           {/* <SortProducts /> */}
-          <Dropdown items={SORT_QUERIES} selectedQuery={SORT_QUERIES[2]} />
+          <Dropdown items={SORT_OBJECTS} />
           {/* Add Items */}
         </div>
       </div>

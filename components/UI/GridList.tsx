@@ -7,11 +7,11 @@ import { FiEdit } from "react-icons/fi";
 import { MdExpandMore } from "react-icons/md";
 import imgPlaceHolder from "../../assets/image_placeholder.svg";
 import { useAppDispatch } from "../../redux-store/hooks/hooks";
-import { setProduct } from "../../redux-store/slices/productsSlice";
+import { setSelectedDocument } from "../../redux-store/slices/firestoreSlice";
 import {
   setFormAction,
-  setShowDeleteDialog,
   setShowFormModal,
+  showEditForm,
 } from "../../redux-store/slices/uiSlice";
 
 type GridListProps = {
@@ -19,6 +19,7 @@ type GridListProps = {
   rowData: object[] | DocumentData;
 };
 
+// TODO: Fixed the Animation Logic
 const GridList = ({ headers, rowData }: GridListProps) => {
   const headerKeys = Object.keys(headers);
 
@@ -88,7 +89,7 @@ const RowData = ({ headers, docData }: RowDataProps) => {
       <button
         onClick={() => {
           // TODO: Set to Dynamic DocumentData
-          dispatch(setProduct(docData as Product));
+          dispatch(setSelectedDocument(docData));
           dispatch(setFormAction("edit"));
           dispatch(setShowFormModal(true));
         }}
@@ -105,9 +106,7 @@ const RowData = ({ headers, docData }: RowDataProps) => {
     forwardRef((_, ref: LegacyRef<HTMLButtonElement>) => (
       <button
         onClick={() => {
-          // TODO: Set to Dynamic DocumentData
-          dispatch(setProduct(docData as Product));
-          dispatch(setShowDeleteDialog(true));
+          dispatch(showEditForm(docData));
         }}
         className="absolute bottom-12 right-11"
         ref={ref}
@@ -264,6 +263,7 @@ const RowData = ({ headers, docData }: RowDataProps) => {
         </motion.div>
       )}
 
+      {/* TODO: Show Conditionally */}
       {/* <motion.div
         animate={{ opacity: isExpanded ? 1 : 0, y: [100, 100] }}
         transition={{ type: "tween", delay: isExpanded ? 0.3 : 0 }}

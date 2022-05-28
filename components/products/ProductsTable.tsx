@@ -23,15 +23,9 @@ const TABLE_HEADERS = {
 };
 
 const ProductsTable = () => {
-  const productQuery = useAppSelector((state) => state.products.productQuery);
+  const productQuery = useAppSelector((state) => state.firestore.sortQuery);
   const collectionRef = collection(db, "products");
-  const q = query(
-    collectionRef,
-    orderBy(
-      productQuery.queryConstraint!,
-      productQuery.descending ? "desc" : "asc"
-    )
-  );
+  const q = query(collectionRef, productQuery);
   const [snapshot, loading] = useCollection(q);
 
   if (loading) return <CircularProgressCentered />;

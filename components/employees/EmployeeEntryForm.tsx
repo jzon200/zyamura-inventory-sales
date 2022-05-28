@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
-  addEmployeeData,
-  editEmployeeData,
-} from "../../redux-store/slices/employeesSlice";
+  addDocumentData,
+  editDocumentData,
+} from "../../redux-store/slices/firestoreSlice";
 import { setShowFormModal } from "../../redux-store/slices/uiSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import EntryForm from "../UI/EntryForm";
@@ -18,14 +18,14 @@ const ROLE_ITEMS: Role[] = ["admin", "cashier", "manager", "other"];
 const EmployeeEntryForm = () => {
   const { selectedEmployee, formAction, showLoadingSpinner } = useAppSelector(
     (state) => ({
-      selectedEmployee: state.employees.selectedEmployee,
+      selectedEmployee: state.firestore.selectedDocument,
       formAction: state.ui.formAction,
       showLoadingSpinner: state.ui.showLoadingSpinner,
     })
   );
 
   const [imageUrl, setImageUrl] = useState<string | null>(
-    selectedEmployee ? selectedEmployee.imageUrl : null
+    selectedEmployee?.imageUrl ? selectedEmployee.imageUrl : null
   );
   const [imagePath, setImagePath] = useState<File | null>(null);
 
@@ -40,9 +40,11 @@ const EmployeeEntryForm = () => {
 
   const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
-      dispatch(editEmployeeData(data, selectedEmployee, imagePath));
+      dispatch(
+        editDocumentData(data, "employees", selectedEmployee, imagePath)
+      );
     } else {
-      dispatch(addEmployeeData(data, imagePath));
+      dispatch(addDocumentData(data, "employees", imagePath));
     }
     reset();
   };
@@ -128,10 +130,7 @@ const EmployeeEntryForm = () => {
             className="form-control upload-input"
             type="file"
             accept="image/*"
-            {...(register("imagePath"),
-            {
-              onChange: uploadImgHandler,
-            })}
+            onChange={uploadImgHandler}
           />
         </div>
         <div className={`w-full max-w-[4rem] min-h-[64px] h-16`}>

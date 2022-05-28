@@ -1,4 +1,7 @@
+import { QueryConstraint } from "firebase/firestore";
 import { MdAdd, MdFilterList } from "react-icons/md";
+import { useAppDispatch } from "../../redux-store/hooks/hooks";
+import { showAddForm } from "../../redux-store/slices/uiSlice";
 import Dropdown from "../UI/Dropdown";
 import TitleHeader from "./TitleHeader";
 
@@ -6,22 +9,21 @@ type Props = {
   title: string;
   addLabel?: string;
   className?: string;
-  sortItems: ProductQuery[];
-  selectedQuery: ProductQuery;
-  // onSortHandler: (sortQuery: SortQuery) => void;
-  onAddHandler: () => void;
-  // TODO: searchHandler
+  sortItems: Record<
+    string,
+    { label: string; queryConstraint: QueryConstraint }
+  >;
 };
 
+// TODO: Implement Search Functionality
 const ActionsHeader = ({
   title,
   className,
   sortItems,
-  selectedQuery,
   addLabel = "Items",
-  // onSortHandler,
-  onAddHandler,
 }: Props) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className={`flex justify-between items-center text-lg ${className}`}>
       <TitleHeader className="basis-52" title={title} />
@@ -39,10 +41,12 @@ const ActionsHeader = ({
           </button>
         </div>
         {/* <SortProducts /> */}
-        <Dropdown items={sortItems} selectedQuery={selectedQuery} />
+        <Dropdown items={sortItems} />
         {/* Add Items */}
         <button
-          onClick={onAddHandler}
+          onClick={() => {
+            dispatch(showAddForm());
+          }}
           className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
         >
           <div>Add {addLabel}</div>

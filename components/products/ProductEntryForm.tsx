@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import imgPlaceholder from "../../assets/image_placeholder.svg";
 import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
 import {
-  addProductData,
-  editProductData,
-} from "../../redux-store/slices/productsSlice";
+  addDocumentData,
+  editDocumentData,
+} from "../../redux-store/slices/firestoreSlice";
 import { setShowFormModal } from "../../redux-store/slices/uiSlice";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
 import EntryForm from "../UI/EntryForm";
@@ -18,14 +18,14 @@ const CATEGORY_ITEMS: Category[] = ["fish", "dog", "materials", "other"];
 const ProductEntryForm = () => {
   const { selectedProduct, formAction, showLoadingSpinner } = useAppSelector(
     (state) => ({
-      selectedProduct: state.products.selectedProduct,
+      selectedProduct: state.firestore.selectedDocument,
       formAction: state.ui.formAction,
       showLoadingSpinner: state.ui.showLoadingSpinner,
     })
   );
 
   const [imageUrl, setImageUrl] = useState<string | null>(
-    selectedProduct ? selectedProduct.imageUrl : null
+    selectedProduct?.imageUrl ? selectedProduct.imageUrl : null
   );
   const [imagePath, setImagePath] = useState<File | null>(null);
 
@@ -35,15 +35,14 @@ const ProductEntryForm = () => {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = (data) => {
     if (formAction === "edit") {
-      dispatch(editProductData(data, selectedProduct, imagePath));
+      dispatch(editDocumentData(data, "products", selectedProduct, imagePath));
     } else {
-      dispatch(addProductData(data, imagePath));
+      dispatch(addDocumentData(data, "products", imagePath));
     }
     reset();
   };
@@ -60,8 +59,6 @@ const ProductEntryForm = () => {
 
   if (showLoadingSpinner) return <CircularProgressCentered />;
 
-  console.log(watch("imagePath"));
-
   return (
     <EntryForm
       title={"Product"}
@@ -75,9 +72,9 @@ const ProductEntryForm = () => {
         autoFocus
         required
         defaultValue={selectedProduct?.name}
-        inputValue="productName"
+        inputValue="name"
         register={register}
-        error={errors.productName}
+        error={errors.name}
       />
 
       <Input
@@ -127,6 +124,7 @@ const ProductEntryForm = () => {
         defaultValue={selectedProduct?.category}
       />
       {/* Image File Upload */}
+      {/* TODO: Make It Reusable */}
       <div className="flex gap-2">
         <div>
           <label htmlFor="imgUpload">Image</label>
@@ -135,10 +133,7 @@ const ProductEntryForm = () => {
             className="form-control upload-input"
             type="file"
             accept="image/*"
-            {...(register("imagePath"),
-            {
-              onChange: uploadImgHandler,
-            })}
+            onChange={uploadImgHandler}
           />
         </div>
         <div className={`w-full max-w-[4rem] min-h-[64px] h-16`}>

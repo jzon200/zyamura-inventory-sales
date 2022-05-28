@@ -9,9 +9,10 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../lib/firebase";
 import { useAppSelector } from "../../redux-store/hooks/hooks";
 import CircularProgressCentered from "../UI/CircularProgressCentered";
-import Table from "../UI/Table";
+import GridList from "../UI/GridList";
 
 const TABLE_HEADERS = {
+  imageUrl: "",
   id: "Employee ID",
   firstName: "First Name",
   lastName: "Last Name",
@@ -21,15 +22,9 @@ const TABLE_HEADERS = {
 };
 
 const EmployeesTable = () => {
-  const productQuery = useAppSelector((state) => state.employees.employeeQuery);
+  const sortQuery = useAppSelector((state) => state.firestore.sortQuery);
   const collectionRef = collection(db, "employees");
-  const q = query(
-    collectionRef,
-    orderBy(
-      productQuery.queryConstraint!,
-      productQuery.descending ? "desc" : "asc"
-    )
-  );
+  const q = query(collectionRef, sortQuery);
   const [snapshot, loading] = useCollection(q);
 
   if (loading) return <CircularProgressCentered />;
@@ -50,7 +45,7 @@ const EmployeesTable = () => {
     };
   });
 
-  return <Table headers={TABLE_HEADERS} cellsData={employees} containsImage />;
+  return <GridList headers={TABLE_HEADERS} rowData={employees} />;
 };
 
 export default EmployeesTable;
