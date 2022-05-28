@@ -7,21 +7,6 @@ import TitleHeader from "../../components/layout/TitleHeader";
 import TransactionsGrid from "../../components/sales/SalesTable";
 import Dropdown from "../../components/UI/Dropdown";
 
-// const SORT_QUERIES: ProductQuery[] = [
-//   {
-//     sortQuery: "priceAsc",
-//     label: "Lowest Price",
-//   },
-//   {
-//     sortQuery: "priceDesc",
-//     label: "Highest Price",
-//   },
-//   {
-//     sortQuery: "latest",
-//     label: "Latest",
-//   },
-// ];
-
 const SORT_OBJECTS = {
   priceAsc: {
     label: "Lowest Price",

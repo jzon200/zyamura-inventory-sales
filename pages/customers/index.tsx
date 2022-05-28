@@ -1,3 +1,4 @@
+import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -14,20 +15,20 @@ const TABLE_HEADERS = [
   { label: "Mobile number" },
 ];
 
-const SORT_QUERIES: ProductQuery[] = [
-  {
-    sortQuery: "latest",
+const SORT_OBJECTS = {
+  nameAsc: {
+    label: "Name A-Z",
+    queryConstraint: orderBy("lastName", "asc"),
+  },
+  nameDesc: {
+    label: "Name Z-A",
+    queryConstraint: orderBy("lastName", "desc"),
+  },
+  latest: {
     label: "Latest",
+    queryConstraint: orderBy("dateAdded", "desc"),
   },
-  {
-    sortQuery: "priceAsc",
-    label: "Lowest Price",
-  },
-  {
-    sortQuery: "priceDesc",
-    label: "Highest Price",
-  },
-];
+};
 
 const Customers: NextPage = () => {
   return (
@@ -35,12 +36,7 @@ const Customers: NextPage = () => {
       <Head>
         <title>Customers | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
-      <ActionsHeader
-        sortItems={SORT_QUERIES}
-        selectedQuery={SORT_QUERIES[0]}
-        title="Customers"
-        onAddHandler={() => {}}
-      />
+      <ActionsHeader sortItems={SORT_OBJECTS} title="Customers" />
       <EmptyPlaceholder />
     </Fragment>
   );
