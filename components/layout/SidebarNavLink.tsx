@@ -15,7 +15,7 @@ const SidebarNavLink = ({ title, icon }: Props) => {
   const isSelected = currentRoute === routeName;
 
   return (
-    <Link href={routeName}>
+    <Link href={routeName} passHref>
       <div
         className={`${
           isSelected &&
