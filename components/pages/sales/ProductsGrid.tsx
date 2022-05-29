@@ -7,9 +7,9 @@ import {
 } from "firebase/firestore";
 import { Fragment, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { db } from "../../lib/firebase";
-import { useAppDispatch } from "../../redux/hooks/hooks";
-import CircularProgressCentered from "../UI/CircularProgressCentered";
+import { useAppDispatch } from "../../../redux/hooks";
+import { db } from "../../../services/firebase";
+import CircularProgressCentered from "../../common/CircularProgressCentered";
 import ProductCard from "./ProductCard";
 
 const ProductsGrid = () => {
