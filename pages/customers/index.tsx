@@ -2,8 +2,8 @@ import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import ActionsHeader from "../../components/layout/ActionsHeader";
-import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
+import ContentPlaceholder from "../../components/common/ContentPlaceholder";
+import ContentHeader from "../../components/header/ContentHeader";
 
 const TABLE_HEADERS = [
   { label: "" },
@@ -36,8 +36,8 @@ const Customers: NextPage = () => {
       <Head>
         <title>Customers | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
-      <ActionsHeader sortItems={SORT_OBJECTS} title="Customers" />
-      <EmptyPlaceholder />
+      <ContentHeader sortItems={SORT_OBJECTS} title="Customers" />
+      <ContentPlaceholder />
     </Fragment>
   );
 };

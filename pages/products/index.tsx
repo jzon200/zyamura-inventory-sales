@@ -2,13 +2,13 @@ import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import ActionsHeader from "../../components/layout/ActionsHeader";
-import ProductEntryForm from "../../components/products/ProductEntryForm";
-import ProductsTable from "../../components/products/ProductsTable";
-import DeleteDialog from "../../components/UI/DeleteDialog";
-import MuiModal from "../../components/UI/Modal";
-import { useAppDispatch, useAppSelector } from "../../redux-store/hooks/hooks";
-import { setShowFormModal } from "../../redux-store/slices/uiSlice";
+import DeleteDialog from "../../components/common/DeleteDialog";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setShowFormModal } from "../../redux/slices/uiSlice";
+import ProductEntryForm from "../../components/pages/products/ProductEntryForm";
+import MuiModal from "../../components/common/Modal";
+import ProductsTable from "../../components/pages/products/ProductsDataGrid";
+import ContentHeader from "../../components/header/ContentHeader";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -62,7 +62,7 @@ const Products: NextPage = () => {
       </MuiModal>
       <DeleteDialog collectionName="products" />
       {/* Products Container */}
-      <ActionsHeader title="All Products" sortItems={SORT_OBJECTS} />
+      <ContentHeader title="All Products" sortItems={SORT_OBJECTS} />
       <ProductsTable />
     </Fragment>
   );

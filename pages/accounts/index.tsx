@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import TitleHeader from "../../components/layout/TitleHeader";
-import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
+import ContentPlaceholder from "../../components/common/ContentPlaceholder";
+import SectionTitle from "../../components/header/SectionTitle";
 
 const Accounts: NextPage = () => {
   return (
@@ -10,8 +10,8 @@ const Accounts: NextPage = () => {
       <Head>
         <title>Accounts | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
-      <TitleHeader title="Accounts" className="mt-4" />
-      <EmptyPlaceholder />
+      <SectionTitle title="Accounts" className="mt-4" />
+      <ContentPlaceholder />
     </Fragment>
   );
 };

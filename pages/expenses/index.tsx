@@ -2,8 +2,8 @@ import { orderBy } from "firebase/firestore";
 import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
-import ActionsHeader from "../../components/layout/ActionsHeader";
-import EmptyPlaceholder from "../../components/UI/EmptyPlaceholder";
+import ContentPlaceholder from "../../components/common/ContentPlaceholder";
+import ContentHeader from "../../components/header/ContentHeader";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -26,12 +26,12 @@ const Expenses: NextPage = () => {
       <Head>
         <title>Expenses | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
-      <ActionsHeader
+      <ContentHeader
         title="Expenses"
         addLabel="Expenses"
         sortItems={SORT_OBJECTS}
       />
-      <EmptyPlaceholder />
+      <ContentPlaceholder />
     </Fragment>
   );
 };

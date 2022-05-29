@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { FiBox } from "react-icons/fi";
-import TitleHeader from "../../components/layout/TitleHeader";
-import SalesReport from "../../components/sales/SalesReport";
+import SectionTitle from "../../components/header/SectionTitle";
+import SalesReport from "../../components/pages/sales/SalesReport";
 
 const Dashboard: NextPage = () => {
   return (
@@ -11,9 +11,9 @@ const Dashboard: NextPage = () => {
       <Head>
         <title>Dashboard | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
-      <TitleHeader title="Sales Overview" className="my-4" />
+      <SectionTitle title="Sales Overview" className="my-4" />
       <SalesReport />
-      <TitleHeader title="Products Overview" className="mt-12 mb-4" />
+      <SectionTitle title="Products Overview" className="mt-12 mb-4" />
       <div className="w-64 bg-purple-500 rounded-2xl p-4">
         <div className="flex items-center gap-4">
           <div className="grid place-items-center rounded-lg bg-white w-12 h-12 text-purple-500">

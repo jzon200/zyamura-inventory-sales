@@ -3,18 +3,18 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { MdFilterList } from "react-icons/md";
-import TitleHeader from "../../components/layout/TitleHeader";
-import TransactionsGrid from "../../components/sales/SalesTable";
-import Dropdown from "../../components/UI/Dropdown";
+import SortDropdown from "../../components/dropdown/SortDropdown";
+import SectionTitle from "../../components/header/SectionTitle";
+import TransactionsGrid from "../../components/pages/sales/SalesDataGrid";
 
 const SORT_OBJECTS = {
-  priceAsc: {
-    label: "Lowest Price",
-    queryConstraint: orderBy("totalPrice", "asc"),
-  },
   priceDesc: {
-    label: "Highest Price",
+    label: "Highest Sales",
     queryConstraint: orderBy("totalPrice", "desc"),
+  },
+  priceAsc: {
+    label: "Lowest Sales",
+    queryConstraint: orderBy("totalPrice", "asc"),
   },
   latest: {
     label: "Latest",
@@ -33,7 +33,7 @@ const Sales: NextPage = () => {
 
       {/* All Sales */}
       <div className={`flex justify-between items-center text-lg`}>
-        <TitleHeader className="basis-48" title={"All Sales"} />
+        <SectionTitle className="basis-48" title={"All Sales"} />
         {/* Search */}
         <div className="w-full flex justify-end gap-8">
           <div className="basis-96 flex items-center">
@@ -48,7 +48,7 @@ const Sales: NextPage = () => {
             </button>
           </div>
           {/* <SortProducts /> */}
-          <Dropdown items={SORT_OBJECTS} />
+          <SortDropdown items={SORT_OBJECTS} />
           {/* Add Items */}
         </div>
       </div>

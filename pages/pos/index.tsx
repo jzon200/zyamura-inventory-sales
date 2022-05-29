@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { ReactElement } from "react";
 import { FiSearch } from "react-icons/fi";
-import BillsList from "../../components/pos/BillsList";
-import CategoriesList from "../../components/pos/CategoriesList";
-import InventoryGrid from "../../components/pos/InventoryGrid";
+import BillsList from "../../components/pages/pos/BillsList";
+import CategoriesList from "../../components/pages/pos/CategoriesList";
+import InventoryGrid from "../../components/pages/pos/InventoryGrid";
 
 const PointOfSales = () => {
   return (
