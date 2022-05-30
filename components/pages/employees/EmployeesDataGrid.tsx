@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../../services/firebase";
 import { useAppSelector } from "../../../redux/hooks";
 import CircularProgressCentered from "../../common/CircularProgressCentered";
-import GridList from "../../data-grid/DataGrid";
+import DataGrid from "../../data-grid/DataGrid";
 
 const TABLE_HEADERS = {
   imageUrl: "",
@@ -15,7 +15,7 @@ const TABLE_HEADERS = {
   role: "Role ",
 };
 
-const EmployeesTable = () => {
+const EmployeesDataGrid = () => {
   const sortQuery = useAppSelector((state) => state.firestore.sortQuery);
   const collectionRef = collection(db, "employees");
   const q = query(collectionRef, sortQuery);
@@ -39,7 +39,7 @@ const EmployeesTable = () => {
     };
   });
 
-  return <GridList headers={TABLE_HEADERS} rowData={employees} />;
+  return <DataGrid headers={TABLE_HEADERS} rowData={employees} />;
 };
 
-export default EmployeesTable;
+export default EmployeesDataGrid;

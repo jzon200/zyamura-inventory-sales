@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setShowFormModal } from "../../redux/slices/uiSlice";
 import MuiModal from "../../components/common/Modal";
 import EmployeeEntryForm from "../../components/pages/employees/EmployeeEntryForm";
-import EmployeesTable from "../../components/pages/employees/EmployeesDataGrid";
+import EmployeesDataGrid from "../../components/pages/employees/EmployeesDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
 
 const SORT_OBJECTS = {
@@ -47,7 +47,7 @@ const Employees: NextPage = () => {
         title="Employees"
         addLabel="Employee"
       />
-      <EmployeesTable />
+      <EmployeesDataGrid />
     </Fragment>
   );
 };

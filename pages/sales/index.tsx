@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { MdFilterList } from "react-icons/md";
 import SortDropdown from "../../components/dropdown/SortDropdown";
 import SectionTitle from "../../components/header/SectionTitle";
-import TransactionsGrid from "../../components/pages/sales/SalesDataGrid";
+import SalesDataGrid from "../../components/pages/sales/SalesDataGrid";
 
 const SORT_OBJECTS = {
   priceDesc: {
@@ -52,7 +52,7 @@ const Sales: NextPage = () => {
           {/* Add Items */}
         </div>
       </div>
-      <TransactionsGrid />
+      <SalesDataGrid />
     </Fragment>
   );
 };

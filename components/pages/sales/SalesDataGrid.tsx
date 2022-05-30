@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../../services/firebase";
 import { useAppSelector } from "../../../redux/hooks";
 import CircularProgressCentered from "../../common/CircularProgressCentered";
-import GridList from "../../data-grid/DataGrid";
+import DataGrid from "../../data-grid/DataGrid";
 
 const TABLE_HEADERS = {
   purchasedItems: "",
@@ -13,7 +13,7 @@ const TABLE_HEADERS = {
   dateAdded: "Transaction Date",
 };
 
-const TransactionsGrid = () => {
+const SalesDataGrid = () => {
   const sortQuery = useAppSelector((state) => state.firestore.sortQuery);
   const colRef = collection(db, "sales");
   const q = query(colRef, sortQuery);
@@ -33,7 +33,7 @@ const TransactionsGrid = () => {
       }),
   }));
 
-  return <GridList headers={TABLE_HEADERS} rowData={sales} />;
+  return <DataGrid headers={TABLE_HEADERS} rowData={sales} />;
 };
 
-export default TransactionsGrid;
+export default SalesDataGrid;

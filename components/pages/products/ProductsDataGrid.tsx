@@ -3,7 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../../services/firebase";
 import { useAppSelector } from "../../../redux/hooks";
 import CircularProgressCentered from "../../common/CircularProgressCentered";
-import GridList from "../../data-grid/DataGrid";
+import DataGrid from "../../data-grid/DataGrid";
 
 const TABLE_HEADERS = {
   imageUrl: "",
@@ -16,7 +16,7 @@ const TABLE_HEADERS = {
   status: "Status",
 };
 
-const ProductsTable = () => {
+const ProductsDataGrid = () => {
   const productQuery = useAppSelector((state) => state.firestore.sortQuery);
   const collectionRef = collection(db, "products");
   const q = query(collectionRef, productQuery);
@@ -41,7 +41,7 @@ const ProductsTable = () => {
     };
   });
 
-  return <GridList headers={TABLE_HEADERS} rowData={products} />;
+  return <DataGrid headers={TABLE_HEADERS} rowData={products} />;
 };
 
-export default ProductsTable;
+export default ProductsDataGrid;

@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setShowFormModal } from "../../redux/slices/uiSlice";
 import ProductEntryForm from "../../components/pages/products/ProductEntryForm";
 import MuiModal from "../../components/common/Modal";
-import ProductsTable from "../../components/pages/products/ProductsDataGrid";
+import ProductsDataGrid from "../../components/pages/products/ProductsDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
 
 const SORT_OBJECTS = {
@@ -63,7 +63,7 @@ const Products: NextPage = () => {
       <DeleteDialog collectionName="products" />
       {/* Products Container */}
       <ContentHeader title="All Products" sortItems={SORT_OBJECTS} />
-      <ProductsTable />
+      <ProductsDataGrid />
     </Fragment>
   );
 };

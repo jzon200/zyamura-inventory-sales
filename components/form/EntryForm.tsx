@@ -22,7 +22,7 @@ const EntryForm = ({
   const isEditing = formAction === "edit";
 
   return (
-    <div className="w-[50vh] mx-auto my-[25vh]">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <div
         className={`${className} relative w-[32rem] px-8 py-4 rounded-xl bg-white text-slate-500`}
       >
