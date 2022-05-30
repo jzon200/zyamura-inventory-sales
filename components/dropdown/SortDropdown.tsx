@@ -1,5 +1,5 @@
 import { QueryConstraint } from "firebase/firestore";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useAppDispatch } from "../../redux/hooks";
@@ -10,6 +10,47 @@ type Props = {
   items: Record<string, { label: string; queryConstraint: QueryConstraint }>;
 };
 
+const dropdownBtnVariants: Variants = {
+  expand: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    transition: {
+      duration: 0.3,
+    },
+  },
+  shrink: {
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    transition: {
+      duration: 0.3,
+      delay: 0.3,
+    },
+  },
+};
+
+const expandBtnVariants: Variants = {
+  expand: {
+    rotate: 180,
+    transition: { type: "tween", ease: "easeInOut", duration: 0.3 },
+  },
+  shrink: {
+    rotate: [180, 0],
+    transition: { type: "tween", ease: "easeInOut", duration: 0.3 },
+  },
+};
+
+const contentVariants: Variants = {
+  expand: {
+    height: "auto",
+    overflow: "visible",
+  },
+  shrink: {
+    height: 0,
+    overflow: "hidden",
+  },
+};
+
+// TODO: Fixed the Local State
 const SortDropdown = ({ items }: Props) => {
   const values = Object.values(items);
 
@@ -19,11 +60,11 @@ const SortDropdown = ({ items }: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="relative basis-72">
-      <button
-        className={`btn-rounded bg-[#D1CEB2] w-full transition-all ${
-          isExpanded ? "rounded-b-none duration-300 " : "duration-[1.7s]"
-        }`}
+    <motion.div className="relative w-72">
+      <motion.button
+        variants={dropdownBtnVariants}
+        animate={isExpanded ? "expand" : "shrink"}
+        className="btn-rounded bg-[#D1CEB2] w-full"
         onClick={() => {
           setIsExpanded((prevState) => !prevState);
         }}
@@ -34,20 +75,20 @@ const SortDropdown = ({ items }: Props) => {
             {values[selectedIndex].label}
           </span>
         </div>
-        <MdOutlineArrowDropDown
-          size={24}
-          className={`transition-all duration-700 ${
-            isExpanded ? "rotate-180" : "rotate-0"
-          }`}
-        />
-      </button>
+        <motion.div
+          variants={expandBtnVariants}
+          animate={isExpanded ? "expand" : "shrink"}
+          initial={false}
+        >
+          <MdOutlineArrowDropDown size={24} />
+        </motion.div>
+      </motion.button>
       {/* Dropdown Items */}
       <motion.ul
-        animate={{
-          height: isExpanded ? "auto" : 0,
-          overflow: isExpanded ? "visible" : "hidden",
-        }}
+        variants={contentVariants}
+        animate={isExpanded ? "expand" : "shrink"}
         className="absolute rounded-b-3xl w-full z-30 shadow-md"
+        initial={false}
       >
         {values.map((item, index) => (
           <DropdownItem
@@ -62,7 +103,7 @@ const SortDropdown = ({ items }: Props) => {
           />
         ))}
       </motion.ul>
-    </div>
+    </motion.div>
   );
 };
 

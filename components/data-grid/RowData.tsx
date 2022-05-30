@@ -1,6 +1,7 @@
 import { DocumentData } from "firebase/firestore";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
@@ -9,16 +10,78 @@ import imgPlaceHolder from "../../assets/image_placeholder.svg";
 import { showDeleteDialog, showEditForm } from "../../redux/actions/uiActions";
 import { useAppDispatch } from "../../redux/hooks";
 
-const variants = {
-  active: {
-    height: [112, 224],
+const containerVariants: Variants = {
+  expand: {
+    height: 224,
     outline: "1px solid #554A33",
     alignItems: "start",
+    transition: {
+      type: "tween",
+      ease: "easeInOut",
+      duration: 0.5,
+      when: "beforeChildren",
+    },
+    // transition: {
+    //   type: "spring",
+    //   mass: 1,
+    //   duration: 0.5,
+    // },
   },
-  inactive: {
-    height: [224, 112],
+  shrink: {
+    height: 112,
     outline: "0px none transparent",
     alignItems: "center",
+    transition: {
+      type: "tween",
+      ease: "easeInOut",
+      duration: 0.5,
+      when: "beforeChildren",
+    },
+    // transition: {
+    //   type: "spring",
+    //   mass: 1,
+    //   duration: 0.5,
+    // },
+  },
+  hover: {
+    outline: "1px solid #554A33",
+  },
+};
+
+const expandBtnVariants: Variants = {
+  expand: {
+    top: "45%",
+    rotate: 180,
+    transition: {
+      type: "tween",
+      ease: "easeInOut",
+      duration: 0.5,
+    },
+  },
+  shrink: {
+    top: "40%",
+    rotate: [180, 0],
+  },
+};
+
+const actionBtnVariants: Variants = {
+  expand: {
+    opacity: [0, 1],
+  },
+  shrink: {
+    opacity: 0,
+  },
+};
+
+const detailsVariants: Variants = {
+  expand: {
+    opacity: 1,
+    y: 100,
+    transition: { type: "tween", delay: 0.3 },
+  },
+  shrink: {
+    opacity: 0,
+    y: 100,
   },
 };
 
@@ -32,6 +95,8 @@ const GridRowData = ({ headers, docData }: Props) => {
 
   const dispatch = useAppDispatch();
 
+  const router = useRouter();
+
   const headerKeys = Object.keys(headers);
 
   const purchasedItems = docData.purchasedItems;
@@ -39,11 +104,70 @@ const GridRowData = ({ headers, docData }: Props) => {
   return (
     <motion.div
       className={`relative grid grid-flow-col auto-cols-fr justify-items-center rounded-3xl py-4 text-[#3A512B] text-xl`}
-      variants={variants}
-      animate={isExpanded ? "active" : "inactive"}
-      transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
-      whileHover={{ outline: "1px solid #554A33" }}
+      variants={containerVariants}
+      animate={isExpanded ? "expand" : "shrink"}
+      whileHover={"hover"}
+      initial={false}
     >
+      <motion.button
+        variants={expandBtnVariants}
+        animate={isExpanded ? "expand" : "shrink"}
+        initial={false}
+        className="absolute right-2"
+        onClick={() => {
+          setIsExpanded((prevState) => !prevState);
+        }}
+      >
+        <MdExpandMore size={28} />
+      </motion.button>
+
+      {router.pathname !== "/sales" && (
+        <Fragment>
+          {/* Edit Button */}
+          <motion.button
+            variants={actionBtnVariants}
+            animate={isExpanded ? "expand" : "shrink"}
+            initial={false}
+            onClick={() => {
+              dispatch(showEditForm(docData));
+            }}
+            className="absolute bottom-12 right-20"
+          >
+            <FiEdit size={24} />
+          </motion.button>
+          {/* Delete Button */}
+          <motion.button
+            variants={actionBtnVariants}
+            animate={isExpanded ? "expand" : "shrink"}
+            initial={false}
+            onClick={() => {
+              dispatch(showDeleteDialog(docData));
+            }}
+            className="absolute bottom-12 right-11"
+          >
+            <BsTrash size={24} />
+          </motion.button>
+        </Fragment>
+      )}
+
+      {router.pathname !== "/sales" && (
+        <motion.div
+          variants={detailsVariants}
+          animate={isExpanded ? "expand" : "shrink"}
+          initial={false}
+          className="absolute left-64"
+        >
+          <div className="grid grid-cols-3 justify-items-center gap-4 text-base uppercase">
+            <div>Date Added</div>
+            <div>Age</div>
+            <div>Description</div>
+            <div className="font-medium">{docData.dateAdded}</div>
+            <div className="font-medium">{docData.year}</div>
+            <div className="font-medium">{docData.description}</div>
+          </div>
+        </motion.div>
+      )}
+
       {headerKeys.map((key, index) => {
         const data = docData[key];
 
@@ -151,6 +275,7 @@ const GridRowData = ({ headers, docData }: Props) => {
         <motion.div
           animate={{ opacity: isExpanded ? [0, 1] : 0 }}
           className="absolute top-24 left-24 grid grid-cols-3 gap-x-4 text-base max-h-28 overflow-y-auto"
+          initial={false}
         >
           <div className="sticky top-0 text-[#919F88] bg-primary-light">
             Items
@@ -179,67 +304,6 @@ const GridRowData = ({ headers, docData }: Props) => {
             );
           })}
         </motion.div>
-      )}
-
-      {/* TODO: Show Conditionally */}
-      {/* <motion.div
-          animate={{ opacity: isExpanded ? 1 : 0, y: [100, 100] }}
-          transition={{ type: "tween", delay: isExpanded ? 0.3 : 0 }}
-          className="absolute left-64"
-        >
-          <div className="grid grid-cols-3 justify-items-center gap-4 text-base uppercase">
-            <div>Date Added</div>
-            <div>Age</div>
-            <div>Description</div>
-            <div className="font-medium">{docData.dateAdded}</div>
-            <div className="font-medium">{docData.year}</div>
-            <div className="font-medium">{docData.description}</div>
-          </div>
-        </motion.div> */}
-
-      <motion.button
-        animate={{
-          rotate: isExpanded ? [0, 180] : [180, 0],
-        }}
-        transition={{
-          type: "tween",
-          ease: "easeInOut",
-          duration: 0.5,
-        }}
-        className="absolute top-4 right-4"
-        onClick={() => {
-          setIsExpanded((prevState) => !prevState);
-        }}
-      >
-        <MdExpandMore size={28} />
-      </motion.button>
-
-      {isExpanded && (
-        <>
-          {/* Edit Button */}
-          <motion.button
-            animate={{ opacity: isExpanded ? [0, 1] : 0 }}
-            transition={{ type: "tween", delay: 0.3 }}
-            onClick={() => {
-              dispatch(showEditForm(docData));
-            }}
-            className="absolute bottom-12 right-20"
-          >
-            <FiEdit size={24} />
-          </motion.button>
-
-          {/* Delete Button */}
-          <motion.button
-            animate={{ opacity: isExpanded ? [0, 1] : 0 }}
-            transition={{ type: "tween", delay: 0.3 }}
-            onClick={() => {
-              dispatch(showDeleteDialog(docData));
-            }}
-            className="absolute bottom-12 right-11"
-          >
-            <BsTrash size={24} />
-          </motion.button>
-        </>
       )}
     </motion.div>
   );

@@ -6,12 +6,11 @@ type GridListProps = {
   rowData: object[] | DocumentData;
 };
 
-// TODO: Fixed the Animation Logic
-const GridList = ({ headers, rowData }: GridListProps) => {
+const DataGrid = ({ headers, rowData }: GridListProps) => {
   const headerKeys = Object.keys(headers);
 
   return (
-    <div className="mt-8 h-[80%] overflow-y-auto">
+    <div className="mt-8 h-[90%] overflow-y-auto">
       <div
         className={`sticky top-0 grid grid-flow-col auto-cols-fr justify-items-center text-lg px-4 bg-primary-light text-[#919F88] uppercase  z-20`}
       >
@@ -34,4 +33,4 @@ const GridList = ({ headers, rowData }: GridListProps) => {
   );
 };
 
-export default GridList;
+export default DataGrid;
