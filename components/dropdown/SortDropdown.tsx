@@ -7,7 +7,7 @@ import { setSortQuery } from "../../redux/slices/firestoreSlice";
 import DropdownItem from "./DropdownItem";
 
 type Props = {
-  items: Record<string, { label: string; queryConstraint: QueryConstraint }>;
+  items: Record<string, { label: string; sortQuery: QueryConstraint }>;
 };
 
 const dropdownBtnVariants: Variants = {
@@ -64,7 +64,7 @@ const SortDropdown = ({ items }: Props) => {
       <motion.button
         variants={dropdownBtnVariants}
         animate={isExpanded ? "expand" : "shrink"}
-        className="btn-rounded bg-[#D1CEB2] w-full"
+        className="btn-rounded-between bg-[#D1CEB2] w-full"
         onClick={() => {
           setIsExpanded((prevState) => !prevState);
         }}
@@ -96,7 +96,7 @@ const SortDropdown = ({ items }: Props) => {
             label={item.label}
             isSelected={selectedIndex === index}
             onClick={() => {
-              dispatch(setSortQuery(item.queryConstraint));
+              dispatch(setSortQuery(item.sortQuery));
               setSelectedIndex(index);
               setIsExpanded(false);
             }}

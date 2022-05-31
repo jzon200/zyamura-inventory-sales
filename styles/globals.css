@@ -42,7 +42,7 @@
     @apply before:content-['Upload'] before:mr-24 file:hidden text-blue-500 font-medium;
   }
 
-  .btn-rounded {
+  .btn-rounded-between {
     @apply flex justify-between items-center rounded-3xl p-4;
   }
 

@@ -18,15 +18,15 @@ const TABLE_HEADERS = [
 const SORT_OBJECTS = {
   nameAsc: {
     label: "Name A-Z",
-    queryConstraint: orderBy("lastName", "asc"),
+    sortQuery: orderBy("lastName", "asc"),
   },
   nameDesc: {
     label: "Name Z-A",
-    queryConstraint: orderBy("lastName", "desc"),
+    sortQuery: orderBy("lastName", "desc"),
   },
   latest: {
     label: "Latest",
-    queryConstraint: orderBy("dateAdded", "desc"),
+    sortQuery: orderBy("dateAdded", "desc"),
   },
 };
 

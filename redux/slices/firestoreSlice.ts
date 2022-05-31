@@ -23,6 +23,9 @@ const firestoreSlice = createSlice({
     ) {
       state.selectedDocument = action.payload;
     },
+    initialSort(state: FirestoreState) {
+      state.sortQuery = initialState.sortQuery;
+    },
     setSortQuery(
       state: FirestoreState,
       action: PayloadAction<QueryConstraint>
@@ -34,6 +37,7 @@ const firestoreSlice = createSlice({
 
 const firestoreReducer = firestoreSlice.reducer;
 
-export const { setSelectedDocument, setSortQuery } = firestoreSlice.actions;
+export const { setSelectedDocument, initialSort, setSortQuery } =
+  firestoreSlice.actions;
 
 export default firestoreReducer;

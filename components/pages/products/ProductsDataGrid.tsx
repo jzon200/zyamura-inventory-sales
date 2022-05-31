@@ -17,9 +17,10 @@ const TABLE_HEADERS = {
 };
 
 const ProductsDataGrid = () => {
-  const productQuery = useAppSelector((state) => state.firestore.sortQuery);
+  const sortQuery = useAppSelector((state) => state.firestore.sortQuery);
+
   const collectionRef = collection(db, "products");
-  const q = query(collectionRef, productQuery);
+  const q = query(collectionRef, sortQuery);
   const [snapshot, loading] = useCollection(q);
 
   if (loading) return <CircularProgressCentered />;

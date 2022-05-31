@@ -9,10 +9,7 @@ type Props = {
   title: string;
   addLabel?: string;
   className?: string;
-  sortItems: Record<
-    string,
-    { label: string; queryConstraint: QueryConstraint }
-  >;
+  sortItems: Record<string, { label: string; sortQuery: QueryConstraint }>;
 };
 
 const ContentHeader = ({
@@ -50,7 +47,7 @@ const ContentHeader = ({
           onClick={() => {
             dispatch(showAddForm());
           }}
-          className="btn-rounded max-h-14 bg-[#887F61] basis-48 text-yellow-50"
+          className="btn-rounded-between max-h-14 bg-[#887F61] basis-48 text-yellow-50"
         >
           <div>Add {addLabel}</div>
           <MdAdd size={24} />

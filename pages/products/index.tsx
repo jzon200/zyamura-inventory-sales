@@ -9,35 +9,36 @@ import ProductEntryForm from "../../components/pages/products/ProductEntryForm";
 import MuiModal from "../../components/common/Modal";
 import ProductsDataGrid from "../../components/pages/products/ProductsDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
+import { initialSort } from "../../redux/slices/firestoreSlice";
 
 const SORT_OBJECTS = {
   nameAsc: {
     label: "Name A-Z",
-    queryConstraint: orderBy("name", "asc"),
+    sortQuery: orderBy("name", "asc"),
   },
   nameDesc: {
     label: "Name Z-A",
-    queryConstraint: orderBy("name", "desc"),
+    sortQuery: orderBy("name", "desc"),
   },
   priceAsc: {
     label: "Lowest Price",
-    queryConstraint: orderBy("price", "asc"),
+    sortQuery: orderBy("price", "asc"),
   },
   priceDesc: {
     label: "Highest Price",
-    queryConstraint: orderBy("price", "desc"),
+    sortQuery: orderBy("price", "desc"),
   },
   quantityAsc: {
     label: "Lowest Price",
-    queryConstraint: orderBy("quantity", "asc"),
+    sortQuery: orderBy("quantity", "asc"),
   },
   quantityDesc: {
     label: "Highest Price",
-    queryConstraint: orderBy("quantity", "desc"),
+    sortQuery: orderBy("quantity", "desc"),
   },
   latest: {
     label: "Latest",
-    queryConstraint: orderBy("dateAdded", "desc"),
+    sortQuery: orderBy("dateAdded", "desc"),
   },
 };
 
@@ -46,6 +47,8 @@ const Products: NextPage = () => {
   const showFormModal = useAppSelector((state) => state.ui.showFormModal);
 
   const dispatch = useAppDispatch();
+
+  dispatch(initialSort());
 
   return (
     <Fragment>

@@ -6,23 +6,29 @@ import { MdFilterList } from "react-icons/md";
 import SortDropdown from "../../components/dropdown/SortDropdown";
 import SectionTitle from "../../components/header/SectionTitle";
 import SalesDataGrid from "../../components/pages/sales/SalesDataGrid";
+import { useAppDispatch } from "../../redux/hooks";
+import { initialSort } from "../../redux/slices/firestoreSlice";
 
 const SORT_OBJECTS = {
   priceDesc: {
     label: "Highest Sales",
-    queryConstraint: orderBy("totalPrice", "desc"),
+    sortQuery: orderBy("totalPrice", "desc"),
   },
   priceAsc: {
     label: "Lowest Sales",
-    queryConstraint: orderBy("totalPrice", "asc"),
+    sortQuery: orderBy("totalPrice", "asc"),
   },
   latest: {
     label: "Latest",
-    queryConstraint: orderBy("dateAdded", "desc"),
+    sortQuery: orderBy("dateAdded", "desc"),
   },
 };
 
 const Sales: NextPage = () => {
+  const dispatch = useAppDispatch();
+
+  dispatch(initialSort());
+
   return (
     <Fragment>
       <Head>

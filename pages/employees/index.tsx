@@ -9,19 +9,20 @@ import MuiModal from "../../components/common/Modal";
 import EmployeeEntryForm from "../../components/pages/employees/EmployeeEntryForm";
 import EmployeesDataGrid from "../../components/pages/employees/EmployeesDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
+import { initialSort } from "../../redux/slices/firestoreSlice";
 
 const SORT_OBJECTS = {
   nameAsc: {
     label: "Name A-Z",
-    queryConstraint: orderBy("lastName", "asc"),
+    sortQuery: orderBy("lastName", "asc"),
   },
   nameDesc: {
     label: "Name Z-A",
-    queryConstraint: orderBy("lastName", "desc"),
+    sortQuery: orderBy("lastName", "desc"),
   },
   latest: {
     label: "Latest",
-    queryConstraint: orderBy("dateAdded", "desc"),
+    sortQuery: orderBy("dateAdded", "desc"),
   },
 };
 
@@ -29,6 +30,8 @@ const Employees: NextPage = () => {
   const showFormModal = useAppSelector((state) => state.ui.showFormModal);
 
   const dispatch = useAppDispatch();
+
+  dispatch(initialSort());
 
   return (
     <Fragment>

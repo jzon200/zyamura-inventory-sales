@@ -17,6 +17,7 @@ const TABLE_HEADERS = {
 
 const EmployeesDataGrid = () => {
   const sortQuery = useAppSelector((state) => state.firestore.sortQuery);
+
   const collectionRef = collection(db, "employees");
   const q = query(collectionRef, sortQuery);
   const [snapshot, loading] = useCollection(q);
