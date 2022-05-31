@@ -65,6 +65,7 @@ const SortDropdown = ({ items }: Props) => {
         variants={dropdownBtnVariants}
         animate={isExpanded ? "expand" : "shrink"}
         className="btn-rounded-between bg-[#D1CEB2] w-full"
+        initial={"shrink"}
         onClick={() => {
           setIsExpanded((prevState) => !prevState);
         }}
