@@ -4,8 +4,22 @@ import { Fragment } from "react";
 import { FiBox } from "react-icons/fi";
 import SectionTitle from "../../components/header/SectionTitle";
 import SalesReport from "../../components/pages/sales/SalesReport";
+import { useAppSelector } from "../../redux/hooks";
 
 const Dashboard: NextPage = () => {
+  const { isLoggedIn, isAdmin } = useAppSelector((state) => ({
+    isLoggedIn: state.auth.isLoggedIn,
+    isAdmin: state.auth.isAdmin,
+  }));
+
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!isLoggedIn && !isAdmin) {
+  //     router.push("/");
+  //   }
+  // }, []);
+
   return (
     <Fragment>
       <Head>

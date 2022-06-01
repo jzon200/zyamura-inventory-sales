@@ -1,4 +1,5 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
 import firestoreReducer from "./slices/firestoreSlice";
 import posReducer from "./slices/posSlice";
 import uiReducer from "./slices/uiSlice";
@@ -8,6 +9,7 @@ const store = configureStore({
     ui: uiReducer,
     pos: posReducer,
     firestore: firestoreReducer,
+    auth: authReducer,
   },
 });
 

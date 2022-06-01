@@ -17,6 +17,11 @@ interface EmployeesInput {
 
 interface InputValues extends ProductsInput, EmployeesInput {}
 
+type UserCredentials = {
+  username: string;
+  password: string;
+};
+
 type Product = {
   id: string;
   docId: string;

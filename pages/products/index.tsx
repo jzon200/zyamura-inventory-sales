@@ -20,6 +20,14 @@ const SORT_OBJECTS = {
     label: "Name Z-A",
     sortQuery: orderBy("name", "desc"),
   },
+  quantityAsc: {
+    label: "Lowest Quantity",
+    sortQuery: orderBy("quantity", "asc"),
+  },
+  quantityDesc: {
+    label: "Highest Quantity",
+    sortQuery: orderBy("quantity", "desc"),
+  },
   priceAsc: {
     label: "Lowest Price",
     sortQuery: orderBy("price", "asc"),
@@ -27,14 +35,6 @@ const SORT_OBJECTS = {
   priceDesc: {
     label: "Highest Price",
     sortQuery: orderBy("price", "desc"),
-  },
-  quantityAsc: {
-    label: "Lowest Price",
-    sortQuery: orderBy("quantity", "asc"),
-  },
-  quantityDesc: {
-    label: "Highest Price",
-    sortQuery: orderBy("quantity", "desc"),
   },
   latest: {
     label: "Latest",

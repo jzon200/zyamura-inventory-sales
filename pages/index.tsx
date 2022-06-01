@@ -1,8 +1,43 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CircularProgressCentered from "../components/common/CircularProgressCentered";
+import MuiModal from "../components/common/Modal";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { loginUser } from "../redux/slices/authSlice";
+import { setShowLoadingSpinner } from "../redux/slices/uiSlice";
 
 const Login = () => {
+  const { register, handleSubmit } = useForm<UserCredentials>();
+
+  const { isAdmin, isLoggedIn } = useAppSelector((state) => ({
+    isAdmin: state.auth.isAdmin,
+    isLoggedIn: state.auth.isLoggedIn,
+  }));
+  const dispatch = useAppDispatch();
+
+  const router = useRouter();
+
+  const submitHandler: SubmitHandler<UserCredentials> = (data) => {
+    console.log(data);
+    dispatch(loginUser(data));
+
+    if (isLoggedIn && isAdmin) {
+      router.push("/dashboard");
+    } else if (isLoggedIn) {
+      router.push("/pos");
+    }
+  };
+
+  // if (showLoadingSpinner)
+  //   return (
+  //     <MuiModal showModal={showLoadingSpinner} onClose={() => {}}>
+  //       <CircularProgressCentered />
+  //     </MuiModal>
+  //   );
+
   return (
     <div className="grid place-items-center h-screen bg-gray-400/50 overflow-hidden">
       <div className="w-full h-full lg:w-[26rem] lg:h-[75%] md:rounded-xl p-5 bg-white shadow-md shadow-zinc-400/80">
@@ -17,25 +52,25 @@ const Login = () => {
           </div>
           <form
             className="mx-4 mt-32 md:mt-0 mb-auto"
-            onSubmit={(event) => {
-              event.preventDefault();
-            }}
+            onSubmit={handleSubmit(submitHandler)}
           >
             <label htmlFor="username" className="text-xl font-medium">
               Sign-in
             </label>
             <input
-              type="email"
+              type="text"
               id="username"
-              placeholder="Email"
+              placeholder="Username"
               className="form-control-login"
               required
+              {...register("username")}
             />
             <input
               type="password"
               placeholder="Password"
               className="form-control-login"
               required
+              {...register("password")}
             />
             <div className="flex justify-between mt-2 mb-6">
               <div>
