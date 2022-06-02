@@ -14,43 +14,49 @@ const containerVariants: Variants = {
   expand: {
     height: 224,
     outline: "1px solid #554A33",
-    alignItems: "start",
     transition: {
       type: "tween",
       ease: "easeInOut",
       duration: 0.5,
       when: "beforeChildren",
     },
-    // transition: {
-    //   type: "spring",
-    //   mass: 1,
-    //   duration: 0.5,
-    // },
   },
   shrink: {
     height: 112,
     outline: "0px none transparent",
-    alignItems: "center",
     transition: {
       type: "tween",
       ease: "easeInOut",
       duration: 0.5,
       when: "beforeChildren",
     },
-    // transition: {
-    //   type: "spring",
-    //   mass: 1,
-    //   duration: 0.5,
-    // },
   },
   hover: {
     outline: "1px solid #554A33",
   },
 };
 
+const cellVariants: Variants = {
+  expand: {
+    y: -50,
+    transition: {
+      type: "tween",
+      ease: "easeIn",
+      duration: 0.5,
+    },
+  },
+  shrink: {
+    y: 0,
+    transition: {
+      type: "tween",
+      ease: "easeOut",
+      duration: 0.5,
+    },
+  },
+};
+
 const expandBtnVariants: Variants = {
   expand: {
-    top: "45%",
     rotate: 180,
     transition: {
       type: "tween",
@@ -59,16 +65,17 @@ const expandBtnVariants: Variants = {
     },
   },
   shrink: {
-    top: "40%",
     rotate: [180, 0],
   },
 };
 
 const actionBtnVariants: Variants = {
   expand: {
+    display: "block",
     opacity: [0, 1],
   },
   shrink: {
+    display: "none",
     opacity: 0,
   },
 };
@@ -76,12 +83,12 @@ const actionBtnVariants: Variants = {
 const detailsVariants: Variants = {
   expand: {
     opacity: 1,
-    y: 100,
+    y: 50,
     transition: { type: "tween", delay: 0.3 },
   },
   shrink: {
     opacity: 0,
-    y: 100,
+    y: 50,
   },
 };
 
@@ -103,26 +110,45 @@ const GridRowData = ({ headers, docData }: Props) => {
 
   return (
     <motion.div
-      className={`relative grid grid-flow-col auto-cols-fr justify-items-center rounded-3xl py-4 text-[#3A512B] text-xl`}
+      className="group relative grid grid-flow-col auto-cols-fr place-items-center rounded-3xl py-4 text-[#3A512B] text-xl"
       variants={containerVariants}
       animate={isExpanded ? "expand" : "shrink"}
       whileHover={"hover"}
       initial={false}
     >
-      <motion.button
-        variants={expandBtnVariants}
-        animate={isExpanded ? "expand" : "shrink"}
-        initial={false}
-        className="absolute right-2"
+      <div
+        className="group-hover:bg-[#CCCABD] absolute right-0 h-full grid place-items-center rounded-r-3xl cursor-pointer"
         onClick={() => {
           setIsExpanded((prevState) => !prevState);
         }}
       >
-        <MdExpandMore size={28} />
-      </motion.button>
+        <motion.button
+          variants={expandBtnVariants}
+          animate={isExpanded ? "expand" : "shrink"}
+          initial={false}
+        >
+          <MdExpandMore size={28} color="inherit" />
+        </motion.button>
+      </div>
 
       {router.pathname !== "/sales" && (
         <Fragment>
+          <motion.div
+            variants={detailsVariants}
+            animate={isExpanded ? "expand" : "shrink"}
+            initial={false}
+            className="absolute left-64"
+          >
+            <div className="grid grid-cols-3 justify-items-center gap-4 text-base uppercase">
+              <div>Date Added</div>
+              <div>Age</div>
+              <div>Description</div>
+              <div className="font-medium">{docData.dateAdded}</div>
+              <div className="font-medium">{docData.year}</div>
+              <div className="font-medium">{docData.description}</div>
+            </div>
+          </motion.div>
+
           {/* Edit Button */}
           <motion.button
             variants={actionBtnVariants}
@@ -131,7 +157,7 @@ const GridRowData = ({ headers, docData }: Props) => {
             onClick={() => {
               dispatch(showEditForm(docData));
             }}
-            className="absolute bottom-12 right-20"
+            className="absolute bottom-4 right-24"
           >
             <FiEdit size={24} />
           </motion.button>
@@ -143,29 +169,11 @@ const GridRowData = ({ headers, docData }: Props) => {
             onClick={() => {
               dispatch(showDeleteDialog(docData));
             }}
-            className="absolute bottom-12 right-11"
+            className="absolute bottom-4 right-16"
           >
             <BsTrash size={24} />
           </motion.button>
         </Fragment>
-      )}
-
-      {router.pathname !== "/sales" && (
-        <motion.div
-          variants={detailsVariants}
-          animate={isExpanded ? "expand" : "shrink"}
-          initial={false}
-          className="absolute left-64"
-        >
-          <div className="grid grid-cols-3 justify-items-center gap-4 text-base uppercase">
-            <div>Date Added</div>
-            <div>Age</div>
-            <div>Description</div>
-            <div className="font-medium">{docData.dateAdded}</div>
-            <div className="font-medium">{docData.year}</div>
-            <div className="font-medium">{docData.description}</div>
-          </div>
-        </motion.div>
       )}
 
       {headerKeys.map((key, index) => {
@@ -173,35 +181,44 @@ const GridRowData = ({ headers, docData }: Props) => {
 
         if (key === "imageUrl") {
           return (
-            <Image
-              key={Math.random()}
-              src={data != null ? data : imgPlaceHolder}
-              className="col-span-1 rounded-md"
-              width={80}
-              height={80}
-              objectFit={"cover"}
-              layout={"fixed"}
-              alt=""
-            />
+            <motion.div
+              variants={cellVariants}
+              animate={isExpanded ? "expand" : "shrink"}
+            >
+              <Image
+                src={data != null ? data : imgPlaceHolder}
+                className="col-span-1 rounded-md"
+                width={80}
+                height={80}
+                objectFit={"cover"}
+                layout={"fixed"}
+                alt=""
+              />
+            </motion.div>
           );
         }
 
         if (key === "status") {
           const quantity = docData.quantity;
           let chip = (
-            <div
-              key={Math.random()}
+            <motion.div
+              variants={cellVariants}
+              animate={isExpanded ? "expand" : "shrink"}
               className="chip bg-green-300 text-green-700"
             >
               Available
-            </div>
+            </motion.div>
           );
 
           if (quantity < 1) {
             chip = (
-              <div key={Math.random()} className="chip bg-red-300 text-red-700">
+              <motion.div
+                variants={cellVariants}
+                animate={isExpanded ? "expand" : "shrink"}
+                className="chip bg-red-300 text-red-700"
+              >
                 Out of stock
-              </div>
+              </motion.div>
             );
           }
 
@@ -268,7 +285,16 @@ const GridRowData = ({ headers, docData }: Props) => {
           });
         }
 
-        return <div key={`doc-${index}`}>{formattedData}</div>;
+        return (
+          <motion.div
+            key={`doc-${index}`}
+            variants={cellVariants}
+            animate={isExpanded ? "expand" : "shrink"}
+            initial={false}
+          >
+            {formattedData}
+          </motion.div>
+        );
       })}
 
       {purchasedItems != null && (
