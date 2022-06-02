@@ -26,27 +26,31 @@ const categoryData: CategoryData[] = [
   { label: "Rabbit", imageData: rabbitIcon, quantity: 21 },
   { label: "Hedgehog", imageData: hedgehogIcon, quantity: 17 },
   { label: "Hamster", imageData: hamsterIcon, quantity: 16 },
-  // { label: "All", imageData: allIcon, quantity: 246 },
+  { label: "Turtle", imageData: turtleIcon, quantity: 20 },
+  { label: "Pet Food", imageData: petFoodIcon, quantity: 20 },
   // { label: "All", imageData: allIcon, quantity: 246 },
 ];
 
 const CategoriesList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // TODO: Carousel Version
   return (
-    <div className="hidden lg:flex my-4 gap-4">
-      {categoryData.map((category, index) => (
-        <CategoryItem
-          key={index}
-          label={category.label}
-          quantity={category.quantity}
-          imageData={category.imageData}
-          isSelected={selectedIndex === index}
-          onClick={() => {
-            setSelectedIndex(index);
-          }}
-        />
-      ))}
+    <div className="absolute lg:static top-16 mx-4 lg:mx-0 p-4 lg:p-0 rounded-xl bg-white z-10 overflow-x-auto shadow-md lg:shadow-none shadow-gray-400">
+      <div className="grid grid-flow-col auto-cols-fr gap-4 lg:gap-40">
+        {categoryData.map((category, index) => (
+          <CategoryItem
+            key={index}
+            label={category.label}
+            quantity={category.quantity}
+            imageData={category.imageData}
+            isSelected={selectedIndex === index}
+            onClick={() => {
+              setSelectedIndex(index);
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 };

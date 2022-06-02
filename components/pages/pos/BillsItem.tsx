@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Fragment } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
+import imgPlaceholder from "../../../assets/image_placeholder.svg";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
   addBillsItem,
@@ -15,11 +16,6 @@ type Props = {
 const BillsItem = ({ product }: Props) => {
   const { id, name, category, imageUrl, price, quantity } = product;
 
-  // const { products, purchasedItems } = useAppSelector((state) => ({
-  //   products: state.pos.items,
-  //   purchasedItems: state.pos.purchasedItems,
-  // }));
-
   const dispatch = useAppDispatch();
 
   return (
@@ -28,7 +24,7 @@ const BillsItem = ({ product }: Props) => {
         <div className="w-24">
           <Image
             className="rounded-lg"
-            src={imageUrl!}
+            src={imageUrl != null ? imageUrl : imgPlaceholder}
             width={480}
             height={480}
             objectFit="cover"
@@ -43,7 +39,6 @@ const BillsItem = ({ product }: Props) => {
             {category}
           </div>
           <div className="mt-4 flex justify-between items-center text-lg font-medium">
-            {/* <div>x{!quantity ? 0 : quantity}</div> */}
             <div className="flex gap-1 items-center">
               <button
                 onClick={() => {
@@ -59,25 +54,25 @@ const BillsItem = ({ product }: Props) => {
                 <MdRemove size={20} />
               </button>
               <input
+                // ref={quantityRef}
                 type="number"
                 className="max-w-[48px] text-lg text-center focus:outline-blue-500"
                 min={1}
                 value={quantity}
                 onBlur={() => {
-                  if (quantity === 0) dispatch(removeBillsItem(product));
+                  if (quantity < 1) dispatch(removeBillsItem(product));
+                  if (isNaN(quantity)) {
+                    alert("Please enter a value!");
+                  }
                 }}
                 onChange={(event) => {
                   const value = event.target.value;
-                  // if (!value) {
-                  //   return;
-                  // }
                   dispatch(
                     setItemQuantity({
                       ...product,
                       quantity: parseInt(value),
                     })
                   );
-                  // setCount(value);
                 }}
               />
               <button
@@ -96,7 +91,7 @@ const BillsItem = ({ product }: Props) => {
             </div>
             <div>
               ₱
-              {!price
+              {isNaN(price)
                 ? 0
                 : price.toLocaleString(undefined, {
                     maximumFractionDigits: 2,

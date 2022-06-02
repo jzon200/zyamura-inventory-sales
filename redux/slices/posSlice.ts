@@ -19,14 +19,12 @@ export type PosState = {
   items: Product[];
   initialItems: Product[];
   purchasedItems: Product[];
-  totalPrice: number;
 };
 
 const initialState: PosState = {
   items: [],
   initialItems: [],
   purchasedItems: [],
-  totalPrice: 0,
 };
 
 export const posSlice = createSlice({
@@ -41,9 +39,11 @@ export const posSlice = createSlice({
     },
     addBillsItem(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
+
       const existingItem = state.items.find(
         (item) => item.docId === payload.docId
-      );
+      )!;
+
       const existingBillsItem = state.purchasedItems.find(
         (item) => item.docId === payload.docId
       );
@@ -52,22 +52,26 @@ export const posSlice = createSlice({
         state.purchasedItems.push(payload);
       } else {
         existingBillsItem.quantity += payload.quantity;
-        existingBillsItem.price += payload!.price;
+        existingBillsItem.price += payload.price;
       }
 
-      existingItem!.quantity -= payload.quantity;
-      state.totalPrice += payload!.price;
+      existingItem.quantity -= payload.quantity;
     },
     removeBillsItem(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
+
       const existingItem = state.items.find(
         (item) => item.docId === payload.docId
       )!;
+
       const existingBillsItem = state.purchasedItems.find(
         (item) => item.docId === payload.docId
       )!;
 
-      if (existingBillsItem.quantity <= 1) {
+      if (
+        existingBillsItem.quantity <= 1 ||
+        isNaN(existingBillsItem.quantity)
+      ) {
         state.purchasedItems = state.purchasedItems.filter(
           (item) => item.docId !== payload.docId
         );
@@ -76,49 +80,40 @@ export const posSlice = createSlice({
       existingBillsItem.quantity--;
       existingItem.quantity++;
       existingBillsItem.price -= existingItem.price;
-      state.totalPrice -= payload.price;
     },
-    // TODO: Fix the NaN value!
-    // ! This method is not yet 100% accurate
     setItemQuantity(state: PosState, action: PayloadAction<Product>) {
       const payload = action.payload;
-      const existingInitialItem = state.initialItems.find(
-        (item) => item.docId === payload.docId
-      );
+
       const existingItem = state.items.find(
         (item) => item.docId === payload.docId
-      );
+      )!;
+
+      const existingInitialItem = state.initialItems.find(
+        (item) => item.docId === payload.docId
+      )!;
+
       const existingBillsItem = state.purchasedItems.find(
         (item) => item.docId === payload.docId
-      );
+      )!;
 
-      let isLess = false;
+      existingBillsItem.quantity = payload.quantity;
+      existingBillsItem.price = existingItem.price * payload.quantity;
+
+      //* If the input is greater than the current quantity
+      //* will increase the current quantity
       if (existingBillsItem!.quantity > payload.quantity) {
-        console.log("is less");
-        isLess = true;
-        existingItem!.quantity =
-          existingInitialItem!.quantity + (payload.quantity - 2);
+        existingItem.quantity = isNaN(payload.quantity)
+          ? existingInitialItem.quantity
+          : existingInitialItem.quantity + payload.quantity;
       } else {
-        console.log("is greater");
-        existingItem!.quantity =
-          existingInitialItem!.quantity - payload.quantity;
+        existingItem.quantity = isNaN(payload.quantity)
+          ? existingInitialItem.quantity
+          : existingInitialItem.quantity - payload.quantity;
       }
-
-      existingBillsItem!.quantity = payload.quantity;
-      existingBillsItem!.price = existingItem!.price * payload.quantity;
-
-      //* This approach is kinda hacky🐱‍💻
-      if (isLess) {
-        state.totalPrice -= payload.price + existingBillsItem!.price;
-        state.totalPrice = Math.abs(state.totalPrice);
-        return;
-      }
-      state.totalPrice += existingBillsItem!.price - payload.price;
     },
     clearTransactions(state: PosState) {
       state.items = state.initialItems;
       state.purchasedItems = [];
-      state.totalPrice = 0;
     },
   },
 });
@@ -154,10 +149,9 @@ export const fetchProductsData = (): AppThunk => {
   };
 };
 
-export const addSalesData = (posState: PosState): AppThunk => {
+export const addSalesData = (purchasedItems: Product[]): AppThunk => {
   return async (dispatch) => {
     dispatch(setShowLoadingSpinner(true));
-    const { purchasedItems, totalPrice } = posState;
 
     const id = Math.floor(Math.random() * 1000000);
 
@@ -193,7 +187,6 @@ export const addSalesData = (posState: PosState): AppThunk => {
     await addDoc(collection(db, "sales"), {
       id,
       purchasedItems,
-      totalPrice,
       author: "Admin",
       dateAdded: serverTimestamp(),
     });

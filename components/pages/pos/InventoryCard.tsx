@@ -74,9 +74,7 @@ const InventoryCard = ({ product }: Props) => {
   };
 
   return (
-    <div
-      className={`w-96 rounded-xl p-4 grid grid-cols-3 border border-zinc-300 shadow-zinc-400/80 shadow-md`}
-    >
+    <div className="w-full rounded-xl p-4 grid grid-cols-3 border border-zinc-300 shadow-md lg:shadow-none shadow-gray-400/70">
       <div>
         <div className="w-24">
           <Image
