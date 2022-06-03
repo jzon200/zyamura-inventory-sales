@@ -42,7 +42,7 @@ const ProductsDataGrid = () => {
     };
   });
 
-  return <DataGrid headers={TABLE_HEADERS} rowData={products} />;
+  return <DataGrid headers={TABLE_HEADERS} data={products} />;
 };
 
 export default ProductsDataGrid;

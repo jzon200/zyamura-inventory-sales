@@ -16,14 +16,14 @@ const PointOfSales = () => {
     .map((item) => item.quantity)
     .reduce((previousValue, currentValue) => {
       if (isNaN(currentValue)) {
-        return previousValue + 0;
+        return previousValue;
       }
       return previousValue + currentValue;
     }, 0);
 
   return (
     <Fragment>
-      <div className="grid md:mx-12 lg:mt-4 lg:grid-cols-3">
+      <div className="grid lg:mx-12 lg:gap-14 lg:mt-4 lg:grid-cols-3">
         {/* App Bar */}
         <div className="relative h-44 lg:hidden">
           <div className="fixed left-0 z-20">
@@ -40,13 +40,13 @@ const PointOfSales = () => {
             <CategoriesList />
           </div>
         </div>
-        <main className="col-span-2 overflow-y-auto">
-          <div className="hidden lg:flex justify-between items-center">
-            <div className="md:block text-4xl font-medium">Point of Sales</div>
-            <div className="relative w-full max-w-lg mb-4">
+        <main className="col-span-2 overflow-hidden">
+          <div className="hidden lg:flex justify-between items-center mb-4">
+            <div className="text-4xl font-medium">Point of Sales</div>
+            <div className="relative w-full max-w-md">
               <input
                 className="w-full rounded-xl px-4 py-3 border border-gray-500
-                focus:outline-blue-500  placeholder:text-lg placeholder:text-[#94A3B8] placeholder:font-medium"
+                focus:outline-blue-500 placeholder:text-lg placeholder:text-[#94A3B8] placeholder:font-medium"
                 type="text"
                 placeholder="Search"
               />

@@ -82,11 +82,13 @@ const actionBtnVariants: Variants = {
 
 const detailsVariants: Variants = {
   expand: {
+    display: "grid",
     opacity: 1,
     y: 50,
     transition: { type: "tween", delay: 0.3 },
   },
   shrink: {
+    display: "none",
     opacity: 0,
     y: 50,
   },
@@ -97,7 +99,7 @@ type Props = {
   docData: DocumentData;
 };
 
-const GridRowData = ({ headers, docData }: Props) => {
+const DataRow = ({ headers, docData }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -139,12 +141,10 @@ const GridRowData = ({ headers, docData }: Props) => {
             initial={false}
             className="absolute left-64"
           >
-            <div className="grid grid-cols-3 justify-items-center gap-4 text-base uppercase">
+            <div className="grid grid-cols-2 justify-items-center gap-4 text-base uppercase">
               <div>Date Added</div>
-              <div>Age</div>
               <div>Description</div>
               <div className="font-medium">{docData.dateAdded}</div>
-              <div className="font-medium">{docData.year}</div>
               <div className="font-medium">{docData.description}</div>
             </div>
           </motion.div>
@@ -237,16 +237,20 @@ const GridRowData = ({ headers, docData }: Props) => {
           return (
             <div className="grid grid-flow-col auto-cols-fr gap-x-2">
               {images.map((imageUrl) => (
-                <Image
-                  key={Math.random()}
-                  src={imageUrl != null ? imageUrl : imgPlaceHolder}
-                  className="rounded-md"
-                  width={60}
-                  height={60}
-                  objectFit={"cover"}
-                  layout={"fixed"}
-                  alt=""
-                />
+                <motion.div
+                  variants={cellVariants}
+                  animate={isExpanded ? "expand" : "shrink"}
+                >
+                  <Image
+                    src={imageUrl != null ? imageUrl : imgPlaceHolder}
+                    className="rounded-md"
+                    width={60}
+                    height={60}
+                    objectFit={"cover"}
+                    layout={"fixed"}
+                    alt=""
+                  />
+                </motion.div>
               ))}
             </div>
           );
@@ -274,16 +278,26 @@ const GridRowData = ({ headers, docData }: Props) => {
           // );
         }
 
+        // if (!data) {
+        //   formattedData = "N/A";
+        // }
+
         if (typeof data === "number" && key != "id" && key != "contactNumber") {
           formattedData = data.toLocaleString();
         }
 
-        if (isCurrency) {
-          formattedData = data.toLocaleString("en-PH", {
-            currency: "PHP",
-            style: "currency",
-          });
-        }
+        // if (isCurrency) {
+        //   formattedData = !data
+        //     ? data.toLocaleString("en-PH", {
+        //         currency: "PHP",
+        //         style: "currency",
+        //       })
+        //     : "N/A";
+        // }
+
+        // if (key === "description") {
+        //   formattedData
+        // }
 
         return (
           <motion.div
@@ -299,8 +313,9 @@ const GridRowData = ({ headers, docData }: Props) => {
 
       {purchasedItems != null && (
         <motion.div
-          animate={{ opacity: isExpanded ? [0, 1] : 0 }}
-          className="absolute top-24 left-24 grid grid-cols-3 gap-x-4 text-base max-h-28 overflow-y-auto"
+          variants={detailsVariants}
+          animate={isExpanded ? "expand" : "shrink"}
+          className="absolute top-16 left-24 grid grid-cols-3 gap-x-4 text-base max-h-24 overflow-y-auto"
           initial={false}
         >
           <div className="sticky top-0 text-[#919F88] bg-primary-light">
@@ -335,4 +350,4 @@ const GridRowData = ({ headers, docData }: Props) => {
   );
 };
 
-export default GridRowData;
+export default DataRow;

@@ -13,7 +13,7 @@ const InventoryGrid = () => {
 
   return (
     <div
-      className="grid gap-4 overflow-x-hidden overflow-y-auto m-6 mb-32
+      className="grid gap-4 overflow-x-hidden overflow-y-auto m-6 mb-32 md:mb-0
     md:p-4 md:grid-cols-2 lg:grid-cols-3 lg:max-h-[40rem]"
     >
       {products.map((product: Product) => (

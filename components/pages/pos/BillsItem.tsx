@@ -54,23 +54,22 @@ const BillsItem = ({ product }: Props) => {
                 <MdRemove size={20} />
               </button>
               <input
-                // ref={quantityRef}
                 type="number"
                 className="max-w-[48px] text-lg text-center focus:outline-blue-500"
                 min={1}
                 value={quantity}
                 onBlur={() => {
-                  if (quantity < 1) dispatch(removeBillsItem(product));
-                  if (isNaN(quantity)) {
-                    alert("Please enter a value!");
+                  if (isNaN(quantity) || quantity < 1) {
+                    dispatch(setItemQuantity({ ...product, quantity: 1 }));
                   }
                 }}
                 onChange={(event) => {
-                  const value = event.target.value;
+                  const value = parseInt(event.target.value);
+
                   dispatch(
                     setItemQuantity({
                       ...product,
-                      quantity: parseInt(value),
+                      quantity: value,
                     })
                   );
                 }}

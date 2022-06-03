@@ -50,7 +50,6 @@ const contentVariants: Variants = {
   },
 };
 
-// TODO: Fixed the Local State
 const SortDropdown = ({ items }: Props) => {
   const values = Object.values(items);
 

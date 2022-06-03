@@ -152,7 +152,7 @@ const ProductEntryForm = () => {
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
-          className="w-full p-2 rounded-lg border-2 border-gray-400 text-black focus:outline-none focus:border-blue-500"
+          className="form-textarea"
           rows={4}
           placeholder={"Enter details such as age, size, etc."}
           maxLength={500}

@@ -1,18 +1,18 @@
 import { DocumentData } from "firebase/firestore";
-import GridRowData from "./RowData";
+import DataRow from "./RowData";
 
 type GridListProps = {
   headers: Record<string, string>;
-  rowData: object[] | DocumentData;
+  data: object[] | DocumentData;
 };
 
-const DataGrid = ({ headers, rowData }: GridListProps) => {
+const DataGrid = ({ headers, data }: GridListProps) => {
   const headerKeys = Object.keys(headers);
 
   return (
     <div className="mt-8 h-[90%] overflow-y-auto">
       <div
-        className={`sticky top-0 grid grid-flow-col auto-cols-fr justify-items-center text-lg px-4 bg-primary-light text-[#919F88] uppercase  z-20`}
+        className={`sticky top-0 grid grid-flow-col auto-cols-fr justify-items-center text-lg px-4 bg-primary-light text-[#919F88] uppercase z-20`}
       >
         {headerKeys.map((key, index) => (
           <div key={`header-${index}`} className={`font-medium`}>
@@ -21,12 +21,8 @@ const DataGrid = ({ headers, rowData }: GridListProps) => {
         ))}
       </div>
       <div className="grid gap-y-4 p-4">
-        {rowData.map((data: DocumentData) => (
-          <GridRowData
-            key={`doc-${data.docId}`}
-            headers={headers}
-            docData={data}
-          />
+        {data.map((data: DocumentData) => (
+          <DataRow key={data.docId} headers={headers} docData={data} />
         ))}
       </div>
     </div>

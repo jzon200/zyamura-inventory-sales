@@ -8,6 +8,7 @@ import DataGrid from "../../data-grid/DataGrid";
 const TABLE_HEADERS = {
   purchasedItems: "",
   id: "Transaction ID",
+  // customer: "Customer",
   totalPrice: "Total Sales",
   author: "Added by",
   dateAdded: "Transaction Date",
@@ -34,7 +35,7 @@ const SalesDataGrid = () => {
       }),
   }));
 
-  return <DataGrid headers={TABLE_HEADERS} rowData={sales} />;
+  return <DataGrid headers={TABLE_HEADERS} data={sales} />;
 };
 
 export default SalesDataGrid;

@@ -40,7 +40,7 @@ const EmployeesDataGrid = () => {
     };
   });
 
-  return <DataGrid headers={TABLE_HEADERS} rowData={employees} />;
+  return <DataGrid headers={TABLE_HEADERS} data={employees} />;
 };
 
 export default EmployeesDataGrid;

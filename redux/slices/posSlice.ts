@@ -44,6 +44,10 @@ export const posSlice = createSlice({
         (item) => item.docId === payload.docId
       )!;
 
+      const existingInitialItem = state.initialItems.find(
+        (item) => item.docId === payload.docId
+      )!;
+
       const existingBillsItem = state.purchasedItems.find(
         (item) => item.docId === payload.docId
       );
@@ -51,6 +55,10 @@ export const posSlice = createSlice({
       if (!existingBillsItem) {
         state.purchasedItems.push(payload);
       } else {
+        if (existingBillsItem.quantity >= existingInitialItem.quantity) {
+          alert("You've reached the maximum quantity for this item!");
+          return;
+        }
         existingBillsItem.quantity += payload.quantity;
         existingBillsItem.price += payload.price;
       }
@@ -68,10 +76,7 @@ export const posSlice = createSlice({
         (item) => item.docId === payload.docId
       )!;
 
-      if (
-        existingBillsItem.quantity <= 1 ||
-        isNaN(existingBillsItem.quantity)
-      ) {
+      if (existingBillsItem.quantity <= 1) {
         state.purchasedItems = state.purchasedItems.filter(
           (item) => item.docId !== payload.docId
         );
@@ -96,7 +101,13 @@ export const posSlice = createSlice({
         (item) => item.docId === payload.docId
       )!;
 
+      if (payload.quantity > existingInitialItem.quantity) {
+        alert("You've reached the maximum quantity for this item!");
+        return;
+      }
+
       existingBillsItem.quantity = payload.quantity;
+
       existingBillsItem.price = existingItem.price * payload.quantity;
 
       //* If the input is greater than the current quantity
@@ -169,14 +180,6 @@ export const addSalesData = (purchasedItems: Product[]): AppThunk => {
           const newQuantity = sfDoc.data().quantity - item.quantity;
 
           transaction.update(sfDocRef, { quantity: newQuantity });
-
-          //! Remove the existing item in the products inventory
-          //! if the quantity is 0, this is revised by the panelists
-          // if (newQuantity === 0) {
-          //   transaction.delete(sfDocRef);
-          // } else {
-          //   transaction.update(sfDocRef, { quantity: newQuantity });
-          // }
         });
         console.log("Transaction successfully committed!");
       } catch (e) {
@@ -184,10 +187,20 @@ export const addSalesData = (purchasedItems: Product[]): AppThunk => {
       }
     }
 
+    const totalPrice = purchasedItems
+      .map((item) => item.price)
+      .reduce((previousValue, currentValue) => {
+        if (isNaN(currentValue)) {
+          return previousValue;
+        }
+        return previousValue + currentValue;
+      }, 0);
+
     await addDoc(collection(db, "sales"), {
       id,
       purchasedItems,
       author: "Admin",
+      totalPrice,
       dateAdded: serverTimestamp(),
     });
 
