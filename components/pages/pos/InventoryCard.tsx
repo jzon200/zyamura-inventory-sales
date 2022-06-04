@@ -76,16 +76,14 @@ const InventoryCard = ({ product }: Props) => {
   return (
     <div className="w-full rounded-xl p-4 grid grid-cols-3 border border-zinc-300 shadow-md lg:shadow-none shadow-gray-400/70">
       <div>
-        <div className="w-24">
-          <Image
-            className="rounded-lg mb-2"
-            src={!imageUrl ? imgPlaceholder : imageUrl}
-            alt=""
-            width={480}
-            height={480}
-            objectFit="cover"
-          />
-        </div>
+        <Image
+          className="rounded-lg mb-2"
+          src={!imageUrl ? imgPlaceholder : imageUrl}
+          alt=""
+          width={80}
+          height={80}
+          objectFit="cover"
+        />
         <div>
           In stock:{" "}
           <span className="font-medium">{quantity.toLocaleString()}</span>

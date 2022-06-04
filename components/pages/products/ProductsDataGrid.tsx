@@ -14,6 +14,7 @@ const TABLE_HEADERS = {
   cost: "Product Cost",
   price: "Selling Price",
   status: "Status",
+  // actions: "Actions",
 };
 
 const ProductsDataGrid = () => {

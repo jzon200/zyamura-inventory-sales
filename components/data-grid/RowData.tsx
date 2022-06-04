@@ -102,6 +102,8 @@ type Props = {
 const DataRow = ({ headers, docData }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const [showActions, setShowActions] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -132,7 +134,6 @@ const DataRow = ({ headers, docData }: Props) => {
           <MdExpandMore size={28} color="inherit" />
         </motion.button>
       </div>
-
       {router.pathname !== "/sales" && (
         <Fragment>
           <motion.div
@@ -175,13 +176,13 @@ const DataRow = ({ headers, docData }: Props) => {
           </motion.button>
         </Fragment>
       )}
-
       {headerKeys.map((key, index) => {
         const data = docData[key];
 
         if (key === "imageUrl") {
           return (
             <motion.div
+              key={index}
               variants={cellVariants}
               animate={isExpanded ? "expand" : "shrink"}
             >
@@ -197,6 +198,30 @@ const DataRow = ({ headers, docData }: Props) => {
             </motion.div>
           );
         }
+
+        //* Ellipsis Button
+        // if (key === "actions") {
+        //   return (
+        //     <div className="relative">
+        //       <IoEllipsisVertical
+        //         className="cursor-pointer"
+        //         onClick={() => {
+        //           setShowActions((prevState) => !prevState);
+        //         }}
+        //       />
+        //       <motion.div
+        //         className="absolute right-4 top-0 w-24 p-4 bg-white"
+        //         animate={{
+        //           display: showActions ? "block" : "none",
+        //         }}
+        //       >
+        //         <div>Edit</div>
+        //         <div>Archive</div>
+        //         <div>Delete</div>
+        //       </motion.div>
+        //     </div>
+        //   );
+        // }
 
         if (key === "status") {
           const quantity = docData.quantity;
@@ -238,6 +263,7 @@ const DataRow = ({ headers, docData }: Props) => {
             <div className="grid grid-flow-col auto-cols-fr gap-x-2">
               {images.map((imageUrl) => (
                 <motion.div
+                  key={imageUrl}
                   variants={cellVariants}
                   animate={isExpanded ? "expand" : "shrink"}
                 >
@@ -254,50 +280,18 @@ const DataRow = ({ headers, docData }: Props) => {
               ))}
             </div>
           );
-          // return (
-          //   <div className="relative">
-          //     {images.map((imageUrl, index) => (
-          //       <div
-          //         className={`absolute top-0 left-${
-          //           index === 0 ? 0 : 4 + index
-          //         } ${index === 0 ? "z-[1]" : `-z-[${index}]`}`}
-          //       >
-          //         <Image
-          //           key={Math.random()}
-          //           src={imageUrl != null ? imageUrl : imgPlaceHolder}
-          //           className={`rounded-md`}
-          //           width={60}
-          //           height={60}
-          //           objectFit={"cover"}
-          //           layout={"fixed"}
-          //           alt=""
-          //         />
-          //       </div>
-          //     ))}
-          //   </div>
-          // );
         }
-
-        // if (!data) {
-        //   formattedData = "N/A";
-        // }
 
         if (typeof data === "number" && key != "id" && key != "contactNumber") {
           formattedData = data.toLocaleString();
         }
 
-        // if (isCurrency) {
-        //   formattedData = !data
-        //     ? data.toLocaleString("en-PH", {
-        //         currency: "PHP",
-        //         style: "currency",
-        //       })
-        //     : "N/A";
-        // }
-
-        // if (key === "description") {
-        //   formattedData
-        // }
+        if (isCurrency) {
+          formattedData = data.toLocaleString("en-PH", {
+            currency: "PHP",
+            style: "currency",
+          });
+        }
 
         return (
           <motion.div

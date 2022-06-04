@@ -26,8 +26,8 @@ const categoryData: CategoryData[] = [
   { label: "Rabbit", imageData: rabbitIcon, quantity: 21 },
   { label: "Hedgehog", imageData: hedgehogIcon, quantity: 17 },
   { label: "Hamster", imageData: hamsterIcon, quantity: 16 },
-  { label: "Turtle", imageData: turtleIcon, quantity: 20 },
-  { label: "Pet Food", imageData: petFoodIcon, quantity: 20 },
+  // { label: "Turtle", imageData: turtleIcon, quantity: 20 },
+  // { label: "Pet Food", imageData: petFoodIcon, quantity: 20 },
   // { label: "All", imageData: allIcon, quantity: 246 },
 ];
 
@@ -37,7 +37,7 @@ const CategoriesList = () => {
   // TODO: Carousel Version
   return (
     <div className="absolute lg:static top-16 mx-4 lg:mx-0 p-4 lg:p-0 rounded-xl bg-white z-10 overflow-x-auto shadow-md lg:shadow-none shadow-gray-400">
-      <div className="grid grid-flow-col auto-cols-fr gap-4 lg:gap-40">
+      <div className="grid grid-flow-col auto-cols-fr">
         {categoryData.map((category, index) => (
           <CategoryItem
             key={index}

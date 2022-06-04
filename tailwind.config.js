@@ -16,7 +16,7 @@ module.exports = {
         "primary-dark": "#667061",
       },
       // gridTemplateColumns: {
-      //   "auto-fill": "repeat(auto-fill, minmax(100px, 1fr))",
+      //   products: "50px repeat(7, minmax(0, 5))",
       // },
     },
   },

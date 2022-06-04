@@ -62,7 +62,7 @@ const PointOfSales = () => {
       </div>
       {/* FAB */}
       <button className="fixed lg:hidden bottom-8 right-2 grid place-items-center w-20 h-20 rounded-3xl bg-emerald-300 text-white shadow-md shadow-gray-400/80">
-        <Image src={icCashRegister} width={52} height={52} />
+        <Image src={icCashRegister} width={52} height={52} alt="" />
         <div className="absolute grid place-items-center top-0 right-0 px-1 h-5 rounded-full bg-red-400 text-white text-sm">
           {totalQuantity > 1000 ? "999+" : totalQuantity}
         </div>
