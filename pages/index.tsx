@@ -1,42 +1,68 @@
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { parseCookies } from "nookies";
+import { ReactElement, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CircularProgressCentered from "../components/common/CircularProgressCentered";
 import MuiModal from "../components/common/Modal";
+import dbConnect from "../lib/dbConnect";
+// import getUser from "../lib/getUser";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { loginUser } from "../redux/slices/authSlice";
 import { setShowLoadingSpinner } from "../redux/slices/uiSlice";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<UserCredentials>();
-
-  const { isAdmin, isLoggedIn } = useAppSelector((state) => ({
-    isAdmin: state.auth.isAdmin,
-    isLoggedIn: state.auth.isLoggedIn,
-  }));
-  const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginMode, setLoginMode] = useState(true);
+  const { register, reset, handleSubmit } = useForm<UserCredentials>();
 
   const router = useRouter();
 
-  const submitHandler: SubmitHandler<UserCredentials> = (data) => {
-    console.log(data);
-    dispatch(loginUser(data));
+  const submitHandler: SubmitHandler<UserCredentials> = async (formData) => {
+    if (loginMode) {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/users/login", {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-    if (isLoggedIn && isAdmin) {
-      router.push("/dashboard");
-    } else if (isLoggedIn) {
-      router.push("/pos");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw Error(data.message);
+        }
+
+        router.push("/dashboard");
+
+        reset();
+      } catch (err: any) {
+        alert(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      try {
+        const response = await fetch("/api/users/register", {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        router.push("/dashboard");
+        console.log(response.json());
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
-
-  // if (showLoadingSpinner)
-  //   return (
-  //     <MuiModal showModal={showLoadingSpinner} onClose={() => {}}>
-  //       <CircularProgressCentered />
-  //     </MuiModal>
-  //   );
 
   return (
     <div className="grid place-items-center h-screen bg-gray-400/50 overflow-hidden">
@@ -89,14 +115,25 @@ const Login = () => {
               </Link>
             </div>
             <button className="w-full rounded-xl p-4 bg-sky-500 hover:bg-sky-400 text-xl text-white font-medium">
-              Login
+              {isLoading ? (
+                <CircularProgressCentered color="inherit" size={24} />
+              ) : loginMode ? (
+                "Login"
+              ) : (
+                "Register"
+              )}
             </button>
           </form>
           <div className="text-center">
             <span className="text-gray-400 mr-2">No Account Yet?</span>
-            <Link href="/" passHref>
-              <a className="text-sky-500">Register</a>
-            </Link>
+            <button
+              className="text-sky-500"
+              onClick={() => {
+                setLoginMode(false);
+              }}
+            >
+              Register
+            </button>
           </div>
         </div>
       </div>
@@ -113,6 +150,26 @@ Login.getLayout = function getLayout(page: ReactElement) {
       {page}
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const { token } = parseCookies(context);
+
+    if (token != null) {
+      return {
+        redirect: {
+          destination: "/dashboard",
+          permanent: false,
+        },
+        props: { token },
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return { props: {} };
 };
 
 export default Login;

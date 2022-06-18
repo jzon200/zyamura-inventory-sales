@@ -1,5 +1,5 @@
 import { orderBy } from "firebase/firestore";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import DeleteDialog from "../../components/common/DeleteDialog";
@@ -10,6 +10,11 @@ import MuiModal from "../../components/common/Modal";
 import ProductsDataGrid from "../../components/pages/products/ProductsDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
 import { initialSort } from "../../redux/slices/firestoreSlice";
+import dbConnect from "../../lib/dbConnect";
+import getUser from "../../lib/getUser";
+import { parseCookies } from "nookies";
+import jwt from "jsonwebtoken";
+import UserCredential from "../../models/userCredential";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -69,6 +74,28 @@ const Products: NextPage = () => {
       <ProductsDataGrid />
     </Fragment>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  await dbConnect();
+
+  const user = await getUser(context);
+
+  if (user == null) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: {
+      user,
+    },
+  };
 };
 
 export default Products;
