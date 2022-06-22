@@ -1,27 +1,12 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 import { FiBox } from "react-icons/fi";
 import SectionTitle from "../../components/header/SectionTitle";
 import SalesReport from "../../components/pages/sales/SalesReport";
-import dbConnect from "../../lib/dbConnect";
-import getUser from "../../lib/getUser";
-import { useAppSelector } from "../../redux/hooks";
+import getAdminAuth from "../../constants/getAdminAuth";
 
 const Dashboard: NextPage = () => {
-  const { isLoggedIn, isAdmin } = useAppSelector((state) => ({
-    isLoggedIn: state.auth.isLoggedIn,
-    isAdmin: state.auth.isAdmin,
-  }));
-
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!isLoggedIn && !isAdmin) {
-  //     router.push("/");
-  //   }
-  // }, []);
-
   return (
     <Fragment>
       <Head>
@@ -43,26 +28,6 @@ const Dashboard: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  await dbConnect();
-
-  const user = await getUser(context);
-
-  if (user == null) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-      props: {},
-    };
-  }
-
-  return {
-    props: {
-      user,
-    },
-  };
-};
+export const getServerSideProps = getAdminAuth;
 
 export default Dashboard;

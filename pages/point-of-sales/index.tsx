@@ -3,10 +3,11 @@ import Image from "next/image";
 import { Fragment, ReactElement } from "react";
 import { FiSearch } from "react-icons/fi";
 import { MdMenu, MdPets } from "react-icons/md";
-import icCashRegister from "../../assets/icons/ic-cash-register.png";
 import BillsList from "../../components/pages/pos/BillsList";
 import CategoriesList from "../../components/pages/pos/CategoriesList";
 import InventoryGrid from "../../components/pages/pos/InventoryGrid";
+import getAdminAuth from "../../constants/getAdminAuth";
+import getEmployeeAuth from "../../constants/getEmployeeAuth";
 import { useAppSelector } from "../../redux/hooks";
 
 const PointOfSales = () => {
@@ -62,7 +63,12 @@ const PointOfSales = () => {
       </div>
       {/* FAB */}
       <button className="fixed lg:hidden bottom-8 right-2 grid place-items-center w-20 h-20 rounded-3xl bg-emerald-300 text-white shadow-md shadow-gray-400/80">
-        <Image src={icCashRegister} width={52} height={52} alt="" />
+        <Image
+          src={"/icons/ic-cash-register.png"}
+          width={52}
+          height={52}
+          alt=""
+        />
         <div className="absolute grid place-items-center top-0 right-0 px-1 h-5 rounded-full bg-red-400 text-white text-sm">
           {totalQuantity > 1000 ? "999+" : totalQuantity}
         </div>
@@ -73,12 +79,15 @@ const PointOfSales = () => {
 
 PointOfSales.getLayout = function getLayout(page: ReactElement) {
   return (
-    <>
+    <Fragment>
       <Head>
         <title>Point of Sales | Zyamura Mix Pet Shop</title>
       </Head>
       {page}
-    </>
+    </Fragment>
   );
 };
+
+export const getServerSideProps = getEmployeeAuth;
+
 export default PointOfSales;

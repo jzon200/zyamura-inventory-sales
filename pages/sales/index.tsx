@@ -6,6 +6,7 @@ import { MdFilterList } from "react-icons/md";
 import SortDropdown from "../../components/dropdown/SortDropdown";
 import SectionTitle from "../../components/header/SectionTitle";
 import SalesDataGrid from "../../components/pages/sales/SalesDataGrid";
+import getAdminAuth from "../../constants/getAdminAuth";
 import { useAppDispatch } from "../../redux/hooks";
 import { initialSort } from "../../redux/slices/firestoreSlice";
 
@@ -62,5 +63,7 @@ const Sales: NextPage = () => {
     </Fragment>
   );
 };
+
+export const getServerSideProps = getAdminAuth;
 
 export default Sales;

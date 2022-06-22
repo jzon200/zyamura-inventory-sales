@@ -1,31 +1,20 @@
-import birdIcon from "../../../assets/icons/ic-bird.png";
-import dogIcon from "../../../assets/icons/ic-dog.png";
-import fishIcon from "../../../assets/icons/ic-fish.png";
-import hamsterIcon from "../../../assets/icons/ic-hamster.png";
-import hedgehogIcon from "../../../assets/icons/ic-hedgehog.png";
-import rabbitIcon from "../../../assets/icons/ic-rabbit.png";
-import allIcon from "../../../assets/icons/ic-small-business.png";
-import turtleIcon from "../../../assets/icons/ic-turtle.png";
-import petFoodIcon from "../../../assets/icons/ic-pet-food.png";
-import shelterIcon from "../../../assets/icons/ic-dog-house.png";
-import { StaticImageData } from "next/image";
 import { useState } from "react";
 import CategoryItem from "./CategoryItem";
 
 type CategoryData = {
   label: string;
-  imageData: StaticImageData;
+  imageUrl: string;
   quantity: number;
 };
 
 const categoryData: CategoryData[] = [
-  { label: "All", imageData: allIcon, quantity: 246 },
-  { label: "Fish", imageData: fishIcon, quantity: 75 },
-  { label: "Dog", imageData: dogIcon, quantity: 59 },
-  { label: "Bird", imageData: birdIcon, quantity: 41 },
-  { label: "Rabbit", imageData: rabbitIcon, quantity: 21 },
-  { label: "Hedgehog", imageData: hedgehogIcon, quantity: 17 },
-  { label: "Hamster", imageData: hamsterIcon, quantity: 16 },
+  { label: "All", imageUrl: "/icons/ic-small-business.png", quantity: 246 },
+  { label: "Fish", imageUrl: "/icons/ic-fish.png", quantity: 75 },
+  { label: "Dog", imageUrl: "/icons/ic-dog.png", quantity: 59 },
+  { label: "Bird", imageUrl: "/icons/ic-bird.png", quantity: 41 },
+  { label: "Rabbit", imageUrl: "/icons/ic-rabbit.png", quantity: 21 },
+  { label: "Hedgehog", imageUrl: "/icons/ic-hedgehog.png", quantity: 17 },
+  { label: "Hamster", imageUrl: "/icons/ic-hamster.png", quantity: 16 },
   // { label: "Turtle", imageData: turtleIcon, quantity: 20 },
   // { label: "Pet Food", imageData: petFoodIcon, quantity: 20 },
   // { label: "All", imageData: allIcon, quantity: 246 },
@@ -43,7 +32,7 @@ const CategoriesList = () => {
             key={index}
             label={category.label}
             quantity={category.quantity}
-            imageData={category.imageData}
+            imageUrl={category.imageUrl}
             isSelected={selectedIndex === index}
             onClick={() => {
               setSelectedIndex(index);

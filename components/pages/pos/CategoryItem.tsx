@@ -1,9 +1,9 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 
 type Props = {
   label: string;
   quantity: number;
-  imageData: StaticImageData;
+  imageUrl: string;
   isSelected: boolean;
   onClick: () => void;
 };
@@ -11,7 +11,7 @@ type Props = {
 const CategoryItem = ({
   label,
   quantity,
-  imageData,
+  imageUrl,
   isSelected,
   onClick,
 }: Props) => {
@@ -24,7 +24,7 @@ const CategoryItem = ({
     >
       <div className="w-12 lg:w-16">
         <Image
-          src={imageData}
+          src={imageUrl}
           width={72}
           height={72}
           alt=""

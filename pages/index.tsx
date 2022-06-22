@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import CircularProgressCentered from "../components/common/CircularProgressCentered";
 import MuiModal from "../components/common/Modal";
 import dbConnect from "../lib/dbConnect";
+import getUser from "../lib/getUser";
 // import getUser from "../lib/getUser";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { loginUser } from "../redux/slices/authSlice";
@@ -38,7 +39,11 @@ const Login = () => {
           throw Error(data.message);
         }
 
-        router.push("/dashboard");
+        if (data.username === "admin") {
+          router.push("/dashboard");
+        } else {
+          router.push("/point-of-sales");
+        }
 
         reset();
       } catch (err: any) {
@@ -153,20 +158,28 @@ Login.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  try {
-    const { token } = parseCookies(context);
+  const user = await getUser(context);
 
-    if (token != null) {
-      return {
-        redirect: {
-          destination: "/dashboard",
-          permanent: false,
-        },
-        props: { token },
-      };
-    }
-  } catch (err) {
-    console.log(err);
+  // Redirect to Admin Dashboard if the account is admin
+  if (user != null && user.username === "admin") {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+      props: { user },
+    };
+  }
+
+  // Redirect to Point of Sales if the account is not admin
+  if (user != null && user.username !== "admin") {
+    return {
+      redirect: {
+        destination: "/point-of-sales",
+        permanent: false,
+      },
+      props: { user },
+    };
   }
 
   return { props: {} };

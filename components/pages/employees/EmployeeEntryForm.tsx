@@ -7,7 +7,6 @@ import {
 } from "../../../redux/actions/firestoreActions";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setShowFormModal } from "../../../redux/slices/uiSlice";
-import imgPlaceholder from "../../../assets/image_placeholder.svg";
 import CircularProgressCentered from "../../common/CircularProgressCentered";
 import EntryForm from "../../form/EntryForm";
 import Input from "../../form/Input";
@@ -136,7 +135,7 @@ const EmployeeEntryForm = () => {
         <div className={`w-full max-w-[4rem] min-h-[64px] h-16`}>
           <Image
             className="rounded-md"
-            src={imageUrl !== null ? imageUrl : imgPlaceholder}
+            src={imageUrl !== null ? imageUrl : "/svg/image_placeholder.svg"}
             width={480}
             height={480}
             objectFit="cover"

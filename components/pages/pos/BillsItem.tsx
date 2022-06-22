@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Fragment } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
-import imgPlaceholder from "../../../assets/image_placeholder.svg";
 import { useAppDispatch } from "../../../redux/hooks";
 import {
   addBillsItem,
@@ -24,7 +23,7 @@ const BillsItem = ({ product }: Props) => {
         <div className="w-24">
           <Image
             className="rounded-lg"
-            src={imageUrl != null ? imageUrl : imgPlaceholder}
+            src={imageUrl != null ? imageUrl : "/svg/image_placeholder.svg"}
             width={480}
             height={480}
             objectFit="cover"

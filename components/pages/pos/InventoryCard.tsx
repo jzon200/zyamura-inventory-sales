@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
-import imgPlaceholder from "../../../assets/image_placeholder.svg";
-import { addBillsItem } from "../../../redux/slices/posSlice";
 import { useAppDispatch } from "../../../redux/hooks";
+import { addBillsItem } from "../../../redux/slices/posSlice";
 
 type Props = {
   product: Product;
@@ -78,7 +77,7 @@ const InventoryCard = ({ product }: Props) => {
       <div>
         <Image
           className="rounded-lg mb-2"
-          src={!imageUrl ? imgPlaceholder : imageUrl}
+          src={imageUrl != null ? imageUrl : "/svg/image_placeholder.svg"}
           alt=""
           width={80}
           height={80}

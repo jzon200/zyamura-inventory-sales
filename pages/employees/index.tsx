@@ -10,6 +10,7 @@ import EmployeeEntryForm from "../../components/pages/employees/EmployeeEntryFor
 import EmployeesDataGrid from "../../components/pages/employees/EmployeesDataGrid";
 import ContentHeader from "../../components/header/ContentHeader";
 import { initialSort } from "../../redux/slices/firestoreSlice";
+import getAdminAuth from "../../constants/getAdminAuth";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -54,5 +55,7 @@ const Employees: NextPage = () => {
     </Fragment>
   );
 };
+
+export const getServerSideProps = getAdminAuth;
 
 export default Employees;

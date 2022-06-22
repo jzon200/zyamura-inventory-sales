@@ -6,7 +6,6 @@ import { Fragment, useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { MdExpandMore } from "react-icons/md";
-import imgPlaceHolder from "../../assets/image_placeholder.svg";
 import { showDeleteDialog, showEditForm } from "../../redux/actions/uiActions";
 import { useAppDispatch } from "../../redux/hooks";
 
@@ -187,7 +186,7 @@ const DataRow = ({ headers, docData }: Props) => {
               animate={isExpanded ? "expand" : "shrink"}
             >
               <Image
-                src={data != null ? data : imgPlaceHolder}
+                src={data != null ? data : "/svg/image_placeholder.svg"}
                 className="col-span-1 rounded-md"
                 width={80}
                 height={80}
@@ -268,7 +267,9 @@ const DataRow = ({ headers, docData }: Props) => {
                   animate={isExpanded ? "expand" : "shrink"}
                 >
                   <Image
-                    src={imageUrl != null ? imageUrl : imgPlaceHolder}
+                    src={
+                      imageUrl != null ? imageUrl : "/svg/image_placeholder.svg"
+                    }
                     className="rounded-md"
                     width={60}
                     height={60}

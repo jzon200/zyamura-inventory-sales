@@ -15,6 +15,7 @@ import getUser from "../../lib/getUser";
 import { parseCookies } from "nookies";
 import jwt from "jsonwebtoken";
 import UserCredential from "../../models/userCredential";
+import getAdminAuth from "../../constants/getAdminAuth";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -76,26 +77,6 @@ const Products: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  await dbConnect();
-
-  const user = await getUser(context);
-
-  if (user == null) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-      props: {},
-    };
-  }
-
-  return {
-    props: {
-      user,
-    },
-  };
-};
+export const getServerSideProps = getAdminAuth;
 
 export default Products;
