@@ -1,14 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../lib/dbConnect";
-import UserCredential from "../../../models/userCredential";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { setCookie } from "nookies";
+import { NextApiRequest, NextApiResponse } from "next";
 
-type Credentials = {
-  username: string;
-  password: string;
-};
+import dbConnect from "../../../../lib/dbConnect";
+import UserCredential from "../../../../models/userCredential";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies";
 
-import dbConnect from "../../../lib/dbConnect";
-import UserCredential from "../../../models/userCredential";
+import dbConnect from "../../../../lib/dbConnect";
+import UserCredential from "../../../../models/userCredential";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
