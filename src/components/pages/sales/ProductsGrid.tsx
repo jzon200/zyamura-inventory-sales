@@ -8,7 +8,7 @@ import {
 import { Fragment, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useAppDispatch } from "../../../redux/hooks";
-import { db } from "../../../services/firebase";
+import { db } from "../../../../services/firebase";
 import CircularProgressCentered from "../../common/CircularProgressCentered";
 import ProductCard from "./ProductCard";
 
