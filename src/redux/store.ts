@@ -1,7 +1,5 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import firestoreReducer from "./slices/firestoreSlice";
-import posReducer from "./slices/posSlice";
-import uiReducer from "./slices/uiSlice";
+import { firestoreReducer, posReducer, uiReducer } from "./slices";
 
 const store = configureStore({
   reducer: {

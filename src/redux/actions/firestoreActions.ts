@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "../../../services/firebase";
+import { db, storage } from "../../services/firebase";
 import { setSelectedDocument } from "../slices/firestoreSlice";
 import {
   setShowDeleteDialog,

@@ -1,43 +1,45 @@
 import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Credential, PrismaClient } from "@prisma/client";
 
-import dbConnect from "../../../../lib/dbConnect";
-import UserCredential from "../../../../models/userCredential";
+import jwt from "jsonwebtoken";
+import { setCookie } from "nookies";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    await dbConnect();
+    const prisma = new PrismaClient();
+
+    // await prisma.credential.delete({ where: { username: "admin" } });
 
     const { username, password } = req.body;
 
-    const userExist = await UserCredential.findOne({ username });
-
-    if (userExist) {
-      return res.status(422).json({ message: "Username is already in use!" });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = new UserCredential({ username, password: hashedPassword });
+    // let newUser: Credential = {
+    //   id: "",
+    //   password: "",
+    //   username: "",
+    //   isAdmin: false,
+    // };
 
-    await user.save().catch((error: any) => {
-      console.log(error.message);
-    });
+    try {
+      const newUser = await prisma.credential.create({
+        data: {
+          username: username,
+          password: hashedPassword,
+          isAdmin: username === "admin",
+        },
+      });
 
-    // const token = jwt.sign({ userId: user._id }, `${process.env.TOKEN_SECRET}`, {
-    //   expiresIn: "1d",
-    // });
-
-    // setCookie("token", token, {
-    //   req,
-    //   res,
-    //   maxAge: 60 * 60 * 24, // 1 day
-    //   path: "/",
-    // });
-
-    res.status(201).json(user);
+      res.status(201).json(newUser);
+    } catch (err) {
+      const errorMessage = (err as Error).message;
+      res.status(422).json({ message: errorMessage });
+    } finally {
+      prisma.$disconnect;
+    }
   } else {
-    res.status(424).json({ message: "Invalid method!" });
+    res.status(405).json({ message: "Invalid method!" });
   }
 }
 
