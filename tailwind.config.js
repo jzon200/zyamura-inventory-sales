@@ -1,8 +1,5 @@
 module.exports = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -15,9 +12,6 @@ module.exports = {
         "primary-light": "#D9D7C4",
         "primary-dark": "#667061",
       },
-      // gridTemplateColumns: {
-      //   products: "50px repeat(7, minmax(0, 5))",
-      // },
     },
   },
 };
