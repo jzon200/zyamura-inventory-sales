@@ -1,34 +1,31 @@
 import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Credential, PrismaClient } from "@prisma/client";
-
 import jwt from "jsonwebtoken";
 import { setCookie } from "nookies";
 
+import prisma from "../../../lib/prisma";
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    const prisma = new PrismaClient();
-
-    // await prisma.credential.delete({ where: { username: "admin" } });
-
     const { username, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // let newUser: Credential = {
-    //   id: "",
-    //   password: "",
-    //   username: "",
-    //   isAdmin: false,
-    // };
-
     try {
-      const newUser = await prisma.credential.create({
+      const newUser = await prisma.user.create({
         data: {
           username: username,
           password: hashedPassword,
-          isAdmin: username === "admin",
         },
+      });
+
+      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_KEY!, {
+        expiresIn: "1d",
+      });
+
+      setCookie({ res }, "token", token, {
+        maxAge: 60 * 60 * 24, // 1 day
+        path: "/",
       });
 
       res.status(201).json(newUser);
