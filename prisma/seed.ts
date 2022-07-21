@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const USER_DATA = [
+const USER_DATA: Prisma.UserCreateInput[] = [
   { username: "admin", password: "adminpass", isAdmin: true },
   { username: "edzon", password: "mypass" },
 ];
