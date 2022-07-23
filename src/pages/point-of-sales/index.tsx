@@ -3,10 +3,13 @@ import Image from "next/image";
 import { Fragment, ReactElement } from "react";
 import { FiSearch } from "react-icons/fi";
 import { MdMenu, MdPets } from "react-icons/md";
-import getEmployeeAuth from "../../../constants/getEmployeeAuth";
-import BillsList from "../../components/pages/pos/BillsList";
-import CategoriesList from "../../components/pages/pos/CategoriesList";
-import InventoryGrid from "../../components/pages/pos/InventoryGrid";
+
+import {
+  BillsList,
+  CategoriesList,
+  InventoryGrid,
+} from "../../features/pos/components";
+import getServerSideAuth from "../../lib/getServerSideAuth";
 import { useAppSelector } from "../../redux/hooks";
 
 const PointOfSales = () => {
@@ -76,6 +79,8 @@ const PointOfSales = () => {
   );
 };
 
+export default PointOfSales;
+
 PointOfSales.getLayout = function getLayout(page: ReactElement) {
   return (
     <Fragment>
@@ -87,6 +92,4 @@ PointOfSales.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export const getServerSideProps = getEmployeeAuth;
-
-export default PointOfSales;
+export const getServerSideProps = getServerSideAuth;

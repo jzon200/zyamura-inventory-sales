@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-poppins;
+  }
+
+  table {
+    border-spacing: 1rem;
+  }
+
+  /* Styling for Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-blue-400 rounded-md;
+  }
+
+  .inventory-sales-page div::-webkit-scrollbar-thumb {
+    @apply bg-[#ACA58E];
+  }
+
+  /* Removes the spinner for number input fields */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .form-control {
+    @apply w-full px-3 py-2 rounded border border-slate-500 text-black
+        focus:outline-none focus:border-blue-500 focus:ring-blue-500 focus:ring-1;
+  }
+
+  .form-control-login {
+    @apply block w-full mt-2 p-2 border border-b-[gray]
+      focus:outline-none focus:rounded focus:border-sky-500 focus:ring-1 focus:ring-sky-500;
+  }
+
+  .form-textarea {
+    @apply w-full p-2 rounded-lg border border-gray-400 text-black 
+      focus:outline-1 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500;
+  }
+
+  .upload-input {
+    @apply before:content-['Upload'] before:mr-24 file:hidden text-blue-500 font-medium;
+  }
+
+  .btn-rounded-between {
+    @apply flex justify-between items-center rounded-3xl p-4;
+  }
+
+  .btn-primary {
+    @apply rounded-lg px-4 py-2 bg-blue-500 text-blue-50 text-lg font-medium;
+  }
+
+  .table-header {
+    @apply text-[#919F88] text-base -ml-4;
+  }
+
+  .chip {
+    @apply px-4 py-2 rounded-full text-base font-medium h-fit;
+  }
+
+  .dropdown-item {
+    @apply p-4 text-gray-500 cursor-pointer hover:bg-primary-light hover:text-gray-700;
+  }
+}
+
+@layer utilities {
+  .center {
+    @apply grid place-items-center h-full;
+  }
+}
