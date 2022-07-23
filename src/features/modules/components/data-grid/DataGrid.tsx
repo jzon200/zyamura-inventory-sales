@@ -1,4 +1,5 @@
 import { DocumentData } from "firebase/firestore";
+
 import DataRow from "./DataRow";
 
 type Props = {

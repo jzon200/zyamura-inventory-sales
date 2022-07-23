@@ -38,6 +38,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-redux": "^7.1.24",
+    "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.20.0",
     "eslint-config-next": "^12.2.2",
@@ -48,7 +49,6 @@
     "typescript": "^4.7.4"
   },
   "prisma": {
-    "schema": "src/prisma/schema.prisma",
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }

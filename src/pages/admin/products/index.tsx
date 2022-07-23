@@ -3,16 +3,19 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 
-import { DeleteDialog, MuiModal } from "../../../common/components";
-import { ContentHeader } from "../../../features/modules/components";
+import { MuiModal } from "../../../common/components";
+import {
+  ContentHeader,
+  DeleteDialog,
+} from "../../../features/modules/components";
 import {
   ProductEntryForm,
   ProductsDataGrid,
 } from "../../../features/modules/products";
+import { initialSort } from "../../../features/modules/reducers/firestoreReducer";
+import { setShowInputForm } from "../../../features/modules/reducers/uiReducer";
 import getServerSideAuth from "../../../lib/getServerSideAuth";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { initialSort } from "../../../redux/slices/firestoreSlice";
-import { setShowFormModal } from "../../../redux/slices/uiSlice";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -46,8 +49,7 @@ const SORT_OBJECTS = {
 };
 
 const Products: NextPage = () => {
-  // TODO: Manage the State to prevent re-rendering
-  const showFormModal = useAppSelector((state) => state.ui.showFormModal);
+  const showInputForm = useAppSelector((state) => state.ui.showInputForm);
 
   const dispatch = useAppDispatch();
 
@@ -59,9 +61,9 @@ const Products: NextPage = () => {
         <title>Products | Zyamura Mix Pet Shop Inventory & Sales System</title>
       </Head>
       <MuiModal
-        showModal={showFormModal}
+        showModal={showInputForm}
         onClose={() => {
-          dispatch(setShowFormModal(false));
+          dispatch(setShowInputForm(false));
         }}
       >
         <ProductEntryForm />

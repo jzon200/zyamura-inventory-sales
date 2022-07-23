@@ -10,16 +10,18 @@ import {
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
-import { db } from "../../services/firebase";
+
+import { db } from "../../firebase";
+import { AppThunk } from "../../redux/store";
 import {
   addAllItems,
   clearTransactions,
   setInitialItems,
-} from "../slices/posSlice";
-import { setShowLoadingSpinner } from "../slices/uiSlice";
-import { AppThunk } from "../store";
+  setIsLoading,
+} from "./reducer";
+import { getTotalPrice } from "./utils";
 
-const fetchProductsData = (): AppThunk => {
+function fetchProductsData(): AppThunk {
   return async (dispatch) => {
     const collectionRef = collection(db, "products");
     const latestProducts = query(
@@ -48,11 +50,11 @@ const fetchProductsData = (): AppThunk => {
     dispatch(addAllItems(productsDocs as Product[]));
     dispatch(setInitialItems(productsDocs as Product[]));
   };
-};
+}
 
-const addSalesData = (purchasedItems: Product[]): AppThunk => {
+function addSalesData(purchasedItems: Product[]): AppThunk {
   return async (dispatch) => {
-    dispatch(setShowLoadingSpinner(true));
+    dispatch(setIsLoading(true));
 
     const id = Math.floor(Math.random() * 1000000);
 
@@ -63,6 +65,7 @@ const addSalesData = (purchasedItems: Product[]): AppThunk => {
         await runTransaction(db, async (transaction) => {
           const sfDocRef = doc(db, "products", item.docId);
           const sfDoc = await transaction.get(sfDocRef);
+
           if (!sfDoc.exists()) {
             throw "Document does not exist!";
           }
@@ -77,14 +80,7 @@ const addSalesData = (purchasedItems: Product[]): AppThunk => {
       }
     }
 
-    const totalPrice = purchasedItems
-      .map((item) => item.price)
-      .reduce((previousValue, currentValue) => {
-        if (isNaN(currentValue)) {
-          return previousValue;
-        }
-        return previousValue + currentValue;
-      }, 0);
+    const totalPrice = getTotalPrice(purchasedItems);
 
     await addDoc(collection(db, "sales"), {
       id,
@@ -95,9 +91,9 @@ const addSalesData = (purchasedItems: Product[]): AppThunk => {
     });
 
     dispatch(clearTransactions());
-    dispatch(setShowLoadingSpinner(false));
+    dispatch(setIsLoading(false));
     dispatch(fetchProductsData());
   };
-};
+}
 
 export { fetchProductsData, addSalesData };

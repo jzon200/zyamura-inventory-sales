@@ -1,5 +1,5 @@
 import CircularProgressCentered from "./CircularProgressCentered";
-import DeleteDialog from "./DeleteDialog";
 import MuiModal from "./MuiModal";
+import CustomImage from "./CustomImage";
 
-export { CircularProgressCentered, DeleteDialog, MuiModal };
+export { CircularProgressCentered, MuiModal, CustomImage };

@@ -1,21 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type PosState = {
+type PosState = {
   items: Product[];
   initialItems: Product[];
   purchasedItems: Product[];
+  isLoading: boolean;
 };
 
 const initialState: PosState = {
   items: [],
   initialItems: [],
   purchasedItems: [],
+  isLoading: false,
 };
 
 export const posSlice = createSlice({
   name: "pos",
   initialState,
   reducers: {
+    setIsLoading(state: PosState, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
     setInitialItems(state: PosState, action: PayloadAction<Product[]>) {
       state.initialItems = action.payload;
     },
@@ -119,8 +124,9 @@ const posReducer = posSlice.reducer;
 export const {
   addBillsItem,
   addAllItems,
-  setInitialItems,
   removeBillsItem,
+  setInitialItems,
+  setIsLoading,
   setItemQuantity,
   clearTransactions,
 } = posSlice.actions;

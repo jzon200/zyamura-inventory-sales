@@ -1,9 +1,10 @@
-import Image from "next/image";
 import { useState } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
 
+import { CustomImage } from "../../../common/components";
+import { getPhpCurrency } from "../../../common/utils";
 import { useAppDispatch } from "../../../redux/hooks";
-import { addBillsItem } from "../../../redux/slices/posSlice";
+import { addBillsItem } from "../reducer";
 
 type Props = {
   product: Product;
@@ -25,24 +26,15 @@ export default function InventoryCard({ product }: Props) {
     itemType,
   } = product;
 
-  const incrementCountHandler = () => {
-    setCount((prevState) => {
-      // If the input is empty, state is set to 1
-      if (!prevState) {
-        return 1;
-      }
+  function handleIncrement() {
+    setCount(count + 1);
+  }
 
-      // The state will be only added if it is lesser
-      // to the total quantity of product
-      if (prevState < quantity) {
-        return prevState + 1;
-      }
+  function handleDecrement() {
+    setCount((c) => (c > 1 ? c - 1 : c));
+  }
 
-      return prevState;
-    });
-  };
-
-  const addItemHandler = () => {
+  function handleAddItem() {
     // Validation on adding items
     if (!count) {
       alert("Please input the amount you want to add");
@@ -67,25 +59,12 @@ export default function InventoryCard({ product }: Props) {
       })
     );
     setCount(initialCount);
-  };
-
-  const decrementCountHandler = () => {
-    setCount((value) => (value > 1 ? value - 1 : value));
-  };
+  }
 
   return (
     <div className="w-full rounded-xl p-4 grid grid-cols-3 border border-zinc-300 shadow-md lg:shadow-none shadow-gray-400/70">
       <div>
-        <Image
-          className="rounded-lg mb-2"
-          src={
-            imageUrl != null ? imageUrl : "/assets/svg/image_placeholder.svg"
-          }
-          alt=""
-          width={80}
-          height={80}
-          objectFit="cover"
-        />
+        <CustomImage imageUrl={imageUrl} />
         <div>
           In stock:{" "}
           <span className="font-medium">{quantity.toLocaleString()}</span>
@@ -119,7 +98,7 @@ export default function InventoryCard({ product }: Props) {
       </div>
 
       <div className="flex gap-1 items-center">
-        <button onClick={decrementCountHandler}>
+        <button onClick={handleDecrement}>
           <MdRemove size={20} />
         </button>
         <input
@@ -137,19 +116,15 @@ export default function InventoryCard({ product }: Props) {
             setCount(newValue);
           }}
         />
-        <button onClick={incrementCountHandler}>
+        <button onClick={handleIncrement}>
           <MdAdd size={20} />
         </button>
       </div>
       <div className="place-self-center text-lg font-medium">
-        {price.toLocaleString("en-PH", {
-          currency: "PHP",
-          style: "currency",
-          maximumFractionDigits: 0,
-        })}
+        {getPhpCurrency(price)}
       </div>
       <button
-        onClick={addItemHandler}
+        onClick={handleAddItem}
         className="w-16 px-2 py-1 rounded bg-blue-500 text-blue-50 font-medium place-self-end hover:shadow-blue-300 hover:shadow-md"
       >
         Add

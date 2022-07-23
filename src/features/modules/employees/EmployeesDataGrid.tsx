@@ -2,8 +2,8 @@ import { collection, DocumentData, query, Timestamp } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
+import { db } from "../../../firebase";
 import { useAppSelector } from "../../../redux/hooks";
-import { db } from "../../../services/firebase";
 import { DataGrid } from "../components/data-grid";
 
 const TABLE_HEADERS = {

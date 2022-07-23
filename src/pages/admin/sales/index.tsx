@@ -8,10 +8,10 @@ import {
   DropdownSort,
   SectionTitle,
 } from "../../../features/modules/components";
+import { initialSort } from "../../../features/modules/reducers/firestoreReducer";
 import { SalesDataGrid } from "../../../features/modules/sales";
 import getServerSideAuth from "../../../lib/getServerSideAuth";
 import { useAppDispatch } from "../../../redux/hooks";
-import { initialSort } from "../../../redux/slices/firestoreSlice";
 
 const SORT_OBJECTS = {
   priceDesc: {

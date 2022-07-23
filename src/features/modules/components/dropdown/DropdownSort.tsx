@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
 import { useAppDispatch } from "../../../../redux/hooks";
-import { setSortQuery } from "../../../../redux/slices/firestoreSlice";
+import { setSortQuery } from "../../reducers/firestoreReducer";
 import DropdownItem from "./DropdownItem";
 
 type Props = {

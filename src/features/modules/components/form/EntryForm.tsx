@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { MdOutlineClose } from "react-icons/md";
+
 import { useAppSelector } from "../../../../redux/hooks";
 
 type Props = {
@@ -17,9 +18,9 @@ export default function EntryForm({
   onSubmit,
   onClose,
 }: Props) {
-  const formAction = useAppSelector((state) => state.ui.formAction);
+  const isEditing = useAppSelector((state) => state.form.isEditing);
 
-  const isEditing = formAction === "edit";
+  const formTitle = `${isEditing ? "Edit" : "Add"} ${title}`;
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -32,9 +33,7 @@ export default function EntryForm({
         >
           <MdOutlineClose size={28} />
         </button>
-        <div className="text-center text-2xl mb-4">{`${
-          isEditing ? "Edit" : "Add"
-        } ${title}`}</div>
+        <div className="text-center text-2xl mb-4">{formTitle}</div>
         <form className="grid grid-cols-2 gap-4" onSubmit={onSubmit}>
           {children}
           <div className="col-span-2 place-self-end">

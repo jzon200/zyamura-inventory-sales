@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { DocumentData, orderBy, QueryConstraint } from "firebase/firestore";
 
-export type FirestoreState = {
+type FirestoreState = {
   items: DocumentData;
   selectedDocument: DocumentData | null;
   sortQuery: QueryConstraint;

@@ -1,31 +1,22 @@
-import Image from "next/image";
-import { ChangeEvent, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
-import {
-  addDocumentData,
-  editDocumentData,
-} from "../../../redux/actions/firestoreActions";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { setShowFormModal } from "../../../redux/slices/uiSlice";
+import { addDocumentData, editDocumentData } from "../actions/firestoreActions";
 import { EntryForm, Input, SelectMenu } from "../components/form";
+import ImageUploader from "../components/form/ImageUploader";
+import { setShowInputForm } from "../reducers/uiReducer";
 
 const ROLE_ITEMS: Role[] = ["admin", "cashier", "manager", "other"];
 
 export default function EmployeeEntryForm() {
-  const { selectedEmployee, formAction, showLoadingSpinner } = useAppSelector(
-    (state) => ({
+  const { selectedEmployee, isEditing, showLoadingSpinner, imagePath } =
+    useAppSelector((state) => ({
       selectedEmployee: state.firestore.selectedDocument,
-      formAction: state.ui.formAction,
+      isEditing: state.form.isEditing,
       showLoadingSpinner: state.ui.showLoadingSpinner,
-    })
-  );
-
-  const [imageUrl, setImageUrl] = useState<string | null>(
-    selectedEmployee?.imageUrl ? selectedEmployee.imageUrl : null
-  );
-  const [imagePath, setImagePath] = useState<File | null>(null);
+      imagePath: state.form.imagePath,
+    }));
 
   const dispatch = useAppDispatch();
 
@@ -37,7 +28,7 @@ export default function EmployeeEntryForm() {
   } = useForm<InputValues>();
 
   const submitHandler: SubmitHandler<InputValues> = (data) => {
-    if (formAction === "edit") {
+    if (isEditing) {
       dispatch(
         editDocumentData(data, "employees", selectedEmployee, imagePath)
       );
@@ -47,22 +38,12 @@ export default function EmployeeEntryForm() {
     reset();
   };
 
-  const uploadImgHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const imgPath = event.target.files ? event.target.files[0] : null;
-
-    if (imgPath) {
-      const imgUrl = URL.createObjectURL(imgPath);
-      setImageUrl(imgUrl);
-      setImagePath(imgPath);
-    }
-  };
-
   if (showLoadingSpinner) return <CircularProgressCentered />;
 
   return (
     <EntryForm
       title="Employee"
-      onClose={() => dispatch(setShowFormModal(false))}
+      onClose={() => dispatch(setShowInputForm(false))}
       onSubmit={handleSubmit(submitHandler)}
     >
       <Input
@@ -120,30 +101,7 @@ export default function EmployeeEntryForm() {
         defaultValue={selectedEmployee?.role}
       />
       {/* Image File Upload */}
-      <div className="flex gap-2">
-        <div>
-          <label htmlFor="imgUpload">Image</label>
-          <input
-            id="imgUpload"
-            className="form-control upload-input"
-            type="file"
-            accept="image/*"
-            onChange={uploadImgHandler}
-          />
-        </div>
-        <div className={`w-full max-w-[4rem] min-h-[64px] h-16`}>
-          <Image
-            className="rounded-md"
-            src={
-              imageUrl !== null ? imageUrl : "/assets/svg/image_placeholder.svg"
-            }
-            width={480}
-            height={480}
-            objectFit="cover"
-            alt=""
-          />
-        </div>
-      </div>
+      <ImageUploader />
     </EntryForm>
   );
 }

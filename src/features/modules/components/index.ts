@@ -5,6 +5,7 @@ import { EntryForm, Input, SelectMenu } from "./form";
 import { ContentHeader, ContentPlaceholder, SectionTitle } from "./header";
 import ModulesLayout from "./layout/ModulesLayout";
 import { NavLink, Sidebar } from "./navigation";
+import DeleteDialog from "./ui/DeleteDialog";
 
 export {
   SimpleAreaChart,
@@ -14,6 +15,7 @@ export {
   DataRow,
   DropdownItem,
   DropdownSort,
+  DeleteDialog,
   ModulesLayout,
   EntryForm,
   Input,

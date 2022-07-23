@@ -1,17 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type UiState = {
+type UiState = {
   showLoadingSpinner: boolean;
-  showFormModal: boolean;
+  showInputForm: boolean;
   showDeleteDialog: boolean;
-  formAction: FormAction;
 };
 
 const initialState: UiState = {
   showLoadingSpinner: false,
   showDeleteDialog: false,
-  showFormModal: false,
-  formAction: "add",
+  showInputForm: false,
 };
 
 const uiSlice = createSlice({
@@ -21,24 +19,17 @@ const uiSlice = createSlice({
     setShowLoadingSpinner(state: UiState, action: PayloadAction<boolean>) {
       state.showLoadingSpinner = action.payload;
     },
+    setShowInputForm(state: UiState, action: PayloadAction<boolean>) {
+      state.showInputForm = action.payload;
+    },
     setShowDeleteDialog(state: UiState, action: PayloadAction<boolean>) {
       state.showDeleteDialog = action.payload;
-    },
-    setShowFormModal(state: UiState, action: PayloadAction<boolean>) {
-      state.showFormModal = action.payload;
-    },
-    setFormAction(state: UiState, action: PayloadAction<FormAction>) {
-      state.formAction = action.payload;
     },
   },
 });
 
-export const {
-  setShowLoadingSpinner,
-  setShowFormModal,
-  setShowDeleteDialog,
-  setFormAction,
-} = uiSlice.actions;
+export const { setShowLoadingSpinner, setShowDeleteDialog, setShowInputForm } =
+  uiSlice.actions;
 
 const uiReducer = uiSlice.reducer;
 

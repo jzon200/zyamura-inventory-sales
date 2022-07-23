@@ -3,16 +3,19 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { Fragment } from "react";
 
-import { DeleteDialog, MuiModal } from "../../../common/components";
-import { ContentHeader } from "../../../features/modules/components";
+import { MuiModal } from "../../../common/components";
+import {
+  ContentHeader,
+  DeleteDialog,
+} from "../../../features/modules/components";
 import {
   EmployeeEntryForm,
   EmployeesDataGrid,
 } from "../../../features/modules/employees";
+import { initialSort } from "../../../features/modules/reducers/firestoreReducer";
+import { setShowInputForm } from "../../../features/modules/reducers/uiReducer";
 import getServerSideAuth from "../../../lib/getServerSideAuth";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { initialSort } from "../../../redux/slices/firestoreSlice";
-import { setShowFormModal } from "../../../redux/slices/uiSlice";
 
 const SORT_OBJECTS = {
   nameAsc: {
@@ -30,8 +33,7 @@ const SORT_OBJECTS = {
 };
 
 const Employees: NextPage = () => {
-  const showFormModal = useAppSelector((state) => state.ui.showFormModal);
-
+  const showInputForm = useAppSelector((state) => state.ui.showInputForm);
   const dispatch = useAppDispatch();
 
   dispatch(initialSort());
@@ -39,8 +41,8 @@ const Employees: NextPage = () => {
   return (
     <Fragment>
       <MuiModal
-        showModal={showFormModal}
-        onClose={() => dispatch(setShowFormModal(false))}
+        showModal={showInputForm}
+        onClose={() => dispatch(setShowInputForm(false))}
       >
         <EmployeeEntryForm />
       </MuiModal>

@@ -1,17 +1,15 @@
 import { DocumentData } from "firebase/firestore";
 import { motion, Variants } from "framer-motion";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
-import { MdExpandMore } from "react-icons/md";
 
-import {
-  showDeleteDialog,
-  showEditForm,
-} from "../../../../redux/actions/uiActions";
+import { MdExpandMore } from "react-icons/md";
+import { CustomImage } from "../../../../common/components";
+import { getPhpCurrency } from "../../../../common/utils";
 import { useAppDispatch } from "../../../../redux/hooks";
+import { showDeleteDialog, showEditForm } from "../../actions/uiActions";
 
 const containerVariants: Variants = {
   expand: {
@@ -105,7 +103,7 @@ type Props = {
 export default function DataRow({ headers, docData }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const [showActions, setShowActions] = useState(false);
+  // const [showActions, setShowActions] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -189,15 +187,7 @@ export default function DataRow({ headers, docData }: Props) {
               variants={cellVariants}
               animate={isExpanded ? "expand" : "shrink"}
             >
-              <Image
-                src={data != null ? data : "/assets/svg/image_placeholder.svg"}
-                className="col-span-1 rounded-md"
-                width={80}
-                height={80}
-                objectFit={"cover"}
-                layout={"fixed"}
-                alt=""
-              />
+              <CustomImage imageUrl={data} />
             </motion.div>
           );
         }
@@ -270,19 +260,7 @@ export default function DataRow({ headers, docData }: Props) {
                   variants={cellVariants}
                   animate={isExpanded ? "expand" : "shrink"}
                 >
-                  <Image
-                    src={
-                      imageUrl != null
-                        ? imageUrl
-                        : "/assets/svg/image_placeholder.svg"
-                    }
-                    className="rounded-md"
-                    width={60}
-                    height={60}
-                    objectFit={"cover"}
-                    layout={"fixed"}
-                    alt=""
-                  />
+                  <CustomImage imageUrl={imageUrl} />
                 </motion.div>
               ))}
             </div>
@@ -294,10 +272,7 @@ export default function DataRow({ headers, docData }: Props) {
         }
 
         if (isCurrency) {
-          formattedData = data.toLocaleString("en-PH", {
-            currency: "PHP",
-            style: "currency",
-          });
+          formattedData = getPhpCurrency(data);
         }
 
         return (
@@ -328,7 +303,7 @@ export default function DataRow({ headers, docData }: Props) {
           <div className="sticky top-0 text-center text-[#919F88] bg-primary-light">
             Price
           </div>
-          {purchasedItems.map((item: DocumentData) => {
+          {purchasedItems.map((item: DocumentData | Product) => {
             return (
               <Fragment key={item.docId}>
                 <div className="font-medium">{item.name}</div>
@@ -336,11 +311,7 @@ export default function DataRow({ headers, docData }: Props) {
                   {item.quantity.toLocaleString()}
                 </div>
                 <div className="text-center font-medium">
-                  {item.price.toLocaleString("en-PH", {
-                    currency: "PHP",
-                    style: "currency",
-                    maximumFractionDigits: 0,
-                  })}
+                  {getPhpCurrency(item.price)}
                 </div>
               </Fragment>
             );

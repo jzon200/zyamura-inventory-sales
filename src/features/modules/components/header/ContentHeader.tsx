@@ -1,8 +1,8 @@
 import { QueryConstraint } from "firebase/firestore";
 import { MdAdd, MdFilterList } from "react-icons/md";
-import { showAddForm } from "../../../../redux/actions/uiActions";
-import { useAppDispatch } from "../../../../redux/hooks";
 
+import { useAppDispatch } from "../../../../redux/hooks";
+import { showAddForm } from "../../actions/uiActions";
 import DropdownSort from "../dropdown/DropdownSort";
 import SectionTitle from "./SectionTitle";
 
@@ -12,8 +12,6 @@ type Props = {
   className?: string;
   sortItems: Record<string, { label: string; sortQuery: QueryConstraint }>;
 };
-
-import React from "react";
 
 export default function ContentHeader({
   title,

@@ -8,20 +8,22 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage } from "../../services/firebase";
-import { setSelectedDocument } from "../slices/firestoreSlice";
+import { v4 as uuid } from "uuid";
+
+import { db, storage } from "../../../firebase";
+import { AppThunk } from "../../../redux/store";
+import { setSelectedDocument } from "../reducers/firestoreReducer";
 import {
   setShowDeleteDialog,
-  setShowFormModal,
+  setShowInputForm,
   setShowLoadingSpinner,
-} from "../slices/uiSlice";
-import { AppThunk } from "../store";
+} from "../reducers/uiReducer";
 
-const addDocumentData = (
+function addDocumentData(
   data: InputValues,
   collectionName: CollectionName,
   imagePath: File | null = null
-): AppThunk => {
+): AppThunk {
   return async (dispatch) => {
     const collectionRef = collection(db, collectionName);
 
@@ -31,10 +33,9 @@ const addDocumentData = (
     try {
       let imageUrl: string | null = null;
       if (imagePath != null) {
-        const storageRef = ref(
-          storage,
-          `${collectionName}/images/${imagePath.name}`
-        );
+        const storagePath = `${collectionName}/images/${uuid()}`;
+        const storageRef = ref(storage, storagePath);
+
         await uploadBytes(storageRef, imagePath);
         imageUrl = await getDownloadURL(storageRef);
       }
@@ -47,21 +48,21 @@ const addDocumentData = (
         dateModified: serverTimestamp(),
       });
       console.log("Added Document successfully!");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      alert((error as Error).message);
     } finally {
       dispatch(setShowLoadingSpinner(false));
-      dispatch(setShowFormModal(false));
+      dispatch(setShowInputForm(false));
     }
   };
-};
+}
 
-const editDocumentData = (
+function editDocumentData(
   data: InputValues,
   collectionName: CollectionName,
   selectedDocument: DocumentData | null,
   imagePath: File | null
-): AppThunk => {
+): AppThunk {
   return async (dispatch) => {
     const docRef = doc(db, collectionName, selectedDocument?.docId);
 
@@ -70,10 +71,9 @@ const editDocumentData = (
       let imageUrl: string | null = selectedDocument?.imageUrl;
 
       if (imagePath != null) {
-        const storageRef = ref(
-          storage,
-          `${collectionName}/images/${imagePath.name}`
-        );
+        const storagePath = `${collectionName}/images/${imagePath.name}`;
+        const storageRef = ref(storage, storagePath);
+
         await uploadBytes(storageRef, imagePath);
         imageUrl = await getDownloadURL(storageRef);
       }
@@ -85,20 +85,20 @@ const editDocumentData = (
       });
 
       console.log(`Updated Document ${selectedDocument!.docId} successfully!`);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      alert((error as Error).message);
     } finally {
       dispatch(setSelectedDocument(null));
       dispatch(setShowLoadingSpinner(false));
-      dispatch(setShowFormModal(false));
+      dispatch(setShowInputForm(false));
     }
   };
-};
+}
 
-const deleteDocumentData = (
+function deleteDocumentData(
   collectionName: CollectionName,
   selectedDocument: DocumentData | null
-): AppThunk => {
+): AppThunk {
   return async (dispatch) => {
     const docRef = doc(db, collectionName, selectedDocument?.docId);
 
@@ -106,14 +106,14 @@ const deleteDocumentData = (
     try {
       await deleteDoc(docRef);
       console.log(`Deleted Document ${selectedDocument!.docId} successfully!`);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      alert((error as Error).message);
     } finally {
       dispatch(setSelectedDocument(null));
       dispatch(setShowLoadingSpinner(false));
       dispatch(setShowDeleteDialog(false));
     }
   };
-};
+}
 
 export { addDocumentData, editDocumentData, deleteDocumentData };

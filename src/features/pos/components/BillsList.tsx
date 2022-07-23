@@ -1,30 +1,26 @@
 import { Fragment } from "react";
 
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
-import { addSalesData } from "../../../redux/actions/posActions";
+import { getPhpCurrency } from "../../../common/utils";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { clearTransactions } from "../../../redux/slices/posSlice";
+import { addSalesData } from "../actions";
+import { clearTransactions } from "../reducer";
+import { getTotalPrice } from "../utils";
 import BillsItem from "./BillsItem";
 
 export default function BillsList() {
   const { purchasedItems, isLoading } = useAppSelector((state) => ({
     purchasedItems: state.pos.purchasedItems,
-    isLoading: state.ui.showLoadingSpinner,
+    isLoading: state.pos.isLoading,
   }));
+
   const dispatch = useAppDispatch();
 
-  const totalPrice = purchasedItems
-    .map((item) => item.price)
-    .reduce((previousValue, currentValue) => {
-      if (isNaN(currentValue)) {
-        return previousValue;
-      }
-      return previousValue + currentValue;
-    }, 0);
+  const totalPrice = getTotalPrice(purchasedItems);
 
-  const submitTransactionHandler = () => {
+  function handleSubmitTransaction() {
     dispatch(addSalesData(purchasedItems));
-  };
+  }
 
   return (
     <Fragment>
@@ -36,9 +32,7 @@ export default function BillsList() {
       </div>
       <div className="flex justify-between items-center w-full my-4 text-xl font-semibold">
         <div>Total</div>
-        <div className="mr-4">
-          ₱{totalPrice.toLocaleString("en-PH", { maximumFractionDigits: 2 })}
-        </div>
+        <div className="mr-4">{getPhpCurrency(totalPrice)}</div>
       </div>
       <div className="flex justify-between gap-16">
         <button
@@ -48,7 +42,7 @@ export default function BillsList() {
           Cancel
         </button>
         <button
-          onClick={submitTransactionHandler}
+          onClick={handleSubmitTransaction}
           className="w-full rounded-2xl py-4 text-xl font-semibold bg-blue-500 text-blue-50 hover:bg-blue-400"
         >
           {!isLoading ? (
@@ -56,7 +50,7 @@ export default function BillsList() {
           ) : (
             <CircularProgressCentered
               className="text-white"
-              size={32}
+              size={24}
               color="inherit"
             />
           )}

@@ -1,13 +1,10 @@
-import Image from "next/image";
 import { Fragment } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
+import { CustomImage } from "../../../common/components";
+import { getPhpCurrency } from "../../../common/utils";
 
 import { useAppDispatch } from "../../../redux/hooks";
-import {
-  addBillsItem,
-  removeBillsItem,
-  setItemQuantity,
-} from "../../../redux/slices/posSlice";
+import { addBillsItem, removeBillsItem, setItemQuantity } from "../reducer";
 
 type Props = {
   product: Product;
@@ -22,16 +19,7 @@ export default function BillsItem({ product }: Props) {
     <Fragment>
       <div className="flex items-center gap-3 mb-4">
         <div className="w-24">
-          <Image
-            className="rounded-lg"
-            src={
-              imageUrl != null ? imageUrl : "/assets/svg/image_placeholder.svg"
-            }
-            width={480}
-            height={480}
-            objectFit="cover"
-            alt=""
-          />
+          <CustomImage imageUrl={imageUrl} width={480} height={480} />
         </div>
         <div className="grow">
           <div className="text-lg font-medium">
@@ -90,14 +78,7 @@ export default function BillsItem({ product }: Props) {
                 <MdAdd size={20} />
               </button>
             </div>
-            <div>
-              ₱
-              {isNaN(price)
-                ? 0
-                : price.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}
-            </div>
+            <div>{getPhpCurrency(price)}</div>
           </div>
         </div>
       </div>

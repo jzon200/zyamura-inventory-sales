@@ -74,7 +74,3 @@ type FormAction = "add" | "edit";
 type Category = "fish" | "dog" | "materials" | "other";
 
 type Role = "admin" | "manager" | "cashier" | "other";
-
-// declare function getCurrency(value: number) {
-//   return value.toLocaleString("en-PH", { currency: "PHP", style: "currency" });
-// };
