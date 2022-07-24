@@ -1,3 +1,5 @@
+import type { KeyboardEvent } from "react";
+
 function getPhpCurrency(amount: number) {
   if (isNaN(amount)) {
     return 0;
@@ -8,4 +10,9 @@ function getPhpCurrency(amount: number) {
   })}`;
 }
 
-export { getPhpCurrency };
+function handleNumberKeys(event: KeyboardEvent) {
+  const invalidKeys = ["e", "E", "+", "-", "."];
+  invalidKeys.includes(event.key) && event.preventDefault();
+}
+
+export { getPhpCurrency, handleNumberKeys };

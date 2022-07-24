@@ -1,10 +1,14 @@
 import { Fragment } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
+
 import { CustomImage } from "../../../common/components";
 import { getPhpCurrency } from "../../../common/utils";
-
 import { useAppDispatch } from "../../../redux/hooks";
-import { addBillsItem, removeBillsItem, setItemQuantity } from "../reducer";
+import {
+  addBillsItem,
+  removeBillsItem,
+  setItemQuantity,
+} from "../store/reducer";
 
 type Props = {
   product: Product;

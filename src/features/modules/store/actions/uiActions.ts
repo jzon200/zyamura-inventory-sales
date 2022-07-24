@@ -1,6 +1,6 @@
 import type { DocumentData } from "firebase/firestore";
 
-import type { AppThunk } from "../../../redux/store";
+import type { AppThunk } from "../../../../redux/store";
 import { setSelectedDocument } from "../reducers/firestoreReducer";
 import { setIsEditing } from "../reducers/formReducer";
 import { setShowDeleteDialog, setShowInputForm } from "../reducers/uiReducer";

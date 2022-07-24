@@ -10,8 +10,8 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 
-import { db, storage } from "../../../firebase";
-import { AppThunk } from "../../../redux/store";
+import { db, storage } from "../../../../firebase";
+import { AppThunk } from "../../../../redux/store";
 import { setSelectedDocument } from "../reducers/firestoreReducer";
 import {
   setShowDeleteDialog,

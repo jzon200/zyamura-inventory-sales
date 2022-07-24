@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
 
 import { CustomImage } from "../../../common/components";
-import { getPhpCurrency } from "../../../common/utils";
+import { getPhpCurrency, handleNumberKeys } from "../../../common/utils";
 import { useAppDispatch } from "../../../redux/hooks";
-import { addBillsItem } from "../reducer";
+import { addBillsItem } from "../store/reducer";
 
 type Props = {
   product: Product;
@@ -34,18 +34,19 @@ export default function InventoryCard({ product }: Props) {
     setCount((c) => (c > 1 ? c - 1 : c));
   }
 
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const newValue = parseInt(event.target.value);
+    setCount(newValue);
+  }
+
+  function handleBlur() {
+    if (isNaN(count) || count < 1) {
+      setCount(initialCount);
+    }
+  }
+
   function handleAddItem() {
     // Validation on adding items
-    if (!count) {
-      alert("Please input the amount you want to add");
-      return;
-    }
-
-    if (count < 1) {
-      alert("Please input a correct amount");
-      return;
-    }
-
     if (count > quantity) {
       alert("You've reached the maximum quantity available for this item!");
       return;
@@ -79,21 +80,11 @@ export default function InventoryCard({ product }: Props) {
           <span className="inline-block rounded px-2 mr-1 bg-blue-500 text-white">
             {category}
           </span>
-          {/* <span
-            className={`inline-block px-2 py-[2px] rounded-full ${
-              itemType === "individual"
-                ? "bg-[#C9EBEC] text-[#558DAB]"
-                : "bg-[#EFE0C1] text-[#B7995D]"
-            }`}
-          >
-            {itemType}
-          </span> */}
         </div>
         <div className="text-[gray] text-sm max-h-14 text-ellipsis">
-          {description?.substring(0, 95)}
+          {description?.substring(0, 35)}
           {description?.length === 0 &&
-            `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-            Recusandae non tenetur`}
+            `Lorem, ipsum dolor sit amet consectetur adipisicing.`}
         </div>
       </div>
 
@@ -106,15 +97,10 @@ export default function InventoryCard({ product }: Props) {
           className="max-w-[48px] text-lg text-center focus:outline-blue-500"
           min={1}
           max={quantity}
-          value={!count ? "" : count}
-          onKeyDown={(event) => {
-            const disabledKeys = ["e", "E", "+", "-", "."];
-            disabledKeys.includes(event.key) && event.preventDefault();
-          }}
-          onChange={(event) => {
-            const newValue = parseInt(event.target.value);
-            setCount(newValue);
-          }}
+          value={count}
+          onBlur={handleBlur}
+          onKeyDown={handleNumberKeys}
+          onChange={handleChange}
         />
         <button onClick={handleIncrement}>
           <MdAdd size={20} />
@@ -125,7 +111,8 @@ export default function InventoryCard({ product }: Props) {
       </div>
       <button
         onClick={handleAddItem}
-        className="w-16 px-2 py-1 rounded bg-blue-500 text-blue-50 font-medium place-self-end hover:shadow-blue-300 hover:shadow-md"
+        className="w-16 px-2 py-1 rounded bg-blue-500 text-blue-50 font-medium place-self-end
+         hover:shadow-blue-300 hover:shadow-md"
       >
         Add
       </button>

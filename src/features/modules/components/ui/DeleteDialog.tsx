@@ -5,7 +5,7 @@ import {
   MuiModal,
 } from "../../../../common/components";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { deleteDocumentData } from "../../actions/firestoreActions";
+import { deleteDocumentData } from "../../store/actions/firestoreActions";
 import { setShowDeleteDialog } from "../../reducers/uiReducer";
 
 type Props = {

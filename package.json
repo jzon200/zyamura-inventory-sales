@@ -29,6 +29,7 @@
     "react-icons": "^4.3.1",
     "react-redux": "^8.0.2",
     "recharts": "^2.1.9",
+    "use-immer": "^0.7.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

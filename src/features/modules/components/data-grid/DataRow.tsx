@@ -9,7 +9,7 @@ import { MdExpandMore } from "react-icons/md";
 import { CustomImage } from "../../../../common/components";
 import { getPhpCurrency } from "../../../../common/utils";
 import { useAppDispatch } from "../../../../redux/hooks";
-import { showDeleteDialog, showEditForm } from "../../actions/uiActions";
+import { showDeleteDialog, showEditForm } from "../../store/actions/uiActions";
 
 const containerVariants: Variants = {
   expand: {

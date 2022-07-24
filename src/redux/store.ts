@@ -4,8 +4,8 @@ import {
   firestoreReducer,
   formReducer,
   uiReducer,
-} from "../features/modules/reducers";
-import posReducer from "../features/pos/reducer";
+} from "../features/modules/store/reducers";
+import posReducer from "../features/pos/store/reducer";
 
 const store = configureStore({
   reducer: {

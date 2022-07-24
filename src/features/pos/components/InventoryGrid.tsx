@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchProductsData } from "../actions";
+import { fetchProductsData } from "../store/actions";
 import InventoryCard from "./InventoryCard";
 
 export default function InventoryGrid() {

@@ -11,15 +11,15 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-import { db } from "../../firebase";
-import { AppThunk } from "../../redux/store";
+import { db } from "../../../firebase";
+import { AppThunk } from "../../../redux/store";
 import {
   addAllItems,
   clearTransactions,
   setInitialItems,
   setIsLoading,
 } from "./reducer";
-import { getTotalPrice } from "./utils";
+import { getTotalPrice } from "../utils";
 
 function fetchProductsData(): AppThunk {
   return async (dispatch) => {

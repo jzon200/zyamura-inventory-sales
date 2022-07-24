@@ -2,10 +2,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { addDocumentData, editDocumentData } from "../actions/firestoreActions";
+import {
+  addDocumentData,
+  editDocumentData,
+} from "../store/actions/firestoreActions";
 import { EntryForm, Input, SelectMenu } from "../components/form";
 import ImageUploader from "../components/form/ImageUploader";
-import { setShowInputForm } from "../reducers/uiReducer";
+import { setShowInputForm } from "../store/reducers/uiReducer";
 
 const CATEGORY_ITEMS: Category[] = ["fish", "dog", "materials", "other"];
 

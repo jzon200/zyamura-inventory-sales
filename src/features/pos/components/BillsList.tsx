@@ -1,10 +1,8 @@
-import { Fragment } from "react";
-
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
 import { getPhpCurrency } from "../../../common/utils";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { addSalesData } from "../actions";
-import { clearTransactions } from "../reducer";
+import { addSalesData } from "../store/actions";
+import { clearTransactions } from "../store/reducer";
 import { getTotalPrice } from "../utils";
 import BillsItem from "./BillsItem";
 
@@ -23,7 +21,7 @@ export default function BillsList() {
   }
 
   return (
-    <Fragment>
+    <aside className="hidden lg:block">
       <div className="mt-1 text-4xl font-medium">Bills</div>
       <div className="my-4 px-4 h-[40rem] border overflow-y-auto">
         {purchasedItems.map((item) => (
@@ -37,7 +35,7 @@ export default function BillsList() {
       <div className="flex justify-between gap-16">
         <button
           onClick={() => dispatch(clearTransactions())}
-          className="w-full rounded-2xl py-4 text-xl font-semibold outline outline-1 outline-blue-400 text-blue-500  hover:bg-blue-400/10"
+          className="w-full rounded-2xl py-4 text-xl font-semibold outline outline-1 outline-blue-400 text-blue-500 hover:bg-blue-400/10"
         >
           Cancel
         </button>
@@ -56,6 +54,6 @@ export default function BillsList() {
           )}
         </button>
       </div>
-    </Fragment>
+    </aside>
   );
 }

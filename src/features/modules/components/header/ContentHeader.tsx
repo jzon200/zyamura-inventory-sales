@@ -2,7 +2,7 @@ import { QueryConstraint } from "firebase/firestore";
 import { MdAdd, MdFilterList } from "react-icons/md";
 
 import { useAppDispatch } from "../../../../redux/hooks";
-import { showAddForm } from "../../actions/uiActions";
+import { showAddForm } from "../../store/actions/uiActions";
 import DropdownSort from "../dropdown/DropdownSort";
 import SectionTitle from "./SectionTitle";
 
