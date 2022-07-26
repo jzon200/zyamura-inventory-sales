@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { setImagePath } from "../../reducers/formReducer";
+import { setImagePath } from "../../store/reducers/formReducer";
 import { CustomImage } from "../../../../common/components";
 
 export default function ImageUploader() {

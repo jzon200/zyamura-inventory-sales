@@ -12,8 +12,8 @@ import {
   EmployeeEntryForm,
   EmployeesDataGrid,
 } from "../../../features/modules/employees";
-import { initialSort } from "../../../features/modules/reducers/firestoreReducer";
-import { setShowInputForm } from "../../../features/modules/reducers/uiReducer";
+import { initialSort } from "../../../features/modules/store/reducers/firestoreReducer";
+import { setShowInputForm } from "../../../features/modules/store/reducers/uiReducer";
 import getServerSideAuth from "../../../lib/getServerSideAuth";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 

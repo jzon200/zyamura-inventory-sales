@@ -8,7 +8,7 @@ import {
   DropdownSort,
   SectionTitle,
 } from "../../../features/modules/components";
-import { initialSort } from "../../../features/modules/reducers/firestoreReducer";
+import { initialSort } from "../../../features/modules/store/reducers/firestoreReducer";
 import { SalesDataGrid } from "../../../features/modules/sales";
 import getServerSideAuth from "../../../lib/getServerSideAuth";
 import { useAppDispatch } from "../../../redux/hooks";

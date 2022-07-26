@@ -6,7 +6,7 @@ import {
 } from "../../../../common/components";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { deleteDocumentData } from "../../store/actions/firestoreActions";
-import { setShowDeleteDialog } from "../../reducers/uiReducer";
+import { setShowDeleteDialog } from "../../store/reducers/uiReducer";
 
 type Props = {
   collectionName: CollectionName;
