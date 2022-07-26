@@ -1,10 +1,10 @@
 import { QueryConstraint } from "firebase/firestore";
 import { motion, Variants } from "framer-motion";
-import { useState } from "react";
+import { MouseEvent, useCallback, useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
 import { useAppDispatch } from "../../../../redux/hooks";
-import { setSortQuery } from "../../reducers/firestoreReducer";
+import { setSortQuery } from "../../store/reducers/firestoreReducer";
 import DropdownItem from "./DropdownItem";
 
 type Props = {
@@ -59,6 +59,42 @@ export default function DropdownSort({ items }: Props) {
 
   const dispatch = useAppDispatch();
 
+  function handleToggleDropdown(event: MouseEvent) {
+    // This prevents propagating the event listener passed to the Document below
+    event.stopPropagation();
+
+    if (!isExpanded) {
+      document.addEventListener("click", handleShrinkOutside);
+    } else {
+      document.removeEventListener("click", handleShrinkOutside);
+    }
+
+    setIsExpanded(!isExpanded);
+  }
+
+  /**
+   * Shrinks the dropdown when clicked on empty space.
+   * Wraps to useCallback to memoized for every re-render,
+   * and improve performance.
+   */
+  const handleShrinkOutside = useCallback(() => {
+    setIsExpanded(false);
+    document.removeEventListener("click", handleShrinkOutside);
+  }, []);
+
+  const dropdownItems = values.map((item, index) => (
+    <DropdownItem
+      key={index}
+      label={item.label}
+      isSelected={selectedIndex === index}
+      onClick={() => {
+        dispatch(setSortQuery(item.sortQuery));
+        setSelectedIndex(index);
+        setIsExpanded(false);
+      }}
+    />
+  ));
+
   return (
     <motion.div className="relative w-72">
       <motion.button
@@ -66,9 +102,7 @@ export default function DropdownSort({ items }: Props) {
         animate={isExpanded ? "expand" : "shrink"}
         className="btn-rounded-between bg-[#D1CEB2] w-full"
         initial={"shrink"}
-        onClick={() => {
-          setIsExpanded((prevState) => !prevState);
-        }}
+        onClick={handleToggleDropdown}
       >
         <div>
           <span>Sort by </span>
@@ -91,18 +125,7 @@ export default function DropdownSort({ items }: Props) {
         className="absolute rounded-b-3xl w-full z-30 shadow-md"
         initial={false}
       >
-        {values.map((item, index) => (
-          <DropdownItem
-            key={index}
-            label={item.label}
-            isSelected={selectedIndex === index}
-            onClick={() => {
-              dispatch(setSortQuery(item.sortQuery));
-              setSelectedIndex(index);
-              setIsExpanded(false);
-            }}
-          />
-        ))}
+        {dropdownItems}
       </motion.ul>
     </motion.div>
   );
