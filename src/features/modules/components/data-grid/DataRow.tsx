@@ -1,11 +1,11 @@
-import { DocumentData } from "firebase/firestore";
+import type { DocumentData } from "firebase/firestore";
 import { motion, Variants } from "framer-motion";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { BsTrash } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
-
 import { MdExpandMore } from "react-icons/md";
+
 import { CustomImage } from "../../../../common/components";
 import { getPhpCurrency } from "../../../../common/utils";
 import { useAppDispatch } from "../../../../redux/hooks";
@@ -120,13 +120,11 @@ export default function DataRow({ headers, docData }: Props) {
       animate={isExpanded ? "expand" : "shrink"}
       whileHover={"hover"}
       initial={false}
+      onClick={() => {
+        setIsExpanded(!isExpanded);
+      }}
     >
-      <div
-        className="group-hover:bg-[#CCCABD] absolute right-0 h-full grid place-items-center rounded-r-3xl cursor-pointer"
-        onClick={() => {
-          setIsExpanded((prevState) => !prevState);
-        }}
-      >
+      <div className="absolute right-0 h-full grid place-items-center rounded-r-3xl cursor-pointer">
         <motion.button
           variants={expandBtnVariants}
           animate={isExpanded ? "expand" : "shrink"}
@@ -156,7 +154,8 @@ export default function DataRow({ headers, docData }: Props) {
             variants={actionBtnVariants}
             animate={isExpanded ? "expand" : "shrink"}
             initial={false}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(showEditForm(docData));
             }}
             className="absolute bottom-4 right-24"
@@ -168,7 +167,8 @@ export default function DataRow({ headers, docData }: Props) {
             variants={actionBtnVariants}
             animate={isExpanded ? "expand" : "shrink"}
             initial={false}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(showDeleteDialog(docData));
             }}
             className="absolute bottom-4 right-16"
