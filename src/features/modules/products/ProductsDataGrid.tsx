@@ -1,21 +1,19 @@
-import { collection, DocumentData, query, Timestamp } from "firebase/firestore";
+import type { DocumentData, Timestamp } from "firebase/firestore";
+import { collection, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
 import { db } from "../../../firebase";
 import { useAppSelector } from "../../../redux/hooks";
-import { DataGrid } from "../components/data-grid";
+import TableContent from "../components/data-grid/TableContent";
 
 const TABLE_HEADERS = {
-  imageUrl: "",
   id: "Product ID",
   name: "Name",
   category: "Category",
   quantity: "Quantity",
   cost: "Product Cost",
   price: "Selling Price",
-  status: "Status",
-  // actions: "Actions",
 };
 
 export default function ProductsDataGrid() {
@@ -27,7 +25,7 @@ export default function ProductsDataGrid() {
 
   if (loading) return <CircularProgressCentered />;
 
-  const products: Product[] | DocumentData = snapshot!.docs.map((doc) => {
+  const products: Product[] | DocumentData[] = snapshot!.docs.map((doc) => {
     const dateAdded = doc.data().dateAdded as Timestamp;
     const dateModified = doc.data().dateModified as Timestamp;
 
@@ -44,5 +42,5 @@ export default function ProductsDataGrid() {
     };
   });
 
-  return <DataGrid headers={TABLE_HEADERS} data={products} />;
+  return <TableContent headers={TABLE_HEADERS} documents={products} />;
 }

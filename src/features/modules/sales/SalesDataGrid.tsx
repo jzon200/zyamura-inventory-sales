@@ -4,12 +4,10 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
 import { db } from "../../../firebase";
 import { useAppSelector } from "../../../redux/hooks";
-import { DataGrid } from "../components/data-grid";
+import { DataGrid } from "../components";
 
 const TABLE_HEADERS = {
-  purchasedItems: "",
   id: "Transaction ID",
-  // customer: "Customer",
   totalPrice: "Total Sales",
   author: "Added by",
   dateAdded: "Transaction Date",
@@ -24,7 +22,7 @@ const SalesDataGrid = () => {
 
   if (loading) return <CircularProgressCentered />;
 
-  const sales: Sales[] | DocumentData = snapshot!.docs.map((doc) => ({
+  const sales: Sales[] | DocumentData[] = snapshot!.docs.map((doc) => ({
     ...doc.data(),
     docId: doc.id,
     dateAdded: (doc.data().dateAdded as Timestamp)
@@ -36,7 +34,7 @@ const SalesDataGrid = () => {
       }),
   }));
 
-  return <DataGrid headers={TABLE_HEADERS} data={sales} />;
+  return <DataGrid headers={TABLE_HEADERS} documents={sales} />;
 };
 
 export default SalesDataGrid;

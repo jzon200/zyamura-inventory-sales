@@ -4,11 +4,10 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import CircularProgressCentered from "../../../common/components/CircularProgressCentered";
 import { db } from "../../../firebase";
 import { useAppSelector } from "../../../redux/hooks";
-import { DataGrid } from "../components/data-grid";
+import { DataGrid } from "../components";
 
 const TABLE_HEADERS = {
-  imageUrl: "",
-  id: "Employee ID",
+  // id: "Employee ID",
   firstName: "First Name",
   lastName: "Last Name",
   email: "Email",
@@ -25,7 +24,7 @@ export default function EmployeesDataGrid() {
 
   if (loading) return <CircularProgressCentered />;
 
-  const employees: Employee[] | DocumentData = snapshot!.docs.map((doc) => {
+  const employees: Employee[] | DocumentData[] = snapshot!.docs.map((doc) => {
     const dateAdded = doc.data().dateAdded as Timestamp;
     const dateModified = doc.data().dateModified as Timestamp;
 
@@ -41,5 +40,5 @@ export default function EmployeesDataGrid() {
     };
   });
 
-  return <DataGrid headers={TABLE_HEADERS} data={employees} />;
+  return <DataGrid headers={TABLE_HEADERS} documents={employees} />;
 }
