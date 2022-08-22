@@ -1,8 +1,8 @@
 import { Checkbox } from "@mui/material";
 import type { DocumentData } from "firebase/firestore";
-import { motion, Variants } from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useRouter } from "next/router";
-import { Fragment, useCallback, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 import { MdArchive, MdDelete, MdEdit, MdExpandMore } from "react-icons/md";
 
@@ -19,20 +19,21 @@ type Props = {
 
 export default function TableRow({ headers, docData }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const actionsDialogRef = useRef<HTMLDialogElement>(null);
+  const actionsRef = useRef<HTMLDialogElement>(null);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const headerKeys = Object.keys(headers);
-  // const actionsDialogId = actionsDialogRef.current!;
 
-  const handleCloseDialog = useCallback(() => {
-    actionsDialogRef.current?.close();
-  }, []);
+  function handleCloseActions() {
+    actionsRef.current?.close();
+    document.removeEventListener("click", handleCloseActions);
+  }
 
   return (
     <motion.tr
-      className="h-28 relative group rounded-3xl cursor-pointer"
+      className="relative rounded-3xl cursor-pointer"
       variants={containerVariants}
       animate={isExpanded ? "expand" : "shrink"}
       initial={false}
@@ -67,9 +68,19 @@ export default function TableRow({ headers, docData }: Props) {
         }
 
         return (
-          <td key={index} className={`${isExpanded && "pt-8"}`}>
-            {formattedData}
-          </td>
+          <motion.td
+            key={index}
+            initial={false}
+            variants={cellVariants}
+            className={`${isExpanded && "pt-8"}`}>
+            <span
+              className="cursor-text"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}>
+              {formattedData}
+            </span>
+          </motion.td>
         );
       })}
       {/* Ellipsis Button */}
@@ -77,35 +88,35 @@ export default function TableRow({ headers, docData }: Props) {
         router.pathname === "/admin/employees") && (
         <td className="relative align-middle">
           <div
-            className={`flex justify-center py-1 rounded-md hover:bg-[#D1CEB2]`}
+            className="flex justify-center py-1 rounded-md hover:bg-[#D1CEB2]"
             title="Actions"
             onClick={(e) => {
               e.stopPropagation();
-              if (actionsDialogRef.current?.open) {
-                actionsDialogRef.current?.close();
-                document.removeEventListener("click", handleCloseDialog);
+
+              if (actionsRef.current?.open) {
+                handleCloseActions();
               } else {
-                actionsDialogRef.current?.show();
-                document.addEventListener("click", handleCloseDialog);
+                actionsRef.current?.show();
+                document.addEventListener("click", handleCloseActions);
               }
             }}>
             <FaEllipsisH />
           </div>
           <dialog
-            ref={actionsDialogRef}
+            ref={actionsRef}
             className="absolute -left-24 p-0 rounded-md z-10 shadow shadow-zinc-400/80"
-            onClick={handleCloseDialog}>
+            onClick={handleCloseActions}>
             <ActionItem
               onClick={() => {
                 dispatch(showEditForm(docData));
-                actionsDialogRef.current?.close();
+                handleCloseActions();
               }}
               text="Edit"
               icon={MdEdit}
             />
             <ActionItem
               onClick={() => {
-                actionsDialogRef.current?.close();
+                handleCloseActions();
               }}
               text="Archive"
               icon={MdArchive}
@@ -113,7 +124,7 @@ export default function TableRow({ headers, docData }: Props) {
             <ActionItem
               onClick={() => {
                 dispatch(showDeleteDialog(docData));
-                actionsDialogRef.current?.close();
+                handleCloseActions();
               }}
               text="Delete"
               icon={MdDelete}
@@ -123,29 +134,39 @@ export default function TableRow({ headers, docData }: Props) {
         </td>
       )}
       <motion.td
-        className="absolute bottom-0 left-1/2 hidden group-hover:block"
-        variants={expandBtnVariants}
-        animate={isExpanded ? "expand" : "shrink"}
-        initial={"expand"}>
-        <MdExpandMore size={32} color="inherit" />
+        className="absolute bottom-0 left-1/2"
+        variants={expandBtnVariants}>
+        <MdExpandMore size={36} color="inherit" />
       </motion.td>
       {/* Product Other Details */}
       {router.pathname === "/admin/products" && (
-        <motion.div
-          animate={{ opacity: isExpanded ? 1 : 0 }}
-          layout
-          className="absolute left-56 bottom-16
-          grid grid-cols-[repeat(2,_minmax(100px,_150px))] justify-items-center gap-4
-           text-base font-medium uppercase">
-          <div>Date Added</div>
-          <div>Description</div>
-          <div className="font-semibold text-[#3A512B]">
-            {docData.dateAdded}
-          </div>
-          <div className="font-semibold text-[#3A512B]">
-            {docData.description}
-          </div>
-        </motion.div>
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.table
+              // variants={detailsVariants}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute left-44 bottom-16 uppercase
+          table-auto border-separate border-spacing-x-7 cursor-text"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}>
+              <thead className="text-sm">
+                <tr>
+                  <th>Date Added</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody className="text-base">
+                <tr>
+                  <td>{docData.dateAdded}</td>
+                  <td>{docData.description}</td>
+                </tr>
+              </tbody>
+            </motion.table>
+          )}
+        </AnimatePresence>
       )}
     </motion.tr>
   );
@@ -154,7 +175,6 @@ export default function TableRow({ headers, docData }: Props) {
 const containerVariants: Variants = {
   expand: {
     height: 256,
-    verticalAlign: "top",
     outline: "1px solid #554A33",
     transition: {
       type: "tween",
@@ -164,7 +184,6 @@ const containerVariants: Variants = {
   },
   shrink: {
     height: 112,
-    verticalAlign: "middle",
     outline: "0px none transparent",
     transition: {
       type: "tween",
@@ -179,19 +198,14 @@ const containerVariants: Variants = {
 
 const cellVariants: Variants = {
   expand: {
-    y: -50,
-    transition: {
-      type: "tween",
-      ease: "easeIn",
-      duration: 0.5,
-    },
+    verticalAlign: "top",
+    paddingTop: 16,
   },
   shrink: {
-    y: 0,
+    verticalAlign: "middle",
+    paddingTop: 0,
     transition: {
-      type: "tween",
-      ease: "easeOut",
-      duration: 0.5,
+      delay: 0.3,
     },
   },
 };
@@ -199,6 +213,7 @@ const cellVariants: Variants = {
 const expandBtnVariants: Variants = {
   expand: {
     rotate: 180,
+    opacity: 1,
     transition: {
       type: "tween",
       ease: "easeInOut",
@@ -206,19 +221,15 @@ const expandBtnVariants: Variants = {
     },
   },
   shrink: {
-    rotate: [180, 0],
+    rotate: 0,
+    opacity: 0,
+    transition: {
+      type: "tween",
+      ease: "easeInOut",
+      duration: 0.5,
+    },
   },
-};
-
-const detailsVariants: Variants = {
-  expand: {
-    display: ["none", "grid"],
+  hover: {
     opacity: 1,
-    transition: { type: "tween", delay: 0.3 },
-  },
-  shrink: {
-    display: ["grid", "none"],
-    opacity: [null, 0],
-    transition: { type: "tween", delay: 0.2 },
   },
 };
