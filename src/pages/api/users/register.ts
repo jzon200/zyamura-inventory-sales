@@ -1,43 +1,42 @@
 import bcrypt from "bcryptjs";
 import { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken";
+import { setCookie } from "nookies";
 
-import dbConnect from "../../../../lib/dbConnect";
-import UserCredential from "../../../../models/userCredential";
+import prisma from "../../../lib/prisma";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    await dbConnect();
-
     const { username, password } = req.body;
-
-    const userExist = await UserCredential.findOne({ username });
-
-    if (userExist) {
-      return res.status(422).json({ message: "Username is already in use!" });
-    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = new UserCredential({ username, password: hashedPassword });
+    try {
+      const newUser = await prisma.user.create({
+        data: {
+          username: username,
+          password: hashedPassword,
+        },
+      });
 
-    await user.save().catch((error: any) => {
-      console.log(error.message);
-    });
+      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_KEY!, {
+        expiresIn: "1d",
+      });
 
-    // const token = jwt.sign({ userId: user._id }, `${process.env.TOKEN_SECRET}`, {
-    //   expiresIn: "1d",
-    // });
+      setCookie({ res }, "token", token, {
+        maxAge: 60 * 60 * 24, // 1 day
+        path: "/",
+      });
 
-    // setCookie("token", token, {
-    //   req,
-    //   res,
-    //   maxAge: 60 * 60 * 24, // 1 day
-    //   path: "/",
-    // });
-
-    res.status(201).json(user);
+      res.status(201).json(newUser);
+    } catch (err) {
+      const errorMessage = (err as Error).message;
+      res.status(422).json({ message: errorMessage });
+    } finally {
+      prisma.$disconnect;
+    }
   } else {
-    res.status(424).json({ message: "Invalid method!" });
+    res.status(405).json({ message: "Invalid method!" });
   }
 }
 
